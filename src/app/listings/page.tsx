@@ -612,7 +612,11 @@ export default function ListingsPage() {
     try {
       const col = collection(db, 'products');
       const snap = await getDocs(col);
-      const fakeDocs = snap.docs.filter(d => d.data().isFake === true);
+      const fakeTitles = FAKE_LISTINGS_DATA.map(f => f.title);
+      const fakeDocs = snap.docs.filter(d => {
+        const data = d.data();
+        return data.isFake === true || fakeTitles.includes(data.title) || (data.sellerId && data.sellerId.startsWith('fake_user_'));
+      });
       if (fakeDocs.length === 0) {
         alert('Silinecek fake ilan bulunamadı.');
         return;
@@ -758,7 +762,7 @@ export default function ListingsPage() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">{sellerNames[p.sellerId] || 'Admin'}</td>
+                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">{(p as any).sellerName || sellerNames[p.sellerId] || 'Admin'}</td>
                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">{p.city}</td>
                     <td className="px-6 py-4 font-bold text-teal-600 dark:text-teal-400 text-sm">
                       {(p as any).isGiveaway || p.price === 0 ? (
