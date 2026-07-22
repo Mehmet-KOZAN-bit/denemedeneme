@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Package, Check, X, Trash2, Search, Filter, Loader2, Gift, Sparkles } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
-import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc, addDoc, getDocs, writeBatch } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc, getDoc, addDoc, getDocs, writeBatch, setDoc } from 'firebase/firestore';
 import { formatPrice } from '../../utils/format';
 
 type Status = 'all' | 'pending' | 'active' | 'rejected';
