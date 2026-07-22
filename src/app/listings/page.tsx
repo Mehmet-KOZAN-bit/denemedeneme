@@ -460,6 +460,69 @@ const FAKE_LISTINGS_DATA = [
   }
 ];
 
+const FAKE_SELLERS = [
+  {
+    id: 'fake_user_1',
+    name: 'Mehmet Ali Yılmaz',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    phone: '+905338661234',
+  },
+  {
+    id: 'fake_user_2',
+    name: 'Ayşe Kaya',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
+    phone: '+905488554321',
+  },
+  {
+    id: 'fake_user_3',
+    name: 'Mustafa Kanatlı',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+    phone: '+905338779900',
+  },
+  {
+    id: 'fake_user_4',
+    name: 'Selin Aksoy',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200',
+    phone: '+905428881122',
+  },
+  {
+    id: 'fake_user_5',
+    name: 'Emre Öztürk',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+    phone: '+905338114455',
+  },
+  {
+    id: 'fake_user_6',
+    name: 'Zeynep Çelik',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200',
+    phone: '+905488223344',
+  },
+  {
+    id: 'fake_user_7',
+    name: 'Hasan Denktaş',
+    avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=200',
+    phone: '+905338336677',
+  },
+  {
+    id: 'fake_user_8',
+    name: 'Ceren Yılmazer',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    phone: '+905428556677',
+  },
+  {
+    id: 'fake_user_9',
+    name: 'Burak Demir',
+    avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=200',
+    phone: '+905338990011',
+  },
+  {
+    id: 'fake_user_10',
+    name: 'Enescan Saykı',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200',
+    phone: '+905488771199',
+  },
+];
+
 export default function ListingsPage() {
   const { user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
@@ -500,17 +563,33 @@ export default function ListingsPage() {
   const remove  = async (id: string) => { if (!confirm('Bu ilanı silmek istediğinize emin misiniz?')) return; await deleteDoc(doc(db, 'products', id)); };
 
   const handleAddFakeListings = async () => {
-    if (!confirm('35 adet görselli ve detaylı fake ilan eklemek istiyor musunuz?')) return;
+    if (!confirm('35 adet görselli ve farklı satıcı profilli fake ilan eklemek istiyor musunuz?')) return;
     setAddingFake(true);
     try {
-      const activeUid = user?.uid || 'admin_seed';
+      // First seed the fake seller user documents in Firestore
+      for (const s of FAKE_SELLERS) {
+        await setDoc(doc(db, 'users', s.id), {
+          uid: s.id,
+          displayName: s.name,
+          email: `${s.id}@adabazar.com`,
+          photoURL: s.avatar,
+          phone: s.phone,
+          role: 'user',
+          createdAt: new Date().toISOString(),
+        }, { merge: true });
+      }
+
       const col = collection(db, 'products');
       let count = 0;
       for (const item of FAKE_LISTINGS_DATA) {
+        const seller = FAKE_SELLERS[count % FAKE_SELLERS.length];
         await addDoc(col, {
           ...item,
           isFake: true,
-          sellerId: activeUid,
+          sellerId: seller.id,
+          sellerName: seller.name,
+          sellerAvatar: seller.avatar,
+          sellerPhone: seller.phone,
           viewsCount: Math.floor(Math.random() * 85) + 12,
           favoritesCount: Math.floor(Math.random() * 15),
           createdAt: new Date(Date.now() - count * 3600000).toISOString(),
@@ -518,7 +597,7 @@ export default function ListingsPage() {
         });
         count++;
       }
-      alert('35 adet görselli fake ilan başarıyla yüklendi!');
+      alert('35 adet farklı satıcılı fake ilan başarıyla yüklendi!');
     } catch (err: any) {
       console.error('Error adding fake listings:', err);
       alert('Hata oluştu: ' + err.message);
