@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Users, Search, ShieldCheck, Ban, Crown, Loader2, Phone, Check, Clock, AlertTriangle, X, CheckCircle, Store, Building2 } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
