@@ -406,7 +406,7 @@ const FAKE_LISTINGS_DATA = [
     city: 'Girne',
     district: 'Alsancak',
     description: 'Sırt desteği ve amortisörü sağlam. Evden çalışanlar için ideal.',
-    images: ['https://images.unsplash.com/photo-1580481072645-022f9a6d1270?auto=format&fit=crop&q=80&w=800'],
+    images: ['https://images.unsplash.com/photo-1505797149-43b0069ec26b?auto=format&fit=crop&q=80&w=800'],
     isGiveaway: false,
     status: 'active',
   },
