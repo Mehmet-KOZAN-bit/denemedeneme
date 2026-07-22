@@ -202,10 +202,50 @@ export default function StoreApplicationsPage() {
           isFakeStore: true,
           createdAt: now,
           updatedAt: now,
-        }, { merge: true });
+        // 3. Add 2 sample active listings per fake store
+        const sampleListings = [
+          {
+            id: `fake_prod_${fs.id}_1`,
+            title: fs.storeType === 'auto' ? `${fs.storeName} - 2022 Model Lüks Araç` : fs.storeType === 'real_estate' ? `${fs.city} Merkezde 3+1 Lüks Gayrimenkul` : `${fs.storeName} - Orijinal Garantili Ürün`,
+            price: fs.storeType === 'auto' ? 35000 : fs.storeType === 'real_estate' ? 185000 : 1250,
+            currency: fs.storeType === 'real_estate' || fs.storeType === 'auto' ? 'GBP' : 'EUR',
+            category: fs.storeType === 'auto' ? 'Vasıta' : fs.storeType === 'real_estate' ? 'Emlak' : 'Elektronik',
+            city: fs.city,
+            sellerId: fs.id,
+            sellerName: fs.storeName,
+            sellerPhone: fs.phone,
+            sellerAccountType: 'store',
+            isVerifiedStore: true,
+            isFake: true,
+            status: 'active',
+            images: [fs.photoURL],
+            createdAt: now,
+          },
+          {
+            id: `fake_prod_${fs.id}_2`,
+            title: fs.storeType === 'auto' ? `${fs.city} Galerimizden Temiz Otomobil` : fs.storeType === 'real_estate' ? `${fs.city} Manzaralı Fırsat Satılık Ev` : `${fs.storeName} - Sıfır Kutulu Cihaz`,
+            price: fs.storeType === 'auto' ? 24500 : fs.storeType === 'real_estate' ? 120000 : 850,
+            currency: fs.storeType === 'real_estate' || fs.storeType === 'auto' ? 'GBP' : 'EUR',
+            category: fs.storeType === 'auto' ? 'Vasıta' : fs.storeType === 'real_estate' ? 'Emlak' : 'Elektronik',
+            city: fs.city,
+            sellerId: fs.id,
+            sellerName: fs.storeName,
+            sellerPhone: fs.phone,
+            sellerAccountType: 'store',
+            isVerifiedStore: true,
+            isFake: true,
+            status: 'active',
+            images: [fs.photoURL],
+            createdAt: now,
+          },
+        ];
+
+        for (const lp of sampleListings) {
+          await setDoc(doc(db, 'products', lp.id), lp, { merge: true });
+        }
       }
 
-      alert('12 Fake Kurumsal Mağaza başarıyla eklendi ve onaylandı!');
+      alert('12 Fake Kurumsal Mağaza ve özel ilanları başarıyla eklendi!');
     } catch (e: any) {
       console.error('Error seeding fake stores:', e);
       alert('Hata oluştu: ' + e.message);
@@ -215,14 +255,16 @@ export default function StoreApplicationsPage() {
   };
 
   const handleDeleteFakeStores = async () => {
-    if (!confirm('Tüm fake mağazaları silmek istediğinize emin misiniz?')) return;
+    if (!confirm('Tüm fake mağazaları ve ilanlarını silmek istediğinize emin misiniz?')) return;
     setSeeding(true);
     try {
       for (const fs of FAKE_STORES_POOL) {
         await deleteDoc(doc(db, 'users', fs.id)).catch(() => {});
         await deleteDoc(doc(db, 'store_applications', fs.id)).catch(() => {});
+        await deleteDoc(doc(db, 'products', `fake_prod_${fs.id}_1`)).catch(() => {});
+        await deleteDoc(doc(db, 'products', `fake_prod_${fs.id}_2`)).catch(() => {});
       }
-      alert('Tüm fake mağazalar temizlendi.');
+      alert('Tüm fake mağazalar ve ilanları temizlendi.');
     } catch (e: any) {
       console.error('Error deleting fake stores:', e);
       alert('Hata oluştu: ' + e.message);
