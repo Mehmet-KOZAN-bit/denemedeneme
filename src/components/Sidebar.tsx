@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Package, Users, Bell, Flag, Settings,
+  LayoutDashboard, Package, Users, Bell, Flag, Settings, Building2,
   LogOut, Globe, Menu, X, ChevronRight
 } from 'lucide-react';
 import { useAuth, db } from '../context/AuthContext';
@@ -13,6 +13,7 @@ import { collection, onSnapshot } from 'firebase/firestore';
 const navItems = [
   { href: '/',               icon: LayoutDashboard, labelTr: 'Dashboard',          labelEn: 'Dashboard',     badge: null as string | null },
   { href: '/listings',       icon: Package,          labelTr: 'İlan Yönetimi',      labelEn: 'Listings',      badge: null },
+  { href: '/store-applications', icon: Building2,     labelTr: 'Mağaza Başvuruları', labelEn: 'Store Requests', badge: 'pending_stores' },
   { href: '/users',          icon: Users,            labelTr: 'Kullanıcılar',        labelEn: 'Users',         badge: 'pending_phone' },
   { href: '/announcements',  icon: Bell,             labelTr: 'Duyurular',           labelEn: 'Announcements', badge: null },
   { href: '/reports',        icon: Flag,             labelTr: 'Raporlar',            labelEn: 'Reports',       badge: null },
