@@ -267,7 +267,6 @@ export default function UsersPage() {
                   <th className="px-6 py-3">Telefon / Durum</th>
                   <th className="px-6 py-3">Rol / Mağaza</th>
                   <th className="px-6 py-3">Hesap</th>
-                  <th className="px-6 py-3 text-right">İşlemler</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -330,48 +329,6 @@ export default function UsersPage() {
                       <span className={`text-[11px] font-black px-2 py-0.5 rounded-full ${u.isBanned ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'}`}>
                         {u.isBanned ? 'Banlı' : 'Aktif'}
                       </span>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-1.5 justify-end">
-                        {updating === u.uid ? (
-                          <Loader2 className="w-4 h-4 animate-spin text-slate-400" />
-                        ) : (
-                          <>
-                            {u.storeInfo?.storeName && !u.isVerifiedStore && (
-                              <button
-                                onClick={() => approveStore(u.uid)}
-                                title="Mağazayı Onayla"
-                                className="flex items-center gap-1 px-2.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white transition-colors rounded-lg font-bold text-xs shadow-sm"
-                              >
-                                <Store className="w-3.5 h-3.5" />
-                                Mağazayı Onayla
-                              </button>
-                            )}
-                            {u.phone && (
-                              <button
-                                onClick={() => togglePhoneVerification(u.uid, !!u.isPhoneVerified)}
-                                title={u.isPhoneVerified ? 'Doğrulamayı Kaldır' : 'Telefonu Doğrula'}
-                                className={`flex items-center gap-1 px-2.5 py-1.5 transition-colors rounded-lg font-bold text-xs ${u.isPhoneVerified ? 'bg-amber-100 hover:bg-amber-200 text-amber-750' : 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-sm'}`}
-                              >
-                                <Check className="w-3.5 h-3.5" />
-                                {u.isPhoneVerified ? 'Tel Kaldır' : 'Tel Doğrula'}
-                              </button>
-                            )}
-                            {u.role !== 'admin' ? (
-                              <button onClick={() => setRole(u.uid, 'admin')} title="Admin yap" className="p-1.5 bg-violet-100 hover:bg-violet-200 text-violet-700 rounded-lg transition-colors">
-                                <Crown className="w-3.5 h-3.5" />
-                              </button>
-                            ) : (
-                              <button onClick={() => setRole(u.uid, 'user')} title="Admin'den al" className="p-1.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded-lg transition-colors">
-                                <ShieldCheck className="w-3.5 h-3.5" />
-                              </button>
-                            )}
-                            <button onClick={() => toggleBan(u.uid, !!u.isBanned)} title={u.isBanned ? 'Yasağı kaldır' : 'Banla'} className={`p-1.5 rounded-lg transition-colors ${u.isBanned ? 'bg-emerald-100 hover:bg-emerald-200 text-emerald-700' : 'bg-rose-100 hover:bg-rose-200 text-rose-600'}`}>
-                              <Ban className="w-3.5 h-3.5" />
-                            </button>
-                          </>
-                        )}
-                      </div>
                     </td>
                   </tr>
                 ))}
