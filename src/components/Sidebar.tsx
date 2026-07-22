@@ -53,7 +53,7 @@ export function Sidebar({ isTr, setIsTr, collapsed, setCollapsed }: SidebarProps
     <aside className={`${collapsed ? 'w-16' : 'w-64'} transition-all duration-300 shrink-0 hidden md:flex flex-col bg-slate-900 text-white h-screen sticky top-0 overflow-hidden`}>
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-slate-800 ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-9 h-9 rounded-xl bg-teal-500 flex items-center justify-center font-black text-sm shadow-lg shrink-0">AB</div>
+        <img src="/logo.png" className="w-9 h-9 rounded-xl object-contain shrink-0" alt="AdaBazar Logo" />
         {!collapsed && (
           <div className="min-w-0">
             <p className="font-extrabold text-sm text-teal-400 truncate">AdaBazar</p>
