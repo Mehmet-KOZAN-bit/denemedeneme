@@ -443,8 +443,8 @@ export default function StoreApplicationsPage() {
                         <div className="flex items-center gap-2">
                           <p className="font-extrabold text-slate-800 dark:text-white text-sm">{app.storeName}</p>
                           {app.isFakeStore && (
-                            <span className="px-1.5 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 text-[10px] font-bold rounded">
-                              FAKE
+                            <span className="px-1.5 py-0.5 bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300 text-[10px] font-bold rounded">
+                              DEMO MAĞAZA
                             </span>
                           )}
                         </div>
