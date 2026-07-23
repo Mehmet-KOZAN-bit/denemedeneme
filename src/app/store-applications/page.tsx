@@ -199,9 +199,9 @@ export default function StoreApplicationsPage() {
           phone: fs.phone,
           address: fs.address,
           status: 'approved',
-          isFakeStore: true,
-          createdAt: now,
           updatedAt: now,
+        }, { merge: true });
+
         // 3. Add 2 sample active listings per fake store
         const sampleListings = [
           {
