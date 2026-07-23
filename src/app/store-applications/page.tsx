@@ -141,6 +141,39 @@ const FAKE_STORES_POOL = [
   },
 ];
 
+const PRODUCT_IMAGES: Record<string, string[]> = {
+  auto: [
+    'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&q=80&w=600',
+  ],
+  real_estate: [
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=600',
+  ],
+  electronics: [
+    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=600',
+  ],
+  default: [
+    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80&w=600',
+  ],
+};
+
 export default function StoreApplicationsPage() {
   const { user } = useAuth();
   const [applications, setApplications] = useState<StoreApp[]>([]);
@@ -168,7 +201,8 @@ export default function StoreApplicationsPage() {
     setSeeding(true);
     try {
       const now = new Date().toISOString();
-      for (const fs of FAKE_STORES_POOL) {
+      for (let index = 0; index < FAKE_STORES_POOL.length; index++) {
+        const fs = FAKE_STORES_POOL[index];
         // 1. Add user document
         await setDoc(doc(db, 'users', fs.id), {
           displayName: fs.storeName,
@@ -202,7 +236,11 @@ export default function StoreApplicationsPage() {
           updatedAt: now,
         }, { merge: true });
 
-        // 3. Add 2 sample active listings per fake store
+        // 3. Add 2 sample active listings per fake store with distinct high-res product photos
+        const pool = PRODUCT_IMAGES[fs.storeType] || PRODUCT_IMAGES.default;
+        const img1 = pool[(index * 2) % pool.length];
+        const img2 = pool[(index * 2 + 1) % pool.length];
+
         const sampleListings = [
           {
             id: `fake_prod_${fs.id}_1`,
@@ -218,8 +256,8 @@ export default function StoreApplicationsPage() {
             isVerifiedStore: true,
             isFake: true,
             status: 'active',
-            images: [fs.photoURL],
-            createdAt: now,
+            images: [img1],
+            createdAt: new Date(Date.now() - (index * 3600000 + 100000)).toISOString(),
           },
           {
             id: `fake_prod_${fs.id}_2`,
@@ -235,8 +273,8 @@ export default function StoreApplicationsPage() {
             isVerifiedStore: true,
             isFake: true,
             status: 'active',
-            images: [fs.photoURL],
-            createdAt: now,
+            images: [img2],
+            createdAt: new Date(Date.now() - (index * 3600000 + 4500000)).toISOString(),
           },
         ];
 
