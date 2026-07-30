@@ -11,10 +11,22 @@ import {
   Eye, 
   EyeOff, 
   MapPin, 
-  Calendar,
-  DollarSign
+  Edit2,
+  X,
+  Save
 } from 'lucide-react';
 import Link from 'next/link';
+
+const CATEGORIES = [
+  'Emlak & Gayrimenkul',
+  'Vasıta & Araçlar',
+  'Elektronik & Teknoloji',
+  'Giyim & Mağaza',
+  'Ev Eşyaları & Mobilya',
+  'Diğer Hizmet & Ticaret',
+];
+
+const CITIES = ['Lefkoşa', 'Girne', 'Gazimağusa', 'Güzelyurt', 'İskele', 'Lefke'];
 
 export default function StoreListingsPage() {
   const { user } = useAuth();
@@ -22,6 +34,18 @@ export default function StoreListingsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  // Edit Modal State
+  const [editingItem, setEditingItem] = useState<any | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editPrice, setEditPrice] = useState('');
+  const [editCurrency, setEditCurrency] = useState('TRY');
+  const [editCategory, setEditCategory] = useState('');
+  const [editCity, setEditCity] = useState('');
+  const [editDistrict, setEditDistrict] = useState('');
+  const [editDescription, setEditDescription] = useState('');
+  const [editImageUrl, setEditImageUrl] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -59,6 +83,60 @@ export default function StoreListingsPage() {
     }
   };
 
+  const handleOpenEdit = (item: any) => {
+    setEditingItem(item);
+    setEditTitle(item.title || '');
+    setEditPrice(item.price ? String(item.price) : '');
+    setEditCurrency(item.currency || 'TRY');
+    setEditCategory(item.category || CATEGORIES[0]);
+    setEditCity(item.city || CITIES[0]);
+    setEditDistrict(item.district || '');
+    setEditDescription(item.description || '');
+    setEditImageUrl(item.images?.[0] || item.img || '');
+  };
+
+  const handleSaveEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingItem) return;
+
+    if (!editTitle.trim() || editTitle.length < 5) {
+      alert('Lütfen geçerli bir başlık girin.');
+      return;
+    }
+
+    if (!editPrice || isNaN(Number(editPrice)) || Number(editPrice) <= 0) {
+      alert('Lütfen geçerli bir fiyat girin.');
+      return;
+    }
+
+    setEditSaving(true);
+    try {
+      const now = new Date().toISOString();
+      const updatedImg = editImageUrl.trim() || editingItem.images?.[0] || editingItem.img;
+
+      await updateDoc(doc(db, 'products', editingItem.id), {
+        title: editTitle.trim(),
+        price: parseFloat(editPrice),
+        currency: editCurrency,
+        category: editCategory,
+        city: editCity,
+        district: editDistrict.trim() || 'Merkez',
+        description: editDescription.trim(),
+        images: [updatedImg],
+        img: updatedImg,
+        updatedAt: now,
+      });
+
+      alert('İlan başarıyla güncellendi!');
+      setEditingItem(null);
+    } catch (e: any) {
+      console.error('Error updating listing:', e);
+      alert('Güncellenirken hata oluştu: ' + e.message);
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   const filtered = listings.filter(item => {
     if (!search.trim()) return true;
     const qStr = search.toLowerCase();
@@ -76,7 +154,7 @@ export default function StoreListingsPage() {
         <div>
           <h1 className="text-2xl font-black text-white">Mağaza İlanlarım</h1>
           <p className="text-xs text-slate-400 mt-1">
-            Yayındaki ve geçmiş mağaza ürünlerinizi bu panelden yönetebilirsiniz.
+            Yayındaki ve geçmiş mağaza ürünlerinizi bu panelden yönetebilir veya düzenleyebilirsiniz.
           </p>
         </div>
 
@@ -173,6 +251,13 @@ export default function StoreListingsPage() {
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
+                          onClick={() => handleOpenEdit(item)}
+                          className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-400 transition-colors"
+                          title="İlanı Düzenle"
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </button>
+                        <button
                           onClick={() => handleToggleStatus(item)}
                           className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
                           title={item.status === 'passive' ? 'İlanı Yayına Al' : 'İlanı Yayından Kaldır'}
@@ -193,6 +278,142 @@ export default function StoreListingsPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Listing Modal */}
+      {editingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-xl w-full space-y-6 shadow-2xl relative text-left max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setEditingItem(null)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-xl bg-slate-800"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <span className="text-[10px] font-black text-emerald-400 bg-emerald-950 border border-emerald-800 px-2.5 py-1 rounded-full uppercase">
+                İLAN DÜZENLEME
+              </span>
+              <h3 className="text-xl font-black text-white mt-2">Mağaza İlanını Güncelle</h3>
+              <p className="text-xs text-slate-400 mt-1">İlan bilgileriniz güncellendiğinde hem web hem mobil uygulamada anında yansır.</p>
+            </div>
+
+            <form onSubmit={handleSaveEdit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-300">İlan Başlığı *</label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  required
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-300">Kategori</label>
+                  <select
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  >
+                    {CATEGORIES.map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-300">Fiyat & Para Birimi *</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="number"
+                      value={editPrice}
+                      onChange={(e) => setEditPrice(e.target.value)}
+                      required
+                      className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                    />
+                    <select
+                      value={editCurrency}
+                      onChange={(e) => setEditCurrency(e.target.value)}
+                      className="w-24 bg-slate-950 border border-slate-800 rounded-xl px-2 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-bold"
+                    >
+                      <option value="TRY">₺ (TRY)</option>
+                      <option value="GBP">£ (GBP)</option>
+                      <option value="USD">$ (USD)</option>
+                      <option value="EUR">€ (EUR)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-300">Şehir</label>
+                  <select
+                    value={editCity}
+                    onChange={(e) => setEditCity(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  >
+                    {CITIES.map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-300">Mahalle / Bölge</label>
+                  <input
+                    type="text"
+                    value={editDistrict}
+                    onChange={(e) => setEditDistrict(e.target.value)}
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-300">Görsel URL</label>
+                <input
+                  type="url"
+                  value={editImageUrl}
+                  onChange={(e) => setEditImageUrl(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-300">Açıklama</label>
+                <textarea
+                  rows={3}
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 resize-none"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => setEditingItem(null)}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs py-3 rounded-xl transition-colors"
+                >
+                  İptal
+                </button>
+                <button
+                  type="submit"
+                  disabled={editSaving}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>{editSaving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet'}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
