@@ -71,13 +71,26 @@ export default function StoreSettingsPage() {
         storeLogo: photoURL.trim(),
       };
 
-      await updateDoc(doc(db, 'users', user.uid), {
+      const updatePayload = {
         displayName: storeName.trim(),
         photoURL: photoURL.trim(),
         photoUrl: photoURL.trim(),
         storeInfo: updatedStoreInfo,
         updatedAt: now,
-      });
+      };
+
+      await updateDoc(doc(db, 'users', user.uid), updatePayload);
+
+      const targetId = profile?.targetStoreUid;
+      if (targetId && targetId !== user.uid) {
+        await updateDoc(doc(db, 'users', targetId), updatePayload).catch(() => {});
+        await updateDoc(doc(db, 'store_applications', targetId), {
+          storeName: storeName.trim(),
+          photoURL: photoURL.trim(),
+          logoUrl: photoURL.trim(),
+          updatedAt: now,
+        }).catch(() => {});
+      }
 
       setSuccessMsg(true);
       setTimeout(() => setSuccessMsg(false), 4000);
