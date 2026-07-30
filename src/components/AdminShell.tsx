@@ -29,10 +29,10 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   const isAdmin = profile?.role === 'admin';
 
-  // Redirect store vendor from admin dashboard to store dashboard if needed
+  // Redirect store vendor from any admin route to store dashboard
   useEffect(() => {
     if (loading || !user || !profile) return;
-    if (isStoreVendor && !isAdmin && (pathname === '/' || pathname === '/listings' || pathname === '/users')) {
+    if (isStoreVendor && !isAdmin && !pathname.startsWith('/store')) {
       router.push('/store/dashboard');
     }
   }, [loading, user, profile, isStoreVendor, isAdmin, pathname, router]);
@@ -137,6 +137,17 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
 
   // RENDER STORE VENDOR SAAS SHELL
   if (isStoreVendor && !isAdmin) {
+    if (!pathname.startsWith('/store')) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950">
+          <Loader2 className="w-10 h-10 animate-spin text-emerald-500" />
+          <span className="text-sm font-bold text-slate-400 mt-3 animate-pulse">
+            Mağaza Paneline Yönlendiriliyorsunuz...
+          </span>
+        </div>
+      );
+    }
+
     const storeName = profile?.storeInfo?.storeName || profile?.displayName || 'Mağazam';
 
     return (
