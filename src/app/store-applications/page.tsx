@@ -143,34 +143,34 @@ const FAKE_STORES_POOL = [
 
 const PRODUCT_IMAGES: Record<string, string[]> = {
   auto: [
-    'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&q=80&w=1200',
   ],
   real_estate: [
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=1200',
   ],
   electronics: [
-    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=1200',
   ],
   default: [
-    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=600',
-    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80&w=600',
+    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80&w=1200',
   ],
 };
 
@@ -210,7 +210,7 @@ export default function StoreApplicationsPage() {
           storeStatus: 'approved',
           isVerifiedStore: true,
           isFakeStore: true,
-          photoURL: fs.photoURL,
+          photoURL: fs.photoURL.replace(/w=\d+/, 'w=500'),
           phone: fs.phone,
           storeInfo: {
             storeName: fs.storeName,
@@ -236,19 +236,35 @@ export default function StoreApplicationsPage() {
           updatedAt: now,
         }, { merge: true });
 
-        // 3. Add 2 sample active listings per fake store with distinct high-res product photos
+        // 3. Add 2 sample active listings per fake store with distinct high-res product photos and rich descriptions
         const pool = PRODUCT_IMAGES[fs.storeType] || PRODUCT_IMAGES.default;
         const img1 = pool[(index * 2) % pool.length];
         const img2 = pool[(index * 2 + 1) % pool.length];
 
+        const title1 = fs.storeType === 'auto' ? `${fs.storeName} - 2022 Model Lüks Araç` : fs.storeType === 'real_estate' ? `${fs.city} Merkezde 3+1 Lüks Gayrimenkul` : `${fs.storeName} - Orijinal Garantili Ürün`;
+        const title2 = fs.storeType === 'auto' ? `${fs.city} Galerimizden Temiz Otomobil` : fs.storeType === 'real_estate' ? `${fs.city} Manzaralı Fırsat Satılık Ev` : `${fs.storeName} - Sıfır Kutulu Cihaz`;
+
+        const desc1 = fs.storeType === 'auto'
+          ? `${fs.storeName} güvencesiyle satışa sunulan bu araç, tüm bakımları yetkili servisinde eksiksiz yapılmış, kazasız ve masrafsızdır. Ekspertiz garantili olup test sürüşüne açıktır.`
+          : fs.storeType === 'real_estate'
+          ? `${fs.city} merkezinde yer alan bu lüks gayrimenkul; koçanı hazır, krediye uygun, geniş teraslı ve yüksek kira getirili lokasyondadır. Taşınmaya hemen uygundur.`
+          : `${fs.storeName} tarafından sıfır ambalajında ve resmi garanti kapsamıyla satışa sunulmuştur. Fatura ve orijinal aksesuarlarıyla birlikte teslim edilecektir.`;
+
+        const desc2 = fs.storeType === 'auto'
+          ? `${fs.city} galerimizde sergilenen bu otomobil, birinci sınıf kondisyonda olup yürür aksamı kusursuzdur. Düşük kilometreli ve takasa açıktır.`
+          : fs.storeType === 'real_estate'
+          ? `${fs.city} bölgesinin en gözde konumunda bulunan bu fırsat ev; kesintisiz manzarası, özel otoparkı ve lüks iç mimarisiyle yatırımcılar için ideal seçenektir.`
+          : `${fs.storeName} stoklarında sınırlı sayıda bulunan bu cihaz, sorunsuz çalışır durumda test edilerek garantili biçimde sunulmaktadır.`;
+
         const sampleListings = [
           {
             id: `fake_prod_${fs.id}_1`,
-            title: fs.storeType === 'auto' ? `${fs.storeName} - 2022 Model Lüks Araç` : fs.storeType === 'real_estate' ? `${fs.city} Merkezde 3+1 Lüks Gayrimenkul` : `${fs.storeName} - Orijinal Garantili Ürün`,
+            title: title1,
             price: fs.storeType === 'auto' ? 35000 : fs.storeType === 'real_estate' ? 185000 : 1250,
             currency: fs.storeType === 'real_estate' || fs.storeType === 'auto' ? 'GBP' : 'EUR',
             category: fs.storeType === 'auto' ? 'Vasıta' : fs.storeType === 'real_estate' ? 'Emlak' : 'Elektronik',
             city: fs.city,
+            description: desc1,
             sellerId: fs.id,
             sellerName: fs.storeName,
             sellerPhone: fs.phone,
@@ -261,11 +277,12 @@ export default function StoreApplicationsPage() {
           },
           {
             id: `fake_prod_${fs.id}_2`,
-            title: fs.storeType === 'auto' ? `${fs.city} Galerimizden Temiz Otomobil` : fs.storeType === 'real_estate' ? `${fs.city} Manzaralı Fırsat Satılık Ev` : `${fs.storeName} - Sıfır Kutulu Cihaz`,
+            title: title2,
             price: fs.storeType === 'auto' ? 24500 : fs.storeType === 'real_estate' ? 120000 : 850,
             currency: fs.storeType === 'real_estate' || fs.storeType === 'auto' ? 'GBP' : 'EUR',
             category: fs.storeType === 'auto' ? 'Vasıta' : fs.storeType === 'real_estate' ? 'Emlak' : 'Elektronik',
             city: fs.city,
+            description: desc2,
             sellerId: fs.id,
             sellerName: fs.storeName,
             sellerPhone: fs.phone,

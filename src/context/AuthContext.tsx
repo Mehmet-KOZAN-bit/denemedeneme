@@ -31,7 +31,20 @@ export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
-  role: 'user' | 'premium_seller' | 'admin';
+  role: 'user' | 'premium_seller' | 'admin' | 'store';
+  accountType?: 'individual' | 'store';
+  storeStatus?: 'pending' | 'approved' | 'rejected';
+  isVerifiedStore?: boolean;
+  storeInfo?: {
+    storeName?: string;
+    storeType?: string;
+    city?: string;
+    district?: string;
+    phone?: string;
+    taxId?: string;
+    address?: string;
+  };
+  photoURL?: string;
   isBanned: boolean;
 }
 
