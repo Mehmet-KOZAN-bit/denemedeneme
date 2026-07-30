@@ -66,11 +66,15 @@ export default function StoreSettingsPage() {
         address: address.trim(),
         phone: phone.trim(),
         taxId: taxId.trim(),
+        photoURL: photoURL.trim(),
+        logoUrl: photoURL.trim(),
+        storeLogo: photoURL.trim(),
       };
 
       await updateDoc(doc(db, 'users', user.uid), {
         displayName: storeName.trim(),
         photoURL: photoURL.trim(),
+        photoUrl: photoURL.trim(),
         storeInfo: updatedStoreInfo,
         updatedAt: now,
       });
