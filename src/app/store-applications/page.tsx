@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Building2, Check, X, Search, Clock, ShieldCheck, Mail, Phone, MapPin, Plus, Trash2 } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
+import { createOrUpdateStoreWebCredentials } from '../../utils/storeAuth';
 
 interface StoreApp {
   id: string;
@@ -182,6 +183,13 @@ export default function StoreApplicationsPage() {
   const [search, setSearch] = useState('');
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
+
+  // Web Credentials Modal State
+  const [credModalApp, setCredModalApp] = useState<StoreApp | null>(null);
+  const [webEmail, setWebEmail] = useState('');
+  const [webPassword, setWebPassword] = useState('');
+  const [credSaving, setCredSaving] = useState(false);
+  const [createdCreds, setCreatedCreds] = useState<{ email: string; pass: string } | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -543,24 +551,39 @@ export default function StoreApplicationsPage() {
                       {app.createdAt ? new Date(app.createdAt).toLocaleDateString('tr-TR') : '-'}
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {app.status === 'pending' && (
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => handleApprove(app)}
-                            disabled={processingId === app.id}
-                            className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
-                          >
-                            <Check className="w-3.5 h-3.5" /> Onayla
-                          </button>
-                          <button
-                            onClick={() => handleReject(app)}
-                            disabled={processingId === app.id}
-                            className="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs font-bold transition-all"
-                          >
-                            <X className="w-3.5 h-3.5" /> Reddet
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex items-center justify-end gap-2">
+                        {app.status === 'pending' && (
+                          <>
+                            <button
+                              onClick={() => handleApprove(app)}
+                              disabled={processingId === app.id}
+                              className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
+                            >
+                              <Check className="w-3.5 h-3.5" /> Onayla
+                            </button>
+                            <button
+                              onClick={() => handleReject(app)}
+                              disabled={processingId === app.id}
+                              className="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs font-bold transition-all"
+                            >
+                              <X className="w-3.5 h-3.5" /> Reddet
+                            </button>
+                          </>
+                        )}
+                        <button
+                          onClick={() => {
+                            setCredModalApp(app);
+                            const cleanName = app.storeName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                            setWebEmail(`${cleanName}@adabazaar.com`);
+                            setWebPassword(`Mağaza${Math.floor(100000 + Math.random() * 900000)}!`);
+                            setCreatedCreds(null);
+                          }}
+                          className="px-3 py-1.5 bg-emerald-900/40 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-700/60 rounded-lg text-xs font-bold transition-all flex items-center gap-1"
+                        >
+                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                          <span>Web Girişi Tanımla</span>
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -569,6 +592,97 @@ export default function StoreApplicationsPage() {
           </div>
         )}
       </div>
+
+      {/* Web Credentials Modal */}
+      {credModalApp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xs">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 max-w-md w-full space-y-6 shadow-2xl relative text-left">
+            <button
+              onClick={() => setCredModalApp(null)}
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-xl bg-slate-800"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <div>
+              <span className="text-[10px] font-black text-emerald-400 bg-emerald-950 border border-emerald-800 px-2.5 py-1 rounded-full uppercase">
+                WEB PANELİ EŞLEŞTİRME
+              </span>
+              <h3 className="text-xl font-black text-white mt-2">{credModalApp.storeName}</h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Mağaza sahibinin web paneline (`denemedeneme.vercel.app`) giriş yapabilmesi için e-posta ve şifre tanımlayın.
+              </p>
+            </div>
+
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setCredSaving(true);
+                try {
+                  await createOrUpdateStoreWebCredentials(credModalApp.userId, webEmail, webPassword);
+                  setCreatedCreds({ email: webEmail, pass: webPassword });
+                  alert('Mağaza web giriş bilgileri başarıyla oluşturuldu ve kurumsal hesaba yükseltildi!');
+                } catch (err: any) {
+                  alert('Hata oluştu: ' + err.message);
+                } finally {
+                  setCredSaving(false);
+                }
+              }}
+              className="space-y-4"
+            >
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-300">Mağaza Web E-Posta Adresi</label>
+                <input
+                  type="email"
+                  value={webEmail}
+                  onChange={(e) => setWebEmail(e.target.value)}
+                  required
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                  placeholder="magaza@adabazaar.com"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-bold text-slate-300">Mağaza Web Giriş Şifresi</label>
+                <input
+                  type="text"
+                  value={webPassword}
+                  onChange={(e) => setWebPassword(e.target.value)}
+                  required
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  placeholder="Şifre belirleyin..."
+                />
+              </div>
+
+              {createdCreds && (
+                <div className="p-4 bg-emerald-950/80 border border-emerald-800 rounded-xl space-y-1.5 text-left">
+                  <p className="text-xs font-bold text-emerald-400">✓ Web Giriş Bilgileri Kaydedildi:</p>
+                  <p className="text-xs text-slate-300 font-mono">E-Posta: <span className="text-white font-bold">{createdCreds.email}</span></p>
+                  <p className="text-xs text-slate-300 font-mono">Şifre: <span className="text-emerald-400 font-bold">{createdCreds.pass}</span></p>
+                  <p className="text-[11px] text-slate-400 pt-1">Bu bilgileri mağaza sahibine ileterek web paneline giriş yapmasını sağlayabilirsiniz.</p>
+                </div>
+              )}
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setCredModalApp(null)}
+                  className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs py-3 rounded-xl transition-colors"
+                >
+                  Kapat
+                </button>
+                <button
+                  type="submit"
+                  disabled={credSaving}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md"
+                >
+                  {credSaving ? 'Kaydediliyor...' : 'Giriş Yetkisini Kaydet'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

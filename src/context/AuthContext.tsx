@@ -45,6 +45,7 @@ export interface UserProfile {
     address?: string;
   };
   photoURL?: string;
+  targetStoreUid?: string;
   isBanned: boolean;
 }
 
@@ -72,9 +73,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const userRef = doc(db, 'users', currentUser.uid);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
-          setProfile(docSnap.data() as UserProfile);
+          const data = docSnap.data() as UserProfile;
+          if (data.targetStoreUid) {
+            const targetSnap = await getDoc(doc(db, 'users', data.targetStoreUid));
+            if (targetSnap.exists()) {
+              setProfile({ ...targetSnap.data(), uid: data.targetStoreUid } as UserProfile);
+            } else {
+              setProfile(data);
+            }
+          } else {
+            setProfile(data);
+          }
         } else {
-          // Do NOT auto-create admin profiles. Assign a temporary client-side 'user' profile to deny access safely.
           setProfile({
             uid: currentUser.uid,
             email: currentUser.email || '',
