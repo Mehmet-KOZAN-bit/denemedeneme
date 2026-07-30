@@ -30,7 +30,12 @@ export function StoreSidebar({ isTr, setIsTr, collapsed, setCollapsed }: StoreSi
 
   const storeName = profile?.storeInfo?.storeName || profile?.displayName || 'Kurumsal Mağaza';
   const city = profile?.storeInfo?.city || 'Kıbrıs';
-  const photoURL = profile?.photoURL;
+  const photoURL =
+    profile?.photoURL ||
+    profile?.photoUrl ||
+    profile?.storeInfo?.photoURL ||
+    profile?.storeInfo?.storeLogo ||
+    profile?.storeInfo?.logoUrl;
 
   const navItems = [
     {

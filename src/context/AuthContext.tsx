@@ -43,8 +43,12 @@ export interface UserProfile {
     phone?: string;
     taxId?: string;
     address?: string;
+    photoURL?: string;
+    storeLogo?: string;
+    logoUrl?: string;
   };
   photoURL?: string;
+  photoUrl?: string;
   targetStoreUid?: string;
   isBanned: boolean;
 }
