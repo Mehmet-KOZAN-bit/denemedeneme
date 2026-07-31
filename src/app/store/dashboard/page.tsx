@@ -29,13 +29,30 @@ export default function StoreDashboardPage() {
     if (!user) return;
     setLoading(true);
 
-    const sellerIds = Array.from(new Set([user?.uid, profile?.targetStoreUid, profile?.uid].filter(Boolean)));
-    const q = sellerIds.length > 1
-      ? query(collection(db, 'products'), where('sellerId', 'in', sellerIds))
-      : query(collection(db, 'products'), where('sellerId', '==', sellerIds[0]));
+    const webUid = user.uid;
+    const targetUid = profile?.targetStoreUid;
+    const profUid = profile?.uid;
+    const storeName = profile?.storeInfo?.storeName || profile?.displayName;
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const unsub = onSnapshot(collection(db, 'products'), (snapshot) => {
+      const docs = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter((item: any) => {
+          const sid = item.sellerId || item.seller?.id;
+          const sName = item.sellerName || item.seller?.name;
+
+          const matchesId = 
+            (sid && sid === webUid) || 
+            (targetUid && sid === targetUid) || 
+            (profUid && sid === profUid);
+
+          const matchesName = 
+            storeName && sName && 
+            sName.toLowerCase().trim() === storeName.toLowerCase().trim();
+
+          return matchesId || matchesName;
+        });
+
       docs.sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
       setStoreListings(docs);
       setLoading(false);
