@@ -124,6 +124,7 @@ export default function StoreListingsPage() {
         description: editDescription.trim(),
         images: [updatedImg],
         img: updatedImg,
+        imageUrl: updatedImg,
         updatedAt: now,
       });
 

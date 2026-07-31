@@ -99,6 +99,7 @@ export default function StoreAddListingPage() {
         district: district.trim() || 'Merkez',
         images: [selectedImg],
         img: selectedImg,
+        imageUrl: selectedImg,
         sellerId: user.uid,
         seller: {
           id: user.uid,
