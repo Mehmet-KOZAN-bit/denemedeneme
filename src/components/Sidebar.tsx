@@ -15,7 +15,6 @@ const navItems = [
   { href: '/store-applications', icon: Building2, labelTr: 'Mağaza Başvuruları', labelEn: 'Store Requests', badge: 'pending_stores' },
   { href: '/listings', icon: Package, labelTr: 'İlan Yönetimi', labelEn: 'Listings', badge: null },
   { href: '/users', icon: Users, labelTr: 'Kullanıcılar', labelEn: 'Users', badge: null },
-  { href: '/announcements', icon: Bell, labelTr: 'Duyurular', labelEn: 'Announcements', badge: null },
 ];
 
 interface SidebarProps {

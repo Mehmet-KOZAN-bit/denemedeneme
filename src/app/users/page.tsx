@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, Search, ShieldCheck, Ban, Crown, Loader2, Phone, Check, CheckCircle, Store, ShieldAlert } from 'lucide-react';
+import { Users, Search, Ban, Loader2, Phone, CheckCircle, Store, ShieldAlert } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 
@@ -73,17 +73,6 @@ export default function UsersPage() {
     }
   };
 
-  const setRole = async (uid: string, role: string) => {
-    setUpdating(uid);
-    try {
-      await updateDoc(doc(db, 'users', uid), { role });
-    } catch (e: any) {
-      alert('Hata: ' + e.message);
-    } finally {
-      setUpdating(null);
-    }
-  };
-
   const storesCount = users.filter(u => u.accountType === 'store' || u.isVerifiedStore).length;
   const individualCount = users.length - storesCount;
 
@@ -110,7 +99,7 @@ export default function UsersPage() {
           </div>
           <div>
             <h1 className="text-2xl font-black text-white">Kullanıcı Yönetimi</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Kayıtlı hesaplar, roller, hesap durumları ve erişim engelleri</p>
+            <p className="text-xs text-slate-400 mt-0.5">Kayıtlı kullanıcı hesapları, mağazalar ve hesap engelleri</p>
           </div>
         </div>
 
@@ -121,7 +110,7 @@ export default function UsersPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
             <Users className="w-5 h-5" />
@@ -139,16 +128,6 @@ export default function UsersPage() {
           <div>
             <p className="text-xl font-black text-emerald-400">{storesCount}</p>
             <p className="text-[11px] font-semibold text-slate-400">Kurumsal Mağaza</p>
-          </div>
-        </div>
-
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center">
-            <Crown className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-xl font-black text-violet-400">{users.filter(u => u.role === 'admin').length}</p>
-            <p className="text-[11px] font-semibold text-slate-400">Yönetici (Admin)</p>
           </div>
         </div>
 
@@ -231,7 +210,6 @@ export default function UsersPage() {
                   <th className="p-4">Kullanıcı</th>
                   <th className="p-4">Hesap Türü / Mağaza</th>
                   <th className="p-4">Telefon</th>
-                  <th className="p-4">Rol</th>
                   <th className="p-4">Durum</th>
                   <th className="p-4 text-right">İşlemler</th>
                 </tr>
@@ -287,18 +265,6 @@ export default function UsersPage() {
                         ) : (
                           <span className="text-slate-500">—</span>
                         )}
-                      </td>
-
-                      <td className="p-4">
-                        <select
-                          value={u.role || 'user'}
-                          onChange={(e) => setRole(u.uid, e.target.value)}
-                          className="bg-slate-950 border border-slate-800 text-xs font-bold text-white rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
-                        >
-                          <option value="user">Kullanıcı</option>
-                          <option value="premium_seller">Satıcı</option>
-                          <option value="admin">Yönetici (Admin)</option>
-                        </select>
                       </td>
 
                       <td className="p-4">

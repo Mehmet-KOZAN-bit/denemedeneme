@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, FileText, ShieldAlert, Activity, Bell, Building2, TrendingUp, CheckCircle } from 'lucide-react';
+import { Users, FileText, ShieldAlert, Activity, Building2 } from 'lucide-react';
 import { useAuth, db } from '../context/AuthContext';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
@@ -11,17 +11,15 @@ export default function DashboardPage() {
   const [activeAds, setActiveAds] = useState(0);
   const [pendingCount, setPendingCount] = useState(0);
   const [storeApplicationsCount, setStoreApplicationsCount] = useState(0);
-  const [announcementsCount, setAnnouncementsCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
     const unsub1 = onSnapshot(collection(db, 'users'), s => setTotalUsers(s.size));
     const unsub2 = onSnapshot(query(collection(db, 'products'), where('status', '==', 'active')), s => setActiveAds(s.size));
     const unsub3 = onSnapshot(query(collection(db, 'products'), where('status', '==', 'pending')), s => setPendingCount(s.size));
-    const unsub4 = onSnapshot(collection(db, 'announcements'), s => setAnnouncementsCount(s.size));
-    const unsub5 = onSnapshot(query(collection(db, 'store_applications'), where('status', '==', 'pending')), s => setStoreApplicationsCount(s.size));
+    const unsub4 = onSnapshot(query(collection(db, 'store_applications'), where('status', '==', 'pending')), s => setStoreApplicationsCount(s.size));
 
-    return () => { unsub1(); unsub2(); unsub3(); unsub4(); unsub5(); };
+    return () => { unsub1(); unsub2(); unsub3(); unsub4(); };
   }, [user]);
 
   const metrics = [
@@ -29,7 +27,6 @@ export default function DashboardPage() {
     { label: 'Toplam Kullanıcı', value: totalUsers, icon: Users, color: 'blue', sub: 'Kayıtlı hesaplar' },
     { label: 'Aktif İlanlar', value: activeAds, icon: FileText, color: 'teal', sub: 'Yayındaki ilanlar' },
     { label: 'Bekleyen İlanlar', value: pendingCount, icon: ShieldAlert, color: 'amber', sub: 'İnceleme bekliyor' },
-    { label: 'Duyurular', value: announcementsCount, icon: Bell, color: 'violet', sub: 'Yayınlanan duyurular' },
   ];
 
   return (
@@ -47,7 +44,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {metrics.map((m) => (
           <div key={m.label} className="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-sm space-y-3">
             <div className="w-10 h-10 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-emerald-400">
@@ -111,7 +108,7 @@ export default function DashboardPage() {
             </div>
           </div>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Tüm kayıtlı kullanıcı hesaplarını listeleyin, rollerini belirleyin ve gerektiginde hesap engeli koyun.
+            Tüm kayıtlı kullanıcı hesaplarını listeleyin ve gerektiğinde hesap engeli koyun.
           </p>
           <span className="inline-block text-xs font-bold text-blue-400 mt-4 group-hover:translate-x-1 transition-transform">
             Kullanıcılara Git →
