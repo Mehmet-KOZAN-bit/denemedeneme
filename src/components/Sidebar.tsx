@@ -11,13 +11,11 @@ import { useAuth, db } from '../context/AuthContext';
 import { collection, onSnapshot } from 'firebase/firestore';
 
 const navItems = [
-  { href: '/',               icon: LayoutDashboard, labelTr: 'Dashboard',          labelEn: 'Dashboard',     badge: null as string | null },
-  { href: '/listings',       icon: Package,          labelTr: 'İlan Yönetimi',      labelEn: 'Listings',      badge: null },
-  { href: '/store-applications', icon: Building2,     labelTr: 'Mağaza Başvuruları', labelEn: 'Store Requests', badge: 'pending_stores' },
-  { href: '/users',          icon: Users,            labelTr: 'Kullanıcılar',        labelEn: 'Users',         badge: 'pending_phone' },
-  { href: '/announcements',  icon: Bell,             labelTr: 'Duyurular',           labelEn: 'Announcements', badge: null },
-  { href: '/reports',        icon: Flag,             labelTr: 'Raporlar',            labelEn: 'Reports',       badge: null },
-  { href: '/settings',       icon: Settings,         labelTr: 'Ayarlar',             labelEn: 'Settings',      badge: null },
+  { href: '/', icon: LayoutDashboard, labelTr: 'Dashboard', labelEn: 'Dashboard', badge: null },
+  { href: '/store-applications', icon: Building2, labelTr: 'Mağaza Başvuruları', labelEn: 'Store Requests', badge: 'pending_stores' },
+  { href: '/listings', icon: Package, labelTr: 'İlan Yönetimi', labelEn: 'Listings', badge: null },
+  { href: '/users', icon: Users, labelTr: 'Kullanıcılar', labelEn: 'Users', badge: null },
+  { href: '/announcements', icon: Bell, labelTr: 'Duyurular', labelEn: 'Announcements', badge: null },
 ];
 
 interface SidebarProps {
@@ -30,23 +28,19 @@ interface SidebarProps {
 export function Sidebar({ isTr, setIsTr, collapsed, setCollapsed }: SidebarProps) {
   const pathname = usePathname();
   const { user, profile, logout } = useAuth();
-  const [pendingPhoneCount, setPendingPhoneCount] = useState(0);
+  const [pendingStoreCount, setPendingStoreCount] = useState(0);
 
-  // Real-time pending phone verification count
   useEffect(() => {
     if (!user) return;
-    const unsub = onSnapshot(collection(db, 'users'), snap => {
-      const count = snap.docs.filter(d => {
-        const data = d.data();
-        return data.phone && data.isPhoneVerified !== true;
-      }).length;
-      setPendingPhoneCount(count);
+    const unsub = onSnapshot(collection(db, 'store_applications'), snap => {
+      const count = snap.docs.filter(d => d.data().status === 'pending').length;
+      setPendingStoreCount(count);
     });
     return () => unsub();
   }, [user]);
 
   const getBadgeCount = (badge: string | null) => {
-    if (badge === 'pending_phone') return pendingPhoneCount;
+    if (badge === 'pending_stores') return pendingStoreCount;
     return 0;
   };
 

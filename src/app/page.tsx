@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, FileText, ShieldAlert, Activity, Bell, Clock, TrendingUp } from 'lucide-react';
+import { Users, FileText, ShieldAlert, Activity, Bell, Building2, TrendingUp, CheckCircle } from 'lucide-react';
 import { useAuth, db } from '../context/AuthContext';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
@@ -10,7 +10,7 @@ export default function DashboardPage() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [activeAds, setActiveAds] = useState(0);
   const [pendingCount, setPendingCount] = useState(0);
-  const [todayAds, setTodayAds] = useState(0);
+  const [storeApplicationsCount, setStoreApplicationsCount] = useState(0);
   const [announcementsCount, setAnnouncementsCount] = useState(0);
 
   useEffect(() => {
@@ -19,112 +19,104 @@ export default function DashboardPage() {
     const unsub2 = onSnapshot(query(collection(db, 'products'), where('status', '==', 'active')), s => setActiveAds(s.size));
     const unsub3 = onSnapshot(query(collection(db, 'products'), where('status', '==', 'pending')), s => setPendingCount(s.size));
     const unsub4 = onSnapshot(collection(db, 'announcements'), s => setAnnouncementsCount(s.size));
-
-    const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0);
-    const unsub5 = onSnapshot(collection(db, 'products'), s => {
-      const count = s.docs.filter(d => {
-        const createdAt = d.data().createdAt;
-        return createdAt && new Date(createdAt) >= todayStart;
-      }).length;
-      setTodayAds(count);
-    });
+    const unsub5 = onSnapshot(query(collection(db, 'store_applications'), where('status', '==', 'pending')), s => setStoreApplicationsCount(s.size));
 
     return () => { unsub1(); unsub2(); unsub3(); unsub4(); unsub5(); };
   }, [user]);
 
   const metrics = [
-    { label: 'Toplam Kullanıcı', value: totalUsers, icon: Users,       color: 'teal',   sub: 'Kayıtlı hesaplar' },
-    { label: 'Aktif İlanlar',    value: activeAds,  icon: FileText,    color: 'emerald', sub: 'Canlı ilanlar' },
-    { label: 'Bekleyen Onay',    value: pendingCount, icon: ShieldAlert, color: 'amber',  sub: 'İnceleme bekliyor' },
-    { label: 'Bugün Eklenen',    value: todayAds,   icon: TrendingUp,  color: 'blue',   sub: 'Yeni ilanlar' },
-    { label: 'Duyurular',        value: announcementsCount, icon: Bell, color: 'violet', sub: 'Toplam duyuru' },
+    { label: 'Mağaza Başvuruları', value: storeApplicationsCount, icon: Building2, color: 'emerald', sub: 'Onay bekleyen mağaza' },
+    { label: 'Toplam Kullanıcı', value: totalUsers, icon: Users, color: 'blue', sub: 'Kayıtlı hesaplar' },
+    { label: 'Aktif İlanlar', value: activeAds, icon: FileText, color: 'teal', sub: 'Yayındaki ilanlar' },
+    { label: 'Bekleyen İlanlar', value: pendingCount, icon: ShieldAlert, color: 'amber', sub: 'İnceleme bekliyor' },
+    { label: 'Duyurular', value: announcementsCount, icon: Bell, color: 'violet', sub: 'Yayınlanan duyurular' },
   ];
-
-  const colorMap: Record<string, string> = {
-    teal:    'bg-teal-50 dark:bg-teal-900/20 text-teal-600 dark:text-teal-400',
-    emerald: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400',
-    amber:   'bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400',
-    blue:    'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
-    violet:  'bg-violet-50 dark:bg-violet-900/20 text-violet-600 dark:text-violet-400',
-  };
 
   return (
     <div className="space-y-8">
-      {/* Page title */}
-      <div className="flex items-center justify-between">
+      {/* Page Title & Status */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-black text-slate-800 dark:text-white">Dashboard</h1>
-          <p className="text-sm text-slate-400 mt-0.5">AdaBazar platform genel durumu</p>
+          <h1 className="text-2xl font-black text-white">Yönetim Özeti (Dashboard)</h1>
+          <p className="text-xs text-slate-400 mt-1">AdaBazar SaaS & Mağaza portalı genel istatistikleri</p>
         </div>
-        <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-500 text-xs font-bold px-3 py-1.5 rounded-full border border-slate-200 dark:border-slate-700">
-          <Activity className="w-3.5 h-3.5 text-emerald-500 animate-pulse" />
-          SYSTEM STABLE
+        <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 text-emerald-400 text-xs font-bold px-4 py-2 rounded-2xl self-start sm:self-auto">
+          <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />
+          <span>SİSTEM AKTİF & CANLI</span>
         </div>
       </div>
 
-      {/* Metrics grid */}
+      {/* Metrics Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
         {metrics.map((m) => (
-          <div key={m.label} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 shadow-sm flex flex-col gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${colorMap[m.color]}`}>
+          <div key={m.label} className="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-sm space-y-3">
+            <div className="w-10 h-10 rounded-2xl bg-slate-950 border border-slate-800 flex items-center justify-center text-emerald-400">
               <m.icon className="w-5 h-5" />
             </div>
             <div>
-              <p className="text-2xl font-black text-slate-800 dark:text-white">{m.value}</p>
-              <p className="text-xs font-semibold text-slate-500 mt-0.5">{m.label}</p>
-              <p className="text-[10px] text-slate-400">{m.sub}</p>
+              <p className="text-2xl font-black text-white">{m.value}</p>
+              <p className="text-xs font-bold text-slate-300 mt-0.5">{m.label}</p>
+              <p className="text-[10px] text-slate-500">{m.sub}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Quick links */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <a href="/listings" className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-teal-400 dark:hover:border-teal-600 transition-all">
-          <div className="flex items-center gap-3 mb-2">
-            <FileText className="w-5 h-5 text-teal-500" />
-            <span className="font-bold text-sm text-slate-700 dark:text-white">İlan Yönetimi</span>
-          </div>
-          <p className="text-xs text-slate-400">Bekleyen, aktif ve reddedilen tüm ilanları yönet</p>
-          <p className="text-xs font-bold text-teal-500 mt-2 group-hover:underline">İlanlara git →</p>
-        </a>
-        <a href="/users" className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-blue-400 dark:hover:border-blue-600 transition-all">
-          <div className="flex items-center gap-3 mb-2">
-            <Users className="w-5 h-5 text-blue-500" />
-            <span className="font-bold text-sm text-slate-700 dark:text-white">Kullanıcı Yönetimi</span>
-          </div>
-          <p className="text-xs text-slate-400">Kullanıcıları listele, rol ver, ban et</p>
-          <p className="text-xs font-bold text-blue-500 mt-2 group-hover:underline">Kullanıcılara git →</p>
-        </a>
-        <a href="/announcements" className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm hover:border-violet-400 dark:hover:border-violet-600 transition-all">
-          <div className="flex items-center gap-3 mb-2">
-            <Bell className="w-5 h-5 text-violet-500" />
-            <span className="font-bold text-sm text-slate-700 dark:text-white">Duyurular</span>
-          </div>
-          <p className="text-xs text-slate-400">Kullanıcılara anlık bildirim ve duyuru gönder</p>
-          <p className="text-xs font-bold text-violet-500 mt-2 group-hover:underline">Duyurulara git →</p>
-        </a>
-      </div>
-
-      {/* Recent activity */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
-        <h2 className="font-bold text-base text-slate-700 dark:text-white flex items-center gap-2 mb-4">
-          <Clock className="w-4 h-4 text-slate-400" />
-          Son İşlemler
-        </h2>
-        <div className="space-y-3">
-          {[
-            { text: 'Sistem başlatıldı', time: 'Az önce', color: 'emerald' },
-            { text: 'Admin paneli yüklendi', time: 'Az önce', color: 'teal' },
-            { text: `${pendingCount} ilan onay bekliyor`, time: 'Canlı', color: pendingCount > 0 ? 'amber' : 'slate' },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center gap-3 text-sm">
-              <span className={`w-2 h-2 rounded-full bg-${item.color}-500 shrink-0`} />
-              <span className="text-slate-600 dark:text-slate-300 flex-1">{item.text}</span>
-              <span className="text-xs text-slate-400">{item.time}</span>
+      {/* Quick Action Navigation */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <a href="/store-applications" className="group bg-slate-900 border border-slate-800 hover:border-emerald-500/50 rounded-3xl p-6 transition-all shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+              <Building2 className="w-5 h-5" />
             </div>
-          ))}
-        </div>
+            <div>
+              <span className="font-extrabold text-sm text-white block">Mağaza Başvuruları & SaaS</span>
+              <span className="text-[10px] font-bold text-emerald-400">WEB GİRİŞİ TANIMLA</span>
+            </div>
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Kurumsal mağaza başvurularını onaylayın ve mağaza sahiplerine özel e-posta/şifre giriş yetkisi atayın.
+          </p>
+          <span className="inline-block text-xs font-bold text-emerald-400 mt-4 group-hover:translate-x-1 transition-transform">
+            Mağazalara Git →
+          </span>
+        </a>
+
+        <a href="/listings" className="group bg-slate-900 border border-slate-800 hover:border-teal-500/50 rounded-3xl p-6 transition-all shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
+              <FileText className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-extrabold text-sm text-white block">İlan Yönetimi</span>
+              <span className="text-[10px] font-bold text-teal-400">TÜM İLANLAR</span>
+            </div>
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Platformdaki tüm ilanları inceleyin, düzenleyin, yayından kaldırın veya kalıcı olarak silin.
+          </p>
+          <span className="inline-block text-xs font-bold text-teal-400 mt-4 group-hover:translate-x-1 transition-transform">
+            İlanlara Git →
+          </span>
+        </a>
+
+        <a href="/users" className="group bg-slate-900 border border-slate-800 hover:border-blue-500/50 rounded-3xl p-6 transition-all shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+              <Users className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="font-extrabold text-sm text-white block">Kullanıcılar & Ban Yönetimi</span>
+              <span className="text-[10px] font-bold text-blue-400">HESAPLAR</span>
+            </div>
+          </div>
+          <p className="text-xs text-slate-400 leading-relaxed">
+            Tüm kayıtlı kullanıcı hesaplarını listeleyin, rollerini belirleyin ve gerektiginde hesap engeli koyun.
+          </p>
+          <span className="inline-block text-xs font-bold text-blue-400 mt-4 group-hover:translate-x-1 transition-transform">
+            Kullanıcılara Git →
+          </span>
+        </a>
       </div>
     </div>
   );

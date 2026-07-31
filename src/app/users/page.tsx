@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, Search, ShieldCheck, Ban, Crown, Loader2, Phone, Check, Clock, AlertTriangle, X, CheckCircle, Store, Building2 } from 'lucide-react';
+import { Users, Search, ShieldCheck, Ban, Crown, Loader2, Phone, Check, CheckCircle, Store, ShieldAlert } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 
@@ -16,13 +16,9 @@ interface UserRecord {
   storeInfo?: {
     storeName?: string;
     storeType?: string;
-    storePhone?: string;
-    storeWhatsapp?: string;
-    storeCity?: string;
-    storeAddress?: string;
-    storeLogo?: string;
-    storeBanner?: string;
-    appliedAt?: string;
+    phone?: string;
+    city?: string;
+    address?: string;
   };
   isBanned?: boolean;
   createdAt?: string;
@@ -31,7 +27,7 @@ interface UserRecord {
   phone?: string;
 }
 
-type FilterTab = 'all' | 'unverified_phones' | 'store_applications';
+type FilterTab = 'all' | 'stores' | 'individual';
 
 export default function UsersPage() {
   const { user } = useAuth();
@@ -52,69 +48,44 @@ export default function UsersPage() {
     return () => unsub();
   }, [user]);
 
-  const approveStore = async (uid: string) => {
-    setUpdating(uid);
-    try {
-      await updateDoc(doc(db, 'users', uid), {
-        accountType: 'store',
-        storeStatus: 'approved',
-        isVerifiedStore: true,
-      });
-    } catch (e: any) { alert('Hata: ' + e.message); }
-    finally { setUpdating(null); }
-  };
-
-  const rejectStore = async (uid: string) => {
-    if (!confirm('Bu mağaza başvurusunu reddetmek istediğinize emin misiniz?')) return;
-    setUpdating(uid);
-    try {
-      await updateDoc(doc(db, 'users', uid), {
-        accountType: 'individual',
-        storeStatus: 'rejected',
-        isVerifiedStore: false,
-      });
-    } catch (e: any) { alert('Hata: ' + e.message); }
-    finally { setUpdating(null); }
-  };
-
-  const approvePhone = async (uid: string) => {
-    setUpdating(uid);
-    try {
-      await updateDoc(doc(db, 'users', uid), {
-        isPhoneVerified: true,
-      });
-    } catch (e: any) { alert('Hata: ' + e.message); }
-    finally { setUpdating(null); }
-  };
-
   const togglePhoneVerification = async (uid: string, isVerified: boolean) => {
     setUpdating(uid);
     try {
       await updateDoc(doc(db, 'users', uid), {
         isPhoneVerified: !isVerified,
       });
+    } catch (e: any) {
+      alert('Hata: ' + e.message);
+    } finally {
+      setUpdating(null);
     }
-    catch (e: any) { alert('Hata: ' + e.message); }
-    finally { setUpdating(null); }
   };
 
   const toggleBan = async (uid: string, isBanned: boolean) => {
     if (!confirm(isBanned ? 'Bu kullanıcının yasağını kaldırmak istediğinize emin misiniz?' : 'Bu kullanıcıyı banlamak istediğinize emin misiniz?')) return;
     setUpdating(uid);
-    try { await updateDoc(doc(db, 'users', uid), { isBanned: !isBanned }); }
-    catch (e: any) { alert('Hata: ' + e.message); }
-    finally { setUpdating(null); }
+    try {
+      await updateDoc(doc(db, 'users', uid), { isBanned: !isBanned });
+    } catch (e: any) {
+      alert('Hata: ' + e.message);
+    } finally {
+      setUpdating(null);
+    }
   };
 
   const setRole = async (uid: string, role: string) => {
     setUpdating(uid);
-    try { await updateDoc(doc(db, 'users', uid), { role }); }
-    catch (e: any) { alert('Hata: ' + e.message); }
-    finally { setUpdating(null); }
+    try {
+      await updateDoc(doc(db, 'users', uid), { role });
+    } catch (e: any) {
+      alert('Hata: ' + e.message);
+    } finally {
+      setUpdating(null);
+    }
   };
 
-  const unverifiedPhoneUsers = users.filter(u => u.phone && !u.isPhoneVerified);
-  const storeApplicationsUsers = users.filter(u => u.storeStatus === 'pending' || (u.storeInfo?.storeName && !u.isVerifiedStore));
+  const storesCount = users.filter(u => u.accountType === 'store' || u.isVerifiedStore).length;
+  const individualCount = users.length - storesCount;
 
   const baseFiltered = users.filter(u =>
     u.displayName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -123,215 +94,240 @@ export default function UsersPage() {
     u.storeInfo?.storeName?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const filtered = activeTab === 'unverified_phones'
-    ? baseFiltered.filter(u => u.phone && !u.isPhoneVerified)
-    : activeTab === 'store_applications'
-    ? baseFiltered.filter(u => u.storeStatus === 'pending' || (u.storeInfo?.storeName && !u.isVerifiedStore))
+  const filtered = activeTab === 'stores'
+    ? baseFiltered.filter(u => u.accountType === 'store' || u.isVerifiedStore)
+    : activeTab === 'individual'
+    ? baseFiltered.filter(u => u.accountType !== 'store' && !u.isVerifiedStore)
     : baseFiltered;
-
-  const roleBadge: Record<string, string> = {
-    admin:          'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400',
-    premium_seller: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-    user:           'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400',
-  };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <Users className="w-6 h-6 text-blue-500" />
-        <div>
-          <h1 className="text-2xl font-black text-slate-800 dark:text-white">Kullanıcılar</h1>
-          <p className="text-sm text-slate-400">Kullanıcı listesi, rol, ban ve telefon doğrulama yönetimi</p>
-        </div>
-      </div>
-
-      {/* Info Alert Banner */}
-      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl p-4 flex gap-3 items-start">
-        <AlertTriangle className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
-        <div className="text-sm text-blue-700 dark:text-blue-300">
-          <p className="font-bold mb-1">WhatsApp ile Telefon Doğrulama Süreci</p>
-          <p>
-            Kullanıcılar telefon numaralarını girdikten sonra WhatsApp üzerinden size doğrulama mesajı gönderir. Mesajdaki e-posta veya UID bilgisini aşağıdaki arama kutusuna yazarak kullanıcıyı hızlıca bulabilir ve yanındaki yeşil onay butonuna tıklayarak telefonunu doğrulayabilirsiniz.
-          </p>
-        </div>
-      </div>
-
-      {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {[
-          { label: 'Toplam', value: users.length, color: 'blue', icon: <Users className="w-4 h-4" /> },
-          { label: 'Admin', value: users.filter(u => u.role === 'admin').length, color: 'violet', icon: <Crown className="w-4 h-4" /> },
-          { label: 'Doğrulanmış', value: users.filter(u => u.isPhoneVerified).length, color: 'emerald', icon: <Phone className="w-4 h-4" /> },
-          { label: 'Onay Bekleyenler (Tel Girmiş)', value: unverifiedPhoneUsers.length, color: 'amber', icon: <Clock className="w-4 h-4" /> },
-        ].map(s => (
-          <div key={s.label} className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm text-center">
-            <div className={`flex justify-center mb-1 ${
-              s.color === 'blue' ? 'text-blue-500' :
-              s.color === 'violet' ? 'text-violet-500' :
-              s.color === 'emerald' ? 'text-emerald-500' : 'text-amber-500'
-            }`}>{s.icon}</div>
-            <p className={`text-2xl font-black ${
-              s.color === 'blue' ? 'text-blue-600' :
-              s.color === 'violet' ? 'text-violet-600' :
-              s.color === 'emerald' ? 'text-emerald-600' : 'text-amber-600'
-            }`}>{s.value}</p>
-            <p className="text-xs font-semibold text-slate-400 mt-1">{s.label}</p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+            <Users className="w-5 h-5" />
           </div>
-        ))}
+          <div>
+            <h1 className="text-2xl font-black text-white">Kullanıcı Yönetimi</h1>
+            <p className="text-xs text-slate-400 mt-0.5">Kayıtlı hesaplar, roller, hesap durumları ve erişim engelleri</p>
+          </div>
+        </div>
+
+        <div className="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold px-3 py-1.5 rounded-xl">
+          <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
+          <span>{users.length} Kayıtlı Kullanıcı</span>
+        </div>
       </div>
 
-      {/* Filter Tabs + Search */}
+      {/* Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
+            <Users className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xl font-black text-white">{users.length}</p>
+            <p className="text-[11px] font-semibold text-slate-400">Toplam Kullanıcı</p>
+          </div>
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <Store className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xl font-black text-emerald-400">{storesCount}</p>
+            <p className="text-[11px] font-semibold text-slate-400">Kurumsal Mağaza</p>
+          </div>
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-violet-500/10 text-violet-400 flex items-center justify-center">
+            <Crown className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xl font-black text-violet-400">{users.filter(u => u.role === 'admin').length}</p>
+            <p className="text-[11px] font-semibold text-slate-400">Yönetici (Admin)</p>
+          </div>
+        </div>
+
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <ShieldAlert className="w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-xl font-black text-amber-400">{users.filter(u => u.isBanned).length}</p>
+            <p className="text-[11px] font-semibold text-slate-400">Engelli (Banlı)</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Filter Tabs & Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-slate-800">
           <button
             onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${activeTab === 'all' ? 'bg-blue-500 text-white shadow-sm' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-blue-300'}`}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'all'
+                ? 'bg-blue-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
             Tümü ({users.length})
           </button>
           <button
-            onClick={() => setActiveTab('store_applications')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${activeTab === 'store_applications' ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-emerald-300'}`}
+            onClick={() => setActiveTab('stores')}
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'stores'
+                ? 'bg-emerald-600 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
             <Store className="w-3.5 h-3.5" />
-            Mağaza Başvuruları
-            {storeApplicationsUsers.length > 0 && (
-              <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${activeTab === 'store_applications' ? 'bg-white/20 text-white' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'}`}>
-                {storeApplicationsUsers.length}
-              </span>
-            )}
+            Mağazalar ({storesCount})
           </button>
           <button
-            onClick={() => setActiveTab('unverified_phones')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-colors ${activeTab === 'unverified_phones' ? 'bg-amber-500 text-white shadow-sm' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-500 hover:border-amber-300'}`}
+            onClick={() => setActiveTab('individual')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'individual'
+                ? 'bg-slate-800 text-white shadow-md'
+                : 'text-slate-400 hover:text-white'
+            }`}
           >
-            <Clock className="w-3.5 h-3.5" />
-            Doğrulanmamış Numaralar
-            {unverifiedPhoneUsers.length > 0 && (
-              <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-full ${activeTab === 'unverified_phones' ? 'bg-white/20 text-white' : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'}`}>
-                {unverifiedPhoneUsers.length}
-              </span>
-            )}
+            Bireysel ({individualCount})
           </button>
         </div>
 
-        <div className="relative max-w-sm w-full sm:w-auto">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+        <div className="relative max-w-sm w-full sm:w-72">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
           <input
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="İsim, mağaza veya tel..."
-            className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:border-blue-400 transition-colors"
+            placeholder="İsim, e-posta veya telefon ara..."
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
           />
         </div>
       </div>
 
-      {/* Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-        <div className="px-6 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-          <span className="text-sm font-bold text-slate-500">{filtered.length} kullanıcı</span>
-          {activeTab === 'store_applications' && (
-            <span className="text-xs font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
-              Kurumsal mağaza başvurusu yapmış veya onay bekleyen kullanıcılar
-            </span>
-          )}
-          {activeTab === 'unverified_phones' && (
-            <span className="text-xs font-bold text-amber-600 bg-amber-50 dark:bg-amber-900/20 px-3 py-1 rounded-full border border-amber-200 dark:border-amber-800">
-              Sadece telefon girmiş ama doğrulanmamış kullanıcılar listeleniyor
-            </span>
-          )}
-        </div>
-
+      {/* Users Table */}
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-sm">
         {loading ? (
           <div className="flex items-center justify-center p-16 gap-2 text-slate-400">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-500" /><span className="text-sm">Yükleniyor...</span>
+            <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
+            <span className="text-xs">Kullanıcılar yükleniyor...</span>
           </div>
         ) : filtered.length === 0 ? (
-          <div className="flex flex-col items-center justify-center p-16 text-slate-400">
-            {activeTab === 'store_applications'
-              ? <><Store className="w-12 h-12 mb-3 text-emerald-400 opacity-70" /><p className="text-sm font-semibold text-emerald-600">Onay bekleyen mağaza başvurusu yok!</p></>
-              : activeTab === 'unverified_phones'
-              ? <><CheckCircle className="w-12 h-12 mb-3 text-emerald-400 opacity-70" /><p className="text-sm font-semibold text-emerald-600">Doğrulanmamış telefon numarası yok!</p></>
-              : <><Users className="w-12 h-12 mb-3 opacity-30" /><p className="text-sm font-semibold">Kullanıcı bulunamadı</p></>
-            }
+          <div className="flex flex-col items-center justify-center p-16 text-slate-500 space-y-2">
+            <Users className="w-10 h-10 text-slate-600" />
+            <p className="text-sm font-bold text-slate-400">Aramaya uygun kullanıcı bulunamadı</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                <tr>
-                  <th className="px-6 py-3">Kullanıcı</th>
-                  <th className="px-6 py-3">Mağaza Detayları</th>
-                  <th className="px-6 py-3">Telefon / Durum</th>
-                  <th className="px-6 py-3">Rol / Mağaza</th>
-                  <th className="px-6 py-3">Hesap</th>
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-slate-950/60 border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+                  <th className="p-4">Kullanıcı</th>
+                  <th className="p-4">Hesap Türü / Mağaza</th>
+                  <th className="p-4">Telefon</th>
+                  <th className="p-4">Rol</th>
+                  <th className="p-4">Durum</th>
+                  <th className="p-4 text-right">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {filtered.map(u => (
-                  <tr key={u.uid} className={`hover:bg-slate-50/60 dark:hover:bg-slate-800/20 transition-colors ${u.storeStatus === 'pending' ? 'bg-amber-50/30 dark:bg-amber-900/10' : ''}`}>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        {u.photoURL
-                          ? <img src={u.photoURL} className="w-8 h-8 rounded-full object-cover" alt="" />
-                          : <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center text-xs font-black">{u.displayName?.charAt(0) || '?'}</div>
-                        }
-                        <div>
-                          <span className="font-semibold text-slate-700 dark:text-white text-sm block">{u.displayName || '—'}</span>
-                          <span className="text-[11px] text-slate-400">{u.email}</span>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      {u.storeInfo?.storeName ? (
-                        <div className="flex flex-col gap-0.5">
-                          <span className="font-bold text-slate-800 dark:text-white text-xs">{u.storeInfo.storeName}</span>
-                          <span className="text-[10px] text-slate-400">{u.storeInfo.storeType || 'Genel'} • {u.storeInfo.storeCity || 'Lefkoşa'}</span>
-                        </div>
-                      ) : <span className="text-slate-400 text-xs">—</span>}
-                    </td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400 text-xs">
-                      {u.phone ? (
-                        <div className="flex flex-col gap-1">
-                          <span className="font-semibold text-slate-700 dark:text-slate-300">{u.phone}</span>
-                          {u.isPhoneVerified ? (
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full w-fit bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-450">
-                              ✓ ONAYLI
-                            </span>
+              <tbody className="divide-y divide-slate-800/60">
+                {filtered.map(u => {
+                  const isStore = u.accountType === 'store' || u.isVerifiedStore;
+                  return (
+                    <tr key={u.uid} className="hover:bg-slate-800/40 transition-colors">
+                      <td className="p-4">
+                        <div className="flex items-center gap-3">
+                          {u.photoURL ? (
+                            <img src={u.photoURL} className="w-9 h-9 rounded-xl object-cover border border-slate-800 shrink-0" alt="" />
                           ) : (
-                            <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full w-fit bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-405 flex items-center gap-1">
-                              ONAY BEKLİYOR
-                            </span>
+                            <div className="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-black shrink-0">
+                              {u.displayName?.charAt(0)?.toUpperCase() || '?'}
+                            </div>
                           )}
+                          <div>
+                            <p className="font-bold text-white max-w-xs truncate">{u.displayName || '—'}</p>
+                            <p className="text-[11px] text-slate-400 max-w-xs truncate">{u.email}</p>
+                          </div>
                         </div>
-                      ) : '—'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col gap-1">
-                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-full w-fit ${roleBadge[u.role] || roleBadge.user}`}>
-                          {u.role === 'admin' ? 'Admin' : u.accountType === 'store' ? 'Kurumsal Mağaza' : 'Bireysel'}
+                      </td>
+
+                      <td className="p-4">
+                        {isStore ? (
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-bold text-emerald-400">{u.storeInfo?.storeName || u.displayName}</span>
+                            <span className="text-[10px] text-slate-400">KURUMSAL MAĞAZA</span>
+                          </div>
+                        ) : (
+                          <span className="text-slate-400 font-medium">Bireysel Hesap</span>
+                        )}
+                      </td>
+
+                      <td className="p-4">
+                        {u.phone ? (
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-slate-300 font-mono">{u.phone}</span>
+                            <button
+                              onClick={() => togglePhoneVerification(u.uid, !!u.isPhoneVerified)}
+                              className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border transition-all ${
+                                u.isPhoneVerified
+                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                                  : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
+                              }`}
+                              title="Telefon Doğrulamasını Değiştir"
+                            >
+                              {u.isPhoneVerified ? '✓ ONAYLI' : 'ONAYSIZ'}
+                            </button>
+                          </div>
+                        ) : (
+                          <span className="text-slate-500">—</span>
+                        )}
+                      </td>
+
+                      <td className="p-4">
+                        <select
+                          value={u.role || 'user'}
+                          onChange={(e) => setRole(u.uid, e.target.value)}
+                          className="bg-slate-950 border border-slate-800 text-xs font-bold text-white rounded-xl px-2.5 py-1.5 focus:outline-none focus:border-blue-500"
+                        >
+                          <option value="user">Kullanıcı</option>
+                          <option value="premium_seller">Satıcı</option>
+                          <option value="admin">Yönetici (Admin)</option>
+                        </select>
+                      </td>
+
+                      <td className="p-4">
+                        <span className={`text-[10px] font-black px-2.5 py-1 rounded-full border ${
+                          u.isBanned
+                            ? 'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                        }`}>
+                          {u.isBanned ? 'YASAKLI (BAN)' : 'AKTİF'}
                         </span>
-                        {u.storeStatus === 'pending' && (
-                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full w-fit bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
-                            MAĞAZA ONAY BEKLİYOR
-                          </span>
-                        )}
-                        {u.isVerifiedStore && (
-                          <span className="text-[9px] font-black px-1.5 py-0.5 rounded-full w-fit bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">
-                            ONAYLI MAĞAZA
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <span className={`text-[11px] font-black px-2 py-0.5 rounded-full ${u.isBanned ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'}`}>
-                        {u.isBanned ? 'Banlı' : 'Aktif'}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+
+                      <td className="p-4 text-right">
+                        <button
+                          onClick={() => toggleBan(u.uid, !!u.isBanned)}
+                          disabled={updating === u.uid}
+                          className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ml-auto ${
+                            u.isBanned
+                              ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                              : 'bg-rose-950/50 hover:bg-rose-900/60 text-rose-400 border border-rose-800/40'
+                          }`}
+                        >
+                          <Ban className="w-3.5 h-3.5" />
+                          <span>{u.isBanned ? 'Banı Kaldır' : 'Banla'}</span>
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
