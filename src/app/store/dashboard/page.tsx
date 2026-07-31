@@ -29,8 +29,11 @@ export default function StoreDashboardPage() {
     if (!user) return;
     setLoading(true);
 
-    // Fetch listings uploaded by this specific store vendor
-    const q = query(collection(db, 'products'), where('sellerId', '==', user.uid));
+    const sellerIds = Array.from(new Set([user?.uid, profile?.targetStoreUid, profile?.uid].filter(Boolean)));
+    const q = sellerIds.length > 1
+      ? query(collection(db, 'products'), where('sellerId', 'in', sellerIds))
+      : query(collection(db, 'products'), where('sellerId', '==', sellerIds[0]));
+
     const unsub = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       docs.sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
@@ -39,7 +42,7 @@ export default function StoreDashboardPage() {
     });
 
     return () => unsub();
-  }, [user]);
+  }, [user, profile]);
 
   const activeCount = storeListings.filter(item => item.status !== 'passive').length;
   const totalValue = storeListings.reduce((sum, item) => sum + (Number(item.price) || 0), 0);

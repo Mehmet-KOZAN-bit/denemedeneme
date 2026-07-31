@@ -29,7 +29,7 @@ const CATEGORIES = [
 const CITIES = ['Lefkoşa', 'Girne', 'Gazimağusa', 'Güzelyurt', 'İskele', 'Lefke'];
 
 export default function StoreListingsPage() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const [listings, setListings] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
@@ -51,7 +51,11 @@ export default function StoreListingsPage() {
     if (!user) return;
     setLoading(true);
 
-    const q = query(collection(db, 'products'), where('sellerId', '==', user.uid));
+    const sellerIds = Array.from(new Set([user?.uid, profile?.targetStoreUid, profile?.uid].filter(Boolean)));
+    const q = sellerIds.length > 1
+      ? query(collection(db, 'products'), where('sellerId', 'in', sellerIds))
+      : query(collection(db, 'products'), where('sellerId', '==', sellerIds[0]));
+
     const unsub = onSnapshot(q, (snapshot) => {
       const docs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
       docs.sort((a: any, b: any) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
@@ -60,7 +64,7 @@ export default function StoreListingsPage() {
     });
 
     return () => unsub();
-  }, [user]);
+  }, [user, profile]);
 
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`"${title}" ilanını kalıcı olarak silmek istediğinize emin misiniz?`)) return;

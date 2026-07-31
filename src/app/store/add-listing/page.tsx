@@ -100,9 +100,9 @@ export default function StoreAddListingPage() {
         images: [selectedImg],
         img: selectedImg,
         imageUrl: selectedImg,
-        sellerId: user.uid,
+        sellerId: profile?.targetStoreUid || user.uid,
         seller: {
-          id: user.uid,
+          id: profile?.targetStoreUid || user.uid,
           name: storeName,
           email: user.email,
           accountType: 'store',
