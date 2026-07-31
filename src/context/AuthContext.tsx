@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { initializeApp, getApps } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
 import { 
   getAuth, 
   onAuthStateChanged, 
@@ -9,9 +9,11 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updatePassword
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, collection, query, where, getDocs, setDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -31,8 +33,8 @@ export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
-  role: 'user' | 'premium_seller' | 'admin' | 'store';
-  accountType?: 'individual' | 'store';
+  role: 'admin' | 'store' | 'user' | string;
+  accountType?: 'store' | 'individual' | string;
   storeStatus?: 'pending' | 'approved' | 'rejected';
   isVerifiedStore?: boolean;
   storeInfo?: {
@@ -92,8 +94,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setProfile({
             uid: currentUser.uid,
             email: currentUser.email || '',
-            displayName: currentUser.displayName || 'Guest User',
-            role: 'user',
+            displayName: currentUser.displayName || 'Mağaza Kullanıcısı',
+            role: 'store',
             isBanned: false
           });
         }
@@ -112,7 +114,75 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithEmail = async (email: string, pass: string) => {
-    await signInWithEmailAndPassword(auth, email, pass);
+    const cleanEmail = email.trim().toLowerCase();
+    const cleanPass = pass.trim();
+
+    try {
+      await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+    } catch (err: any) {
+      // Fallback for Store vendors whose webPassword was assigned by Admin in Firestore
+      const usersRef = collection(db, 'users');
+      const q1 = query(usersRef, where('webEmail', '==', cleanEmail));
+      const q2 = query(usersRef, where('email', '==', cleanEmail));
+      
+      let snap = await getDocs(q1);
+      if (snap.empty) {
+        snap = await getDocs(q2);
+      }
+
+      if (!snap.empty) {
+        const matchDoc = snap.docs.find(d => {
+          const data = d.data();
+          return (data.webPassword === cleanPass || data.password === cleanPass);
+        });
+
+        if (matchDoc) {
+          const SECONDARY_APP_NAME = 'StoreAuthSecondaryApp';
+          let secondaryApp;
+          if (getApps().some(a => a.name === SECONDARY_APP_NAME)) {
+            secondaryApp = getApp(SECONDARY_APP_NAME);
+          } else {
+            secondaryApp = initializeApp(firebaseConfig, SECONDARY_APP_NAME);
+          }
+          const secondaryAuth = getAuth(secondaryApp);
+
+          try {
+            const userCred = await createUserWithEmailAndPassword(secondaryAuth, cleanEmail, cleanPass);
+            const newUid = userCred.user.uid;
+            await secondaryAuth.signOut();
+
+            // Link targetStoreUid to secondary doc
+            await setDoc(doc(db, 'users', newUid), {
+              accountType: 'store',
+              storeStatus: 'approved',
+              isVerifiedStore: true,
+              webEmail: cleanEmail,
+              webPassword: cleanPass,
+              email: cleanEmail,
+              targetStoreUid: matchDoc.id,
+              updatedAt: new Date().toISOString(),
+            }, { merge: true });
+
+            await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+            return;
+          } catch (authErr: any) {
+            if (authErr.code === 'auth/email-already-in-use') {
+              const oldPass = matchDoc.data().webPassword || matchDoc.data().password;
+              if (oldPass && oldPass !== cleanPass) {
+                try {
+                  const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, oldPass);
+                  await updatePassword(cred.user, cleanPass);
+                  await secondaryAuth.signOut();
+                  await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+                  return;
+                } catch (e) {}
+              }
+            }
+          }
+        }
+      }
+      throw err;
+    }
   };
 
   const logout = async () => {
