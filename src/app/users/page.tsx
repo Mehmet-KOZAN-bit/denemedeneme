@@ -248,20 +248,7 @@ export default function UsersPage() {
 
                       <td className="p-4">
                         {u.phone ? (
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-slate-300 font-mono">{u.phone}</span>
-                            <button
-                              onClick={() => togglePhoneVerification(u.uid, !!u.isPhoneVerified)}
-                              className={`text-[9px] font-black px-1.5 py-0.5 rounded-full border transition-all ${
-                                u.isPhoneVerified
-                                  ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                                  : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-                              }`}
-                              title="Telefon Doğrulamasını Değiştir"
-                            >
-                              {u.isPhoneVerified ? '✓ ONAYLI' : 'ONAYSIZ'}
-                            </button>
-                          </div>
+                          <span className="text-slate-300 font-mono">{u.phone}</span>
                         ) : (
                           <span className="text-slate-500">—</span>
                         )}
