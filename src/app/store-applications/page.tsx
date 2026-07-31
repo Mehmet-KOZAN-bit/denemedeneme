@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Building2, Check, X, Search, Clock, ShieldCheck, Mail, Phone, MapPin, Plus, Trash2 } from 'lucide-react';
+import { Building2, Check, X, Search, Clock, ShieldCheck, Phone, MapPin, Plus, Trash2, Key, Copy } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
-import { collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs } from 'firebase/firestore';
 import { createOrUpdateStoreWebCredentials } from '../../utils/storeAuth';
 
 interface StoreApp {
@@ -39,7 +39,7 @@ const FAKE_STORES_POOL = [
     city: 'Girne',
     phone: '+90 533 811 2233',
     address: 'Mete Adanır Caddesi No: 42, Girne',
-    photoURL: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_2',
@@ -48,7 +48,7 @@ const FAKE_STORES_POOL = [
     city: 'Lefkoşa',
     phone: '+90 533 822 3344',
     address: 'Dereboyu caddesi No: 15, Lefkoşa',
-    photoURL: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_3',
@@ -57,7 +57,7 @@ const FAKE_STORES_POOL = [
     city: 'Gazimağusa',
     phone: '+90 533 833 4455',
     address: 'İsmet İnönü Bulvarı No: 88, Gazimağusa',
-    photoURL: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_4',
@@ -66,7 +66,7 @@ const FAKE_STORES_POOL = [
     city: 'Lefkoşa',
     phone: '+90 533 844 5566',
     address: 'Bedrettin Demirel Caddesi No: 104, Lefkoşa',
-    photoURL: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_5',
@@ -75,7 +75,7 @@ const FAKE_STORES_POOL = [
     city: 'Girne',
     phone: '+90 533 855 6677',
     address: 'Alsancak Ana Yol Üzeri No: 7, Girne',
-    photoURL: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_6',
@@ -84,7 +84,7 @@ const FAKE_STORES_POOL = [
     city: 'Gazimağusa',
     phone: '+90 533 866 7788',
     address: 'Salamis Yolu No: 45, Gazimağusa',
-    photoURL: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_7',
@@ -93,7 +93,7 @@ const FAKE_STORES_POOL = [
     city: 'Güzelyurt',
     phone: '+90 533 877 8899',
     address: 'Ecevit Caddesi No: 12, Güzelyurt',
-    photoURL: 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1595246140625-573b715d11dc?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_8',
@@ -102,7 +102,7 @@ const FAKE_STORES_POOL = [
     city: 'İskele',
     phone: '+90 533 888 9900',
     address: 'Long Beach Bölgesi No: 3, İskele',
-    photoURL: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_9',
@@ -111,7 +111,7 @@ const FAKE_STORES_POOL = [
     city: 'Lefke',
     phone: '+90 533 899 0011',
     address: 'Çamlık Sokak No: 5, Lefke',
-    photoURL: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_10',
@@ -120,7 +120,7 @@ const FAKE_STORES_POOL = [
     city: 'Girne',
     phone: '+90 533 810 2030',
     address: 'Liman Arkası Sokak No: 19, Girne',
-    photoURL: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_11',
@@ -129,7 +129,7 @@ const FAKE_STORES_POOL = [
     city: 'Lefkoşa',
     phone: '+90 533 820 3040',
     address: 'Taşkınköy Sanayi Bölgesi No: 8, Lefkoşa',
-    photoURL: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=500',
   },
   {
     id: 'fake_store_12',
@@ -138,42 +138,9 @@ const FAKE_STORES_POOL = [
     city: 'Lefkoşa',
     phone: '+90 533 830 4050',
     address: 'Gönyeli Çemberi Yanı No: 2, Lefkoşa',
-    photoURL: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=200',
+    photoURL: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=500',
   },
 ];
-
-const PRODUCT_IMAGES: Record<string, string[]> = {
-  auto: [
-    'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1542282088-72c9c27ed0cd?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&q=80&w=1200',
-  ],
-  real_estate: [
-    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80&w=1200',
-  ],
-  electronics: [
-    'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&q=80&w=1200',
-  ],
-  default: [
-    'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&q=80&w=1200',
-  ],
-};
 
 export default function StoreApplicationsPage() {
   const { user } = useAuth();
@@ -211,14 +178,13 @@ export default function StoreApplicationsPage() {
       const now = new Date().toISOString();
       for (let index = 0; index < FAKE_STORES_POOL.length; index++) {
         const fs = FAKE_STORES_POOL[index];
-        // 1. Add user document
         await setDoc(doc(db, 'users', fs.id), {
           displayName: fs.storeName,
           accountType: 'store',
           storeStatus: 'approved',
           isVerifiedStore: true,
           isFakeStore: true,
-          photoURL: fs.photoURL.replace(/w=\d+/, 'w=500'),
+          photoURL: fs.photoURL,
           phone: fs.phone,
           storeInfo: {
             storeName: fs.storeName,
@@ -231,7 +197,6 @@ export default function StoreApplicationsPage() {
           updatedAt: now,
         }, { merge: true });
 
-        // 2. Add store application document
         await setDoc(doc(db, 'store_applications', fs.id), {
           userId: fs.id,
           userDisplayName: fs.storeName,
@@ -241,76 +206,12 @@ export default function StoreApplicationsPage() {
           phone: fs.phone,
           address: fs.address,
           status: 'approved',
-          updatedAt: now,
+          createdAt: now,
+          isFakeStore: true,
         }, { merge: true });
-
-        // 3. Add 2 sample active listings per fake store with distinct high-res product photos and rich descriptions
-        const pool = PRODUCT_IMAGES[fs.storeType] || PRODUCT_IMAGES.default;
-        const img1 = pool[(index * 2) % pool.length];
-        const img2 = pool[(index * 2 + 1) % pool.length];
-
-        const title1 = fs.storeType === 'auto' ? `${fs.storeName} - 2022 Model Lüks Araç` : fs.storeType === 'real_estate' ? `${fs.city} Merkezde 3+1 Lüks Gayrimenkul` : `${fs.storeName} - Orijinal Garantili Ürün`;
-        const title2 = fs.storeType === 'auto' ? `${fs.city} Galerimizden Temiz Otomobil` : fs.storeType === 'real_estate' ? `${fs.city} Manzaralı Fırsat Satılık Ev` : `${fs.storeName} - Sıfır Kutulu Cihaz`;
-
-        const desc1 = fs.storeType === 'auto'
-          ? `${fs.storeName} güvencesiyle satışa sunulan bu araç, tüm bakımları yetkili servisinde eksiksiz yapılmış, kazasız ve masrafsızdır. Ekspertiz garantili olup test sürüşüne açıktır.`
-          : fs.storeType === 'real_estate'
-          ? `${fs.city} merkezinde yer alan bu lüks gayrimenkul; koçanı hazır, krediye uygun, geniş teraslı ve yüksek kira getirili lokasyondadır. Taşınmaya hemen uygundur.`
-          : `${fs.storeName} tarafından sıfır ambalajında ve resmi garanti kapsamıyla satışa sunulmuştur. Fatura ve orijinal aksesuarlarıyla birlikte teslim edilecektir.`;
-
-        const desc2 = fs.storeType === 'auto'
-          ? `${fs.city} galerimizde sergilenen bu otomobil, birinci sınıf kondisyonda olup yürür aksamı kusursuzdur. Düşük kilometreli ve takasa açıktır.`
-          : fs.storeType === 'real_estate'
-          ? `${fs.city} bölgesinin en gözde konumunda bulunan bu fırsat ev; kesintisiz manzarası, özel otoparkı ve lüks iç mimarisiyle yatırımcılar için ideal seçenektir.`
-          : `${fs.storeName} stoklarında sınırlı sayıda bulunan bu cihaz, sorunsuz çalışır durumda test edilerek garantili biçimde sunulmaktadır.`;
-
-        const sampleListings = [
-          {
-            id: `fake_prod_${fs.id}_1`,
-            title: title1,
-            price: fs.storeType === 'auto' ? 35000 : fs.storeType === 'real_estate' ? 185000 : 1250,
-            currency: fs.storeType === 'real_estate' || fs.storeType === 'auto' ? 'GBP' : 'EUR',
-            category: fs.storeType === 'auto' ? 'Vasıta' : fs.storeType === 'real_estate' ? 'Emlak' : 'Elektronik',
-            city: fs.city,
-            description: desc1,
-            sellerId: fs.id,
-            sellerName: fs.storeName,
-            sellerPhone: fs.phone,
-            sellerAccountType: 'store',
-            isVerifiedStore: true,
-            isFake: true,
-            status: 'active',
-            images: [img1],
-            createdAt: new Date(Date.now() - (index * 3600000 + 100000)).toISOString(),
-          },
-          {
-            id: `fake_prod_${fs.id}_2`,
-            title: title2,
-            price: fs.storeType === 'auto' ? 24500 : fs.storeType === 'real_estate' ? 120000 : 850,
-            currency: fs.storeType === 'real_estate' || fs.storeType === 'auto' ? 'GBP' : 'EUR',
-            category: fs.storeType === 'auto' ? 'Vasıta' : fs.storeType === 'real_estate' ? 'Emlak' : 'Elektronik',
-            city: fs.city,
-            description: desc2,
-            sellerId: fs.id,
-            sellerName: fs.storeName,
-            sellerPhone: fs.phone,
-            sellerAccountType: 'store',
-            isVerifiedStore: true,
-            isFake: true,
-            status: 'active',
-            images: [img2],
-            createdAt: new Date(Date.now() - (index * 3600000 + 4500000)).toISOString(),
-          },
-        ];
-
-        for (const lp of sampleListings) {
-          await setDoc(doc(db, 'products', lp.id), lp, { merge: true });
-        }
       }
-
-      alert('12 Fake Kurumsal Mağaza ve özel ilanları başarıyla eklendi!');
+      alert('12 kurumsal fake mağaza eklendi!');
     } catch (e: any) {
-      console.error('Error seeding fake stores:', e);
       alert('Hata oluştu: ' + e.message);
     } finally {
       setSeeding(false);
@@ -322,14 +223,11 @@ export default function StoreApplicationsPage() {
     setSeeding(true);
     try {
       for (const fs of FAKE_STORES_POOL) {
-        await deleteDoc(doc(db, 'users', fs.id)).catch(() => {});
         await deleteDoc(doc(db, 'store_applications', fs.id)).catch(() => {});
-        await deleteDoc(doc(db, 'products', `fake_prod_${fs.id}_1`)).catch(() => {});
-        await deleteDoc(doc(db, 'products', `fake_prod_${fs.id}_2`)).catch(() => {});
+        await deleteDoc(doc(db, 'users', fs.id)).catch(() => {});
       }
-      alert('Tüm fake mağazalar ve ilanları temizlendi.');
+      alert('Tüm fake mağazalar temizlendi.');
     } catch (e: any) {
-      console.error('Error deleting fake stores:', e);
       alert('Hata oluştu: ' + e.message);
     } finally {
       setSeeding(false);
@@ -337,11 +235,9 @@ export default function StoreApplicationsPage() {
   };
 
   const handleApprove = async (app: StoreApp) => {
-    if (!confirm(`${app.storeName} mağaza başvurusunu onaylamak istediğinize emin misiniz?`)) return;
     setProcessingId(app.id);
     try {
       const now = new Date().toISOString();
-
       await updateDoc(doc(db, 'store_applications', app.id), {
         status: 'approved',
         approvedAt: now,
@@ -357,15 +253,13 @@ export default function StoreApplicationsPage() {
           storeType: app.storeType,
           city: app.city,
           phone: app.phone,
-          taxId: app.taxId || '',
           address: app.address || '',
         },
         updatedAt: now,
       }, { merge: true });
 
-      alert(`${app.storeName} mağazası başarıyla onaylandı ve kurumsal hesaba yükseltildi!`);
+      alert(`"${app.storeName}" onaylandı ve Kurumsal Mağaza statüsüne yükseltildi!`);
     } catch (e: any) {
-      console.error('Error approving store application:', e);
       alert('Hata oluştu: ' + e.message);
     } finally {
       setProcessingId(null);
@@ -373,11 +267,10 @@ export default function StoreApplicationsPage() {
   };
 
   const handleReject = async (app: StoreApp) => {
-    if (!confirm(`${app.storeName} mağaza başvurusunu reddetmek istediğinize emin misiniz?`)) return;
+    if (!confirm(`"${app.storeName}" mağaza başvurusunu reddetmek istediğinize emin misiniz?`)) return;
     setProcessingId(app.id);
     try {
       const now = new Date().toISOString();
-
       await updateDoc(doc(db, 'store_applications', app.id), {
         status: 'rejected',
         rejectedAt: now,
@@ -391,7 +284,6 @@ export default function StoreApplicationsPage() {
 
       alert('Başvuru reddedildi.');
     } catch (e: any) {
-      console.error('Error rejecting store application:', e);
       alert('Hata oluştu: ' + e.message);
     } finally {
       setProcessingId(null);
@@ -410,166 +302,181 @@ export default function StoreApplicationsPage() {
   });
 
   return (
-    <div className="p-6 md:p-8 space-y-6">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tight flex items-center gap-2">
-            <Building2 className="w-6 h-6 text-teal-600" />
-            Mağaza Başvuruları & Kurumsal Vitrin
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-sm mt-0.5">
-            İşletmelerin kurumsal mağaza başvurularını inceleyin, onaylayın veya 12 fake mağaza ekleyin.
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <Building2 className="w-5 h-5" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-black text-white">Mağaza Başvuruları & SaaS</h1>
+            <p className="text-xs text-slate-400 mt-0.5">Kurumsal mağaza başvurularını onaylayın ve web paneli giriş şifresi atayın</p>
+          </div>
         </div>
 
-        {/* Action Buttons & Filter */}
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2">
           <button
             onClick={handleAddFakeStores}
             disabled={seeding}
-            className="px-3.5 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5"
+            className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all shadow-md flex items-center gap-1.5"
           >
-            <Plus className="w-4 h-4" /> 12 Fake Mağaza Ekle
+            <Plus className="w-4 h-4" />
+            <span>12 Fake Mağaza Ekle</span>
           </button>
           <button
             onClick={handleDeleteFakeStores}
             disabled={seeding}
-            className="px-3.5 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-300 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+            className="px-3.5 py-2 bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 border border-rose-800/40 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
           >
-            <Trash2 className="w-4 h-4" /> Fake Mağazaları Sil
+            <Trash2 className="w-4 h-4" />
+            <span>Fake Mağazaları Sil</span>
           </button>
         </div>
       </div>
 
-      {/* Filter Pills */}
-      <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/60 p-1.5 rounded-xl self-start">
-        {[
-          { id: 'all', label: 'Tümü' },
-          { id: 'pending', label: 'Bekleyenler' },
-          { id: 'approved', label: 'Onaylananlar' },
-          { id: 'rejected', label: 'Reddedilenler' },
-        ].map(f => (
-          <button
-            key={f.id}
-            onClick={() => setFilter(f.id as any)}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-              filter === f.id
-                ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm'
-                : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
-            }`}
-          >
-            {f.label}
-          </button>
-        ))}
+      {/* Filter Tabs & Search */}
+      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+        <div className="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-slate-800">
+          {[
+            { id: 'all', label: `Tümü (${applications.length})` },
+            { id: 'pending', label: `Bekleyenler (${applications.filter(a => a.status === 'pending').length})` },
+            { id: 'approved', label: `Onaylananlar (${applications.filter(a => a.status === 'approved').length})` },
+            { id: 'rejected', label: `Reddedilenler (${applications.filter(a => a.status === 'rejected').length})` },
+          ].map(f => (
+            <button
+              key={f.id}
+              onClick={() => setFilter(f.id as any)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                filter === f.id
+                  ? 'bg-emerald-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="relative max-w-sm w-full sm:w-72">
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Mağaza adı, yetkili veya şehir..."
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
+          />
+        </div>
       </div>
 
-      {/* Search Input */}
-      <div className="relative max-w-md">
-        <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
-        <input
-          type="text"
-          placeholder="Mağaza adı, ad soyad veya telefon ile ara..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500"
-        />
-      </div>
-
-      {/* Applications Table */}
-      <div className="bg-white dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700/60 overflow-hidden shadow-sm">
+      {/* Table */}
+      <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="p-12 text-center text-slate-400">Yükleniyor...</div>
+          <div className="p-16 text-center text-xs text-slate-400 animate-pulse">
+            Mağaza başvuruları yükleniyor...
+          </div>
         ) : filtered.length === 0 ? (
-          <div className="p-12 text-center text-slate-400">
-            Mağaza başvurusu veya kaydı bulunamadı. "12 Fake Mağaza Ekle" butonuna basarak vitrini doldurabilirsiniz.
+          <div className="p-16 text-center text-slate-500 space-y-2">
+            <Building2 className="w-10 h-10 text-slate-600 mx-auto" />
+            <p className="text-sm font-bold text-slate-400">Aramaya uygun mağaza başvurusu bulunamadı</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                <tr>
-                  <th className="px-6 py-3">İşletme / Mağaza</th>
-                  <th className="px-6 py-3">Sektör</th>
-                  <th className="px-6 py-3">Şehir / Konum</th>
-                  <th className="px-6 py-3">İletişim</th>
-                  <th className="px-6 py-3">Durum</th>
-                  <th className="px-6 py-3">Tarih</th>
-                  <th className="px-6 py-3 text-right">İşlem</th>
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-slate-950/60 border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider">
+                  <th className="p-4">İşletme / Mağaza</th>
+                  <th className="p-4">Sektör</th>
+                  <th className="p-4">Şehir / Adres</th>
+                  <th className="p-4">İletişim</th>
+                  <th className="p-4">Durum</th>
+                  <th className="p-4">Tarih</th>
+                  <th className="p-4 text-right">İşlemler</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+              <tbody className="divide-y divide-slate-800/60">
                 {filtered.map(app => (
-                  <tr key={app.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/20 transition-colors">
-                    <td className="px-6 py-4">
+                  <tr key={app.id} className="hover:bg-slate-800/40 transition-colors">
+                    <td className="p-4">
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="font-extrabold text-slate-800 dark:text-white text-sm">{app.storeName}</p>
+                          <p className="font-extrabold text-white text-sm">{app.storeName}</p>
                           {app.isFakeStore && (
-                            <span className="px-1.5 py-0.5 bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300 text-[10px] font-bold rounded">
+                            <span className="px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 text-[9px] font-black rounded-full">
                               DEMO MAĞAZA
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-slate-400">{app.userDisplayName || 'Kullanıcı'} ({app.userEmail || 'Mail yok'})</p>
+                        <p className="text-[11px] text-slate-400 mt-0.5">
+                          {app.userDisplayName || 'Kullanıcı'} ({app.userEmail || 'Mail yok'})
+                        </p>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
-                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200">
+
+                    <td className="p-4">
+                      <span className="inline-block px-2.5 py-1 rounded-xl font-bold text-[11px] bg-slate-950 border border-slate-800 text-slate-300">
                         {SECTOR_LABELS[app.storeType] || app.storeType}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-600 dark:text-slate-300">
+
+                    <td className="p-4 text-slate-300">
                       <div className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                        <span>{app.city}</span>
+                        <MapPin className="w-3.5 h-3.5 text-slate-500" />
+                        <span className="font-semibold">{app.city}</span>
                       </div>
-                      {app.address && <p className="text-[11px] text-slate-400 truncate max-w-xs">{app.address}</p>}
+                      {app.address && <p className="text-[10px] text-slate-500 truncate max-w-xs mt-0.5">{app.address}</p>}
                     </td>
-                    <td className="px-6 py-4 text-xs font-mono text-slate-600 dark:text-slate-300">
+
+                    <td className="p-4 font-mono text-slate-300">
                       <div className="flex items-center gap-1">
-                        <Phone className="w-3.5 h-3.5 text-slate-400" />
+                        <Phone className="w-3.5 h-3.5 text-slate-500" />
                         <span>{app.phone}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+
+                    <td className="p-4">
                       {app.status === 'pending' ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
-                          <Clock className="w-3 h-3" /> Bekliyor
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                          <Clock className="w-3 h-3" /> BEKLİYOR
                         </span>
                       ) : app.status === 'approved' ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800 dark:bg-teal-900/40 dark:text-teal-300">
-                          <ShieldCheck className="w-3 h-3" /> Onaylandı
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                          <ShieldCheck className="w-3 h-3" /> ONAYLANDI
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300">
-                          <X className="w-3 h-3" /> Reddedildi
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black bg-rose-500/10 text-rose-400 border border-rose-500/20">
+                          <X className="w-3 h-3" /> REDDEDİLDİ
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-xs text-slate-400">
+
+                    <td className="p-4 text-slate-400">
                       {app.createdAt ? new Date(app.createdAt).toLocaleDateString('tr-TR') : '-'}
                     </td>
-                    <td className="px-6 py-4 text-right">
+
+                    <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         {app.status === 'pending' && (
                           <>
                             <button
                               onClick={() => handleApprove(app)}
                               disabled={processingId === app.id}
-                              className="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1"
+                              className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1"
                             >
                               <Check className="w-3.5 h-3.5" /> Onayla
                             </button>
                             <button
                               onClick={() => handleReject(app)}
                               disabled={processingId === app.id}
-                              className="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-lg text-xs font-bold transition-all"
+                              className="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 border border-rose-800/40 rounded-xl text-xs font-bold transition-all"
                             >
                               <X className="w-3.5 h-3.5" /> Reddet
                             </button>
                           </>
                         )}
+
                         <button
                           onClick={() => {
                             setCredModalApp(app);
@@ -578,9 +485,9 @@ export default function StoreApplicationsPage() {
                             setWebPassword(`Mağaza${Math.floor(100000 + Math.random() * 900000)}!`);
                             setCreatedCreds(null);
                           }}
-                          className="px-3 py-1.5 bg-emerald-900/40 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-700/60 rounded-lg text-xs font-bold transition-all flex items-center gap-1"
+                          className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5"
                         >
-                          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                          <Key className="w-3.5 h-3.5" />
                           <span>Web Girişi Tanımla</span>
                         </button>
                       </div>
@@ -606,11 +513,11 @@ export default function StoreApplicationsPage() {
 
             <div>
               <span className="text-[10px] font-black text-emerald-400 bg-emerald-950 border border-emerald-800 px-2.5 py-1 rounded-full uppercase">
-                WEB PANELİ EŞLEŞTİRME
+                MAĞAZA WEB KİMLİK TANIMLAMA
               </span>
               <h3 className="text-xl font-black text-white mt-2">{credModalApp.storeName}</h3>
               <p className="text-xs text-slate-400 mt-1">
-                Mağaza sahibinin web paneline (`denemedeneme.vercel.app`) giriş yapabilmesi için e-posta ve şifre tanımlayın.
+                Mağaza sahibinin web paneline (`denemedeneme.vercel.app`) giriş yapabilmesi için e-posta ve şifre belirleyin.
               </p>
             </div>
 
@@ -621,7 +528,7 @@ export default function StoreApplicationsPage() {
                 try {
                   await createOrUpdateStoreWebCredentials(credModalApp.userId, webEmail, webPassword);
                   setCreatedCreds({ email: webEmail, pass: webPassword });
-                  alert('Mağaza web giriş bilgileri başarıyla oluşturuldu ve kurumsal hesaba yükseltildi!');
+                  alert('Mağaza web giriş bilgileri başarıyla oluşturuldu ve eşleştirildi!');
                 } catch (err: any) {
                   alert('Hata oluştu: ' + err.message);
                 } finally {
@@ -650,16 +557,28 @@ export default function StoreApplicationsPage() {
                   onChange={(e) => setWebPassword(e.target.value)}
                   required
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                  placeholder="Şifre belirleyin..."
                 />
               </div>
 
               {createdCreds && (
-                <div className="p-4 bg-emerald-950/80 border border-emerald-800 rounded-xl space-y-1.5 text-left">
-                  <p className="text-xs font-bold text-emerald-400">✓ Web Giriş Bilgileri Kaydedildi:</p>
-                  <p className="text-xs text-slate-300 font-mono">E-Posta: <span className="text-white font-bold">{createdCreds.email}</span></p>
-                  <p className="text-xs text-slate-300 font-mono">Şifre: <span className="text-emerald-400 font-bold">{createdCreds.pass}</span></p>
-                  <p className="text-[11px] text-slate-400 pt-1">Bu bilgileri mağaza sahibine ileterek web paneline giriş yapmasını sağlayabilirsiniz.</p>
+                <div className="p-4 bg-emerald-950/80 border border-emerald-800 rounded-2xl space-y-2 text-xs">
+                  <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+                    <Check className="w-4 h-4" />
+                    <span>Giriş Yetkisi Aktif Edildi!</span>
+                  </div>
+                  <p className="text-slate-300"><strong>E-Posta:</strong> {createdCreds.email}</p>
+                  <p className="text-slate-300"><strong>Şifre:</strong> {createdCreds.pass}</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(`E-Posta: ${createdCreds.email}\nŞifre: ${createdCreds.pass}`);
+                      alert('Giriş bilgileri kopyalandı!');
+                    }}
+                    className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl flex items-center justify-center gap-1.5"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Bilgileri Kopyala</span>
+                  </button>
                 </div>
               )}
 
@@ -674,9 +593,10 @@ export default function StoreApplicationsPage() {
                 <button
                   type="submit"
                   disabled={credSaving}
-                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md"
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
                 >
-                  {credSaving ? 'Kaydediliyor...' : 'Giriş Yetkisini Kaydet'}
+                  <Key className="w-4 h-4" />
+                  <span>{credSaving ? 'Kaydediliyor...' : 'Giriş Yetkisini Kaydet'}</span>
                 </button>
               </div>
             </form>
