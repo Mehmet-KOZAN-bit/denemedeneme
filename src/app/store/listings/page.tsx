@@ -60,7 +60,7 @@ export default function StoreListingsPage() {
       const docs = snapshot.docs
         .map(d => ({ id: d.id, ...d.data() }))
         .filter((item: any) => {
-          const sid = item.sellerId || item.seller?.id;
+          const sid = item.sellerId || item.seller?.id || item.userId;
           const sName = item.sellerName || item.seller?.name;
 
           const matchesId = 
