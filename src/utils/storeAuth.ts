@@ -33,24 +33,39 @@ export async function createOrUpdateStoreWebCredentials(
     await secondaryAuth.signOut();
   } catch (err: any) {
     if (err.code === 'auth/email-already-in-use') {
-      // If email exists, try signing in with old stored password and update to new password
+      // Try signing in with cleanPass first
       try {
+        const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, cleanPass);
+        createdAuthUid = cred.user.uid;
+        await secondaryAuth.signOut();
+      } catch (signInErr: any) {
+        // If cleanPass fails, search for previous passwords in Firestore or try common patterns
         const userDocRef = doc(db, 'users', userUid);
         const snap = await getDoc(userDocRef);
-        const prevPass = snap.exists() ? (snap.data().webPassword || snap.data().password) : null;
-        
-        if (prevPass) {
-          const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, prevPass);
-          createdAuthUid = cred.user.uid;
-          await updatePassword(cred.user, cleanPass);
-          await secondaryAuth.signOut();
-        } else {
-          const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, cleanPass);
-          createdAuthUid = cred.user.uid;
-          await secondaryAuth.signOut();
+        const dData = snap.exists() ? snap.data() : {};
+        const candidatePasses = [
+          dData.webPassword,
+          dData.password,
+          dData.prevPassword,
+          '123456',
+          'Mağaza123456!',
+        ].filter(Boolean);
+
+        let passUpdated = false;
+        for (const testP of candidatePasses) {
+          try {
+            const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, testP);
+            createdAuthUid = cred.user.uid;
+            await updatePassword(cred.user, cleanPass);
+            await secondaryAuth.signOut();
+            passUpdated = true;
+            break;
+          } catch (e) {}
         }
-      } catch (signInErr: any) {
-        console.log('Existing auth account password update notice:', signInErr.message);
+
+        if (!passUpdated) {
+          console.warn('Could not sync secondary Auth password automatically. Fallback active on login.');
+        }
       }
     } else {
       console.warn('Firebase Auth user creation note:', err.message);

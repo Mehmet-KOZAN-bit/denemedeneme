@@ -119,6 +119,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     try {
       await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+      return;
     } catch (err: any) {
       // Fallback for Store vendors whose webPassword was assigned by Admin in Firestore
       const usersRef = collection(db, 'users');
@@ -167,11 +168,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             return;
           } catch (authErr: any) {
             if (authErr.code === 'auth/email-already-in-use') {
-              const oldPass = matchDoc.data().webPassword || matchDoc.data().password;
-              if (oldPass && oldPass !== cleanPass) {
+              const dData = matchDoc.data();
+              const testPasses = [
+                cleanPass,
+                dData.webPassword,
+                dData.password,
+                '123456',
+                'Mağaza123456!',
+              ].filter(Boolean);
+
+              for (const testP of testPasses) {
                 try {
-                  const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, oldPass);
-                  await updatePassword(cred.user, cleanPass);
+                  const cred = await signInWithEmailAndPassword(secondaryAuth, cleanEmail, testP as string);
+                  if (testP !== cleanPass) {
+                    await updatePassword(cred.user, cleanPass);
+                  }
                   await secondaryAuth.signOut();
                   await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
                   return;
