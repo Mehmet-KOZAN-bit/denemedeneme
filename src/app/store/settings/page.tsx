@@ -14,6 +14,7 @@ import {
   FileText,
   Image as ImageIcon
 } from 'lucide-react';
+import { ImageUploader } from '../../../components/ImageUploader';
 
 const STORE_SECTORS = [
   { id: 'real_estate', label: 'Emlak & Gayrimenkul Acentesi' },
@@ -122,13 +123,13 @@ export default function StoreSettingsPage() {
       {successMsg && (
         <div className="p-4 bg-emerald-950/80 border border-emerald-700/60 rounded-2xl text-emerald-300 text-xs font-bold flex items-center gap-2 animate-fade-in">
           <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-          <span>Mağaza bilgileriniz başarıyla güncellendi!Mobil uygulamadaki profilinizde anında aktifleşti.</span>
+          <span>Mağaza bilgileriniz başarıyla güncellendi! Mobil uygulamadaki profilinizde anında aktifleşti.</span>
         </div>
       )}
 
       {/* Settings Form */}
       <form onSubmit={handleSave} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
-        {/* Store Name & Logo URL */}
+        {/* Store Name & Sector */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-300">Mağaza Ticari Unvanı *</label>
@@ -156,17 +157,13 @@ export default function StoreSettingsPage() {
           </div>
         </div>
 
-        {/* Logo URL */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-300">Mağaza Logosu Görsel URL</label>
-          <input
-            type="url"
-            value={photoURL}
-            onChange={(e) => setPhotoURL(e.target.value)}
-            placeholder="https://images.unsplash.com/... (Mağaza amblemi / logosu)"
-            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
-          />
-        </div>
+        {/* Mağaza Logosu / Görseli (Bilgisayardan Yükleme + Supabase) */}
+        <ImageUploader
+          label="Mağaza Logosu / Amblemi Görseli"
+          value={photoURL}
+          onChange={(url) => setPhotoURL(url)}
+          folder="store-logos"
+        />
 
         {/* City & Phone */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

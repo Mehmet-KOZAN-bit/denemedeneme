@@ -15,6 +15,7 @@ import {
   Tag
 } from 'lucide-react';
 import Link from 'next/link';
+import { ImageUploader } from '../../../components/ImageUploader';
 
 const CATEGORIES = [
   'Emlak & Gayrimenkul',
@@ -98,29 +99,23 @@ export default function StoreAddListingPage() {
         city,
         district: district.trim() || 'Merkez',
         images: [selectedImg],
-        img: selectedImg,
         imageUrl: selectedImg,
         sellerId: profile?.targetStoreUid || user.uid,
-        seller: {
-          id: profile?.targetStoreUid || user.uid,
-          name: storeName,
-          email: user.email,
-          accountType: 'store',
-          storeStatus: 'approved',
-          isVerifiedStore: true,
-        },
-        sellerAccountType: 'store',
+        sellerName: storeName,
+        sellerPhone: profile?.storeInfo?.phone || (profile as any)?.phone || '',
+        sellerPhoto: profile?.photoURL || '',
         isVerifiedStore: true,
+        sellerAccountType: 'store',
         status: 'active',
         createdAt: now,
         updatedAt: now,
       });
 
-      alert('Mağaza ilanınız başarıyla yayınlandı!');
+      alert('İlanınız kurumsal mağaza adına başarıyla yayınlandı ve mobil uygulamada canlıya alındı!');
       router.push('/store/listings');
     } catch (e: any) {
-      console.error('Error creating listing:', e);
-      alert('İlan eklenirken hata oluştu: ' + e.message);
+      console.error('Error adding store product:', e);
+      alert('İlan yayınlanırken hata oluştu: ' + e.message);
     } finally {
       setSubmitting(false);
     }
@@ -128,24 +123,26 @@ export default function StoreAddListingPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      {/* Back & Page Title */}
-      <div className="flex items-center gap-3">
-        <Link
-          href="/store/listings"
-          className="p-2.5 rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </Link>
-        <div>
-          <h1 className="text-2xl font-black text-white">Yeni Mağaza İlanı Paylaş</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Ürün veya hizmetinizi onaylı kurumsal mağaza kimliğinizle saniyeler içinde yayınlayın.
-          </p>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Link
+            href="/store/dashboard"
+            className="p-2 text-slate-400 hover:text-white rounded-xl bg-slate-900 border border-slate-800 transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-black text-white">Yeni İlan Yayınla</h1>
+            <p className="text-xs text-slate-400 mt-0.5">
+              <span className="text-emerald-400 font-bold">{storeName}</span> kurumsal mağazası adına vitrine yeni ürün ekleyin.
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Form Container */}
-      <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl">
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6 shadow-xl text-left">
         {/* Title */}
         <div className="space-y-2">
           <label className="text-xs font-bold text-slate-300">İlan Başlığı *</label>
@@ -226,17 +223,13 @@ export default function StoreAddListingPage() {
           </div>
         </div>
 
-        {/* Image URL */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-300">Ürün / Mağaza Fotoğrafı URL</label>
-          <input
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="https://images.unsplash.com/... (Boş bırakılırsa sektöre özel yüksek çözünürlüklü kapak atanır)"
-            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
-          />
-        </div>
+        {/* Ürün Fotoğrafı Yükleyici (Supabase Entegre) */}
+        <ImageUploader
+          label="Ürün Fotoğrafı (Bilgisayardan Seç / Yükle)"
+          value={imageUrl}
+          onChange={(url) => setImageUrl(url)}
+          folder="product-images"
+        />
 
         {/* Description */}
         <div className="space-y-2">
