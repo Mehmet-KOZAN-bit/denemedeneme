@@ -724,7 +724,7 @@ export default function StoreApplicationsPage() {
                   className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
                 >
                   <Key className="w-4 h-4" />
-                  <span>{credSaving ? 'Kaydedilizce...' : 'Giriş Yetkisini Kaydet'}</span>
+                  <span>{credSaving ? 'Kaydediliyor...' : 'Giriş Yetkisini Kaydet'}</span>
                 </button>
               </div>
             </form>
