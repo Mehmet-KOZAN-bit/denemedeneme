@@ -215,7 +215,7 @@ export default function StoreApplicationsPage() {
       const storeUsers: StoreApp[] = [];
       snap.docs.forEach(d => {
         const data = d.data();
-        if (data.accountType === 'store' || data.isVerifiedStore === true || data.storeStatus === 'approved') {
+        if ((data.accountType === 'store' || data.isVerifiedStore === true || data.storeStatus === 'approved') && !data.targetStoreUid) {
           storeUsers.push({
             id: d.id,
             userId: d.id,

@@ -106,14 +106,15 @@ export default function UsersPage() {
     }
   };
 
-  const storesCount = users.filter(u => u.accountType === 'store' || u.isVerifiedStore).length;
+  const storesCount = users.filter(u => (u.accountType === 'store' || u.isVerifiedStore) && !(u as any).targetStoreUid).length;
   const individualCount = users.length - storesCount;
 
   const baseFiltered = users.filter(u =>
-    u.displayName?.toLowerCase().includes(search.toLowerCase()) ||
+    !(u as any).targetStoreUid &&
+    (u.displayName?.toLowerCase().includes(search.toLowerCase()) ||
     u.email?.toLowerCase().includes(search.toLowerCase()) ||
     u.phone?.toLowerCase().includes(search.toLowerCase()) ||
-    u.storeInfo?.storeName?.toLowerCase().includes(search.toLowerCase())
+    u.storeInfo?.storeName?.toLowerCase().includes(search.toLowerCase()))
   );
 
   const filtered = activeTab === 'stores'
