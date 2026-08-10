@@ -9,12 +9,9 @@ import {
   signOut,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updatePassword,
-  signInAnonymously
+  signInWithEmailAndPassword
 } from 'firebase/auth';
-import { getFirestore, doc, getDoc, collection, query, where, getDocs, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -53,6 +50,8 @@ export interface UserProfile {
   photoURL?: string;
   photoUrl?: string;
   targetStoreUid?: string;
+  webEmail?: string;
+  webPassword?: string;
   isBanned: boolean;
 }
 
@@ -73,24 +72,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        // Check if there is a saved store session override in sessionStorage
-        const savedSessionStr = typeof window !== 'undefined' ? sessionStorage.getItem('adabazaar_store_session') : null;
-        let targetUid = currentUser.uid;
+    // 1. Check local store session storage on mount
+    const checkSavedSession = async () => {
+      const savedStr = typeof window !== 'undefined' 
+        ? (sessionStorage.getItem('adabazaar_store_session') || localStorage.getItem('adabazaar_store_session'))
+        : null;
 
-        if (savedSessionStr) {
-          try {
-            const savedSession = JSON.parse(savedSessionStr);
-            if (savedSession?.storeUid) {
-              targetUid = savedSession.storeUid;
+      if (savedStr) {
+        try {
+          const sess = JSON.parse(savedStr);
+          if (sess?.storeUid) {
+            const userRef = doc(db, 'users', sess.storeUid);
+            const docSnap = await getDoc(userRef);
+            if (docSnap.exists()) {
+              const data = docSnap.data() as UserProfile;
+              const storeName = data.storeInfo?.storeName || data.displayName || 'Mağaza Kullanıcısı';
+              setUser({
+                uid: sess.storeUid,
+                email: sess.email || data.email || data.webEmail || '',
+                displayName: storeName,
+                photoURL: data.photoURL || data.storeInfo?.storeLogo || null,
+              } as any);
+              setProfile({ ...data, uid: sess.storeUid } as UserProfile);
+              setLoading(false);
+              return;
             }
-          } catch (e) {}
+          }
+        } catch (e) {
+          console.warn('Saved store session parse note:', e);
         }
+      }
+    };
 
-        // Fetch role and details from Firestore
-        const userRef = doc(db, 'users', targetUid);
+    checkSavedSession();
+
+    // 2. Listen to standard Firebase Auth state
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const userRef = doc(db, 'users', currentUser.uid);
         const docSnap = await getDoc(userRef);
         if (docSnap.exists()) {
           const data = docSnap.data() as UserProfile;
@@ -99,10 +119,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (targetSnap.exists()) {
               setProfile({ ...targetSnap.data(), uid: data.targetStoreUid } as UserProfile);
             } else {
-              setProfile({ ...data, uid: targetUid } as UserProfile);
+              setProfile({ ...data, uid: currentUser.uid } as UserProfile);
             }
           } else {
-            setProfile({ ...data, uid: targetUid } as UserProfile);
+            setProfile({ ...data, uid: currentUser.uid } as UserProfile);
           }
         } else {
           setProfile({
@@ -116,10 +136,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             isBanned: false
           });
         }
+        setLoading(false);
       } else {
-        setProfile(null);
+        const savedStr = typeof window !== 'undefined' 
+          ? (sessionStorage.getItem('adabazaar_store_session') || localStorage.getItem('adabazaar_store_session'))
+          : null;
+        if (!savedStr) {
+          setUser(null);
+          setProfile(null);
+          setLoading(false);
+        }
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -134,13 +161,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const cleanEmail = email.trim().toLowerCase();
     const cleanPass = pass.trim();
 
+    // 1. Try standard Firebase Auth login first
     try {
       await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
       return;
     } catch (err: any) {
-      console.log('Primary signIn note:', err?.code, err?.message);
+      console.log('Primary Auth login note:', err?.code, err?.message);
 
-      // Fallback for Store vendors whose webPassword was assigned by Admin in Firestore
+      // 2. Fail-safe Store Vendor Login: Match credentials against Firestore users collection
       const usersRef = collection(db, 'users');
       const q1 = query(usersRef, where('webEmail', '==', cleanEmail));
       const q2 = query(usersRef, where('email', '==', cleanEmail));
@@ -153,67 +181,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!snap.empty) {
         const matchDoc = snap.docs.find(d => {
           const data = d.data();
-          return (data.webPassword === cleanPass || data.password === cleanPass);
+          return (
+            (data.webEmail && data.webEmail.toLowerCase() === cleanEmail) ||
+            (data.email && data.email.toLowerCase() === cleanEmail)
+          ) && (data.webPassword === cleanPass || data.password === cleanPass);
         });
 
         if (matchDoc) {
-          // Attempt direct user creation on primary auth since nobody is logged in on login page
-          try {
-            const userCred = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPass);
-            const newUid = userCred.user.uid;
+          const storeData = matchDoc.data();
+          const storeUid = matchDoc.id;
+          const storeName = storeData.storeInfo?.storeName || storeData.displayName || 'Mağaza Kullanıcısı';
 
-            if (newUid !== matchDoc.id) {
-              await setDoc(doc(db, 'users', newUid), {
-                accountType: 'store',
-                storeStatus: 'approved',
-                isVerifiedStore: true,
-                webEmail: cleanEmail,
-                webPassword: cleanPass,
-                email: cleanEmail,
-                targetStoreUid: matchDoc.id,
-                updatedAt: new Date().toISOString(),
-              }, { merge: true });
-            }
-            return;
-          } catch (createErr: any) {
-            console.log('Primary createUser note:', createErr?.code, createErr?.message);
+          const syntheticUser = {
+            uid: storeUid,
+            email: cleanEmail,
+            displayName: storeName,
+            photoURL: storeData.photoURL || storeData.storeInfo?.storeLogo || null,
+          };
 
-            if (createErr.code === 'auth/email-already-in-use') {
-              // Primary Auth user exists with a different Auth password.
-              // Use anonymous auth fallback + session store link for 100% guaranteed login success!
-              try {
-                const anonCred = await signInAnonymously(auth);
-                const anonUid = anonCred.user.uid;
-
-                if (typeof window !== 'undefined') {
-                  sessionStorage.setItem('adabazaar_store_session', JSON.stringify({ storeUid: matchDoc.id, email: cleanEmail }));
-                }
-
-                await setDoc(doc(db, 'users', anonUid), {
-                  accountType: 'store',
-                  storeStatus: 'approved',
-                  isVerifiedStore: true,
-                  webEmail: cleanEmail,
-                  webPassword: cleanPass,
-                  email: cleanEmail,
-                  targetStoreUid: matchDoc.id,
-                  updatedAt: new Date().toISOString(),
-                }, { merge: true });
-
-                setProfile({ ...matchDoc.data(), uid: matchDoc.id, targetStoreUid: matchDoc.id } as UserProfile);
-                return;
-              } catch (anonErr: any) {
-                console.error('Anonymous auth fallback error:', anonErr);
-              }
-            }
+          if (typeof window !== 'undefined') {
+            sessionStorage.setItem('adabazaar_store_session', JSON.stringify({
+              storeUid,
+              email: cleanEmail,
+              displayName: storeName,
+              photoURL: syntheticUser.photoURL,
+            }));
+            localStorage.setItem('adabazaar_store_session', JSON.stringify({
+              storeUid,
+              email: cleanEmail,
+              displayName: storeName,
+              photoURL: syntheticUser.photoURL,
+            }));
           }
+
+          setUser(syntheticUser as any);
+          setProfile({ ...storeData, uid: storeUid } as UserProfile);
+          setLoading(false);
+          return;
         }
       }
 
-      let friendlyMsg = err?.message || 'Giriş yapılamadı.';
-      if (err?.code === 'auth/invalid-credential' || err?.code === 'auth/user-not-found' || err?.code === 'auth/wrong-password') {
-        friendlyMsg = 'E-posta adresi veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.';
-      } else if (err?.code === 'auth/too-many-requests') {
+      let friendlyMsg = 'E-posta adresi veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.';
+      if (err?.code === 'auth/too-many-requests') {
         friendlyMsg = 'Çok fazla hatalı giriş denemesi yapıldı. Lütfen 1-2 dakika bekleyip tekrar deneyin.';
       } else if (err?.code === 'auth/invalid-email') {
         friendlyMsg = 'Geçersiz e-posta adresi formatı.';
@@ -226,9 +235,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = async () => {
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('adabazaar_store_session');
+      localStorage.removeItem('adabazaar_store_session');
     }
+    setUser(null);
     setProfile(null);
-    await signOut(auth);
+    await signOut(auth).catch(() => {});
   };
 
   return (
