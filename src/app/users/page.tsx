@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, Search, Ban, Loader2, Phone, CheckCircle, Store, ShieldAlert } from 'lucide-react';
+import { Users, Search, Ban, Loader2, Phone, CheckCircle, Store, ShieldAlert, Trash2 } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
-import { collection, onSnapshot, doc, updateDoc } from 'firebase/firestore';
+import { collection, onSnapshot, doc, updateDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
 
 interface UserRecord {
   uid: string;
@@ -73,6 +73,39 @@ export default function UsersPage() {
     }
   };
 
+  const handleDeleteUser = async (u: UserRecord) => {
+    const name = u.displayName || u.storeInfo?.storeName || u.email || 'Hesap';
+    if (!confirm(`"${name}" hesabını ve bu hesaba ait tüm verileri/ilanları kalıcı olarak silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`)) {
+      return;
+    }
+    setUpdating(u.uid);
+    try {
+      // 1. Delete doc from users
+      await deleteDoc(doc(db, 'users', u.uid)).catch(() => {});
+      // 2. Delete doc from store_applications if exists
+      await deleteDoc(doc(db, 'store_applications', u.uid)).catch(() => {});
+
+      // 3. Delete products
+      try {
+        const q1 = query(collection(db, 'products'), where('sellerId', '==', u.uid));
+        const s1 = await getDocs(q1);
+        s1.docs.forEach(async pDoc => await deleteDoc(pDoc.ref).catch(() => {}));
+
+        const q2 = query(collection(db, 'products'), where('userId', '==', u.uid));
+        const s2 = await getDocs(q2);
+        s2.docs.forEach(async pDoc => await deleteDoc(pDoc.ref).catch(() => {}));
+      } catch (prodErr) {
+        console.warn('Product delete note:', prodErr);
+      }
+
+      alert(`"${name}" hesabı tamamen silindi.`);
+    } catch (e: any) {
+      alert('Silinirken hata oluştu: ' + e.message);
+    } finally {
+      setUpdating(null);
+    }
+  };
+
   const storesCount = users.filter(u => u.accountType === 'store' || u.isVerifiedStore).length;
   const individualCount = users.length - storesCount;
 
@@ -92,52 +125,14 @@ export default function UsersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
             <Users className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-2xl font-black text-white">Kullanıcı Yönetimi</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Kayıtlı kullanıcı hesapları, mağazalar ve hesap engelleri</p>
-          </div>
-        </div>
-
-        <div className="hidden sm:flex items-center gap-2 bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold px-3 py-1.5 rounded-xl">
-          <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
-          <span>{users.length} Kayıtlı Kullanıcı</span>
-        </div>
-      </div>
-
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
-            <Users className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-xl font-black text-white">{users.length}</p>
-            <p className="text-[11px] font-semibold text-slate-400">Toplam Kullanıcı</p>
-          </div>
-        </div>
-
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-            <Store className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-xl font-black text-emerald-400">{storesCount}</p>
-            <p className="text-[11px] font-semibold text-slate-400">Kurumsal Mağaza</p>
-          </div>
-        </div>
-
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
-            <ShieldAlert className="w-5 h-5" />
-          </div>
-          <div>
-            <p className="text-xl font-black text-amber-400">{users.filter(u => u.isBanned).length}</p>
-            <p className="text-[11px] font-semibold text-slate-400">Engelli (Banlı)</p>
+            <h1 className="text-2xl font-black text-white">Kullanıcı & Mağaza Yönetimi</h1>
+            <p className="text-xs text-slate-400 mt-0.5">Tüm kayıtlı kullanıcıları ve mağazaları yönetin, yasaklayın veya tamamen silin.</p>
           </div>
         </div>
       </div>
@@ -145,37 +140,23 @@ export default function UsersPage() {
       {/* Filter Tabs & Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-slate-800">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'all'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Tümü ({users.length})
-          </button>
-          <button
-            onClick={() => setActiveTab('stores')}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'stores'
-                ? 'bg-emerald-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Store className="w-3.5 h-3.5" />
-            Mağazalar ({storesCount})
-          </button>
-          <button
-            onClick={() => setActiveTab('individual')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === 'individual'
-                ? 'bg-slate-800 text-white shadow-md'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Bireysel ({individualCount})
-          </button>
+          {[
+            { id: 'all', label: `Tümü (${users.length})` },
+            { id: 'stores', label: `Mağazalar (${storesCount})` },
+            { id: 'individual', label: `Bireysel (${individualCount})` },
+          ].map(t => (
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id as FilterTab)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === t.id
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
         <div className="relative max-w-sm w-full sm:w-72">
@@ -184,18 +165,17 @@ export default function UsersPage() {
             type="text"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="İsim, e-posta veya telefon ara..."
+            placeholder="İsim, email veya telefon ara..."
             className="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
           />
         </div>
       </div>
 
-      {/* Users Table */}
+      {/* Table */}
       <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-sm">
         {loading ? (
-          <div className="flex items-center justify-center p-16 gap-2 text-slate-400">
-            <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
-            <span className="text-xs">Kullanıcılar yükleniyor...</span>
+          <div className="p-16 text-center text-xs text-slate-400 animate-pulse">
+            Kullanıcılar yükleniyor...
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center p-16 text-slate-500 space-y-2">
@@ -207,8 +187,8 @@ export default function UsersPage() {
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-slate-950/60 border-b border-slate-800 text-slate-400 font-bold uppercase tracking-wider">
-                  <th className="p-4">Kullanıcı</th>
-                  <th className="p-4">Hesap Türü / Mağaza</th>
+                  <th className="p-4">Kullanıcı / İşletme</th>
+                  <th className="p-4">Hesap Türü</th>
                   <th className="p-4">Telefon</th>
                   <th className="p-4">Durum</th>
                   <th className="p-4 text-right">İşlemler</th>
@@ -265,18 +245,30 @@ export default function UsersPage() {
                       </td>
 
                       <td className="p-4 text-right">
-                        <button
-                          onClick={() => toggleBan(u.uid, !!u.isBanned)}
-                          disabled={updating === u.uid}
-                          className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ml-auto ${
-                            u.isBanned
-                              ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
-                              : 'bg-rose-950/50 hover:bg-rose-900/60 text-rose-400 border border-rose-800/40'
-                          }`}
-                        >
-                          <Ban className="w-3.5 h-3.5" />
-                          <span>{u.isBanned ? 'Banı Kaldır' : 'Banla'}</span>
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => toggleBan(u.uid, !!u.isBanned)}
+                            disabled={updating === u.uid}
+                            className={`px-3 py-1.5 rounded-xl font-bold text-xs transition-all flex items-center gap-1.5 ${
+                              u.isBanned
+                                ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
+                                : 'bg-amber-950/50 hover:bg-amber-900/60 text-amber-400 border border-amber-800/40'
+                            }`}
+                          >
+                            <Ban className="w-3.5 h-3.5" />
+                            <span>{u.isBanned ? 'Banı Kaldır' : 'Banla'}</span>
+                          </button>
+
+                          <button
+                            onClick={() => handleDeleteUser(u)}
+                            disabled={updating === u.uid}
+                            title="Hesabı tamamen sil"
+                            className="px-2.5 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-400 border border-rose-800/60 rounded-xl text-xs font-bold transition-all flex items-center gap-1"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                            <span className="hidden sm:inline">Sil</span>
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

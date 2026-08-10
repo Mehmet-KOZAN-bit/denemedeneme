@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Check, X, Search, Clock, ShieldCheck, Phone, MapPin, Plus, Trash2, Key, Copy } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
-import { collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import { collection, onSnapshot, doc, updateDoc, setDoc, deleteDoc, getDocs, query, where } from 'firebase/firestore';
 import { createOrUpdateStoreWebCredentials } from '../../utils/storeAuth';
 
 interface StoreApp {
@@ -161,14 +161,85 @@ export default function StoreApplicationsPage() {
   useEffect(() => {
     if (!user) return;
     setLoading(true);
-    const colRef = collection(db, 'store_applications');
-    const unsub = onSnapshot(colRef, snap => {
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as StoreApp));
-      data.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
-      setApplications(data);
+
+    let appsData: StoreApp[] = [];
+    let usersStoreData: StoreApp[] = [];
+
+    const updateCombined = () => {
+      const mergedMap = new Map<string, StoreApp>();
+
+      // 1. Add records from store_applications
+      appsData.forEach(app => {
+        mergedMap.set(app.id, app);
+        if (app.userId) {
+          mergedMap.set(app.userId, app);
+        }
+      });
+
+      // 2. Add/merge records from users collection
+      usersStoreData.forEach(u => {
+        const existing = mergedMap.get(u.id) || mergedMap.get(u.userId);
+        if (existing) {
+          mergedMap.set(existing.id, {
+            ...existing,
+            userDisplayName: existing.userDisplayName || u.userDisplayName,
+            userEmail: existing.userEmail || u.userEmail,
+            storeName: existing.storeName || u.storeName,
+            phone: existing.phone || u.phone,
+            city: existing.city || u.city,
+            address: existing.address || u.address,
+            status: existing.status || u.status,
+            isFakeStore: existing.isFakeStore || u.isFakeStore,
+          });
+        } else {
+          mergedMap.set(u.id, u);
+        }
+      });
+
+      const combinedList = Array.from(mergedMap.values());
+      const uniqueList = combinedList.filter((item, index, self) =>
+        index === self.findIndex(t => t.id === item.id)
+      );
+
+      uniqueList.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+      setApplications(uniqueList);
       setLoading(false);
+    };
+
+    const unsubApps = onSnapshot(collection(db, 'store_applications'), snap => {
+      appsData = snap.docs.map(d => ({ id: d.id, ...d.data() } as StoreApp));
+      updateCombined();
     });
-    return () => unsub();
+
+    const unsubUsers = onSnapshot(collection(db, 'users'), snap => {
+      const storeUsers: StoreApp[] = [];
+      snap.docs.forEach(d => {
+        const data = d.data();
+        if (data.accountType === 'store' || data.isVerifiedStore === true || data.storeStatus === 'approved') {
+          storeUsers.push({
+            id: d.id,
+            userId: d.id,
+            userDisplayName: data.displayName || data.storeInfo?.storeName || 'Mağaza Kullanıcısı',
+            userEmail: data.email || data.webEmail || '',
+            storeName: data.storeInfo?.storeName || data.displayName || 'Mağaza',
+            storeType: data.storeInfo?.storeType || 'other',
+            city: data.storeInfo?.city || data.city || 'Kıbrıs',
+            phone: data.storeInfo?.phone || data.phone || '',
+            address: data.storeInfo?.address || data.address || '',
+            status: (data.storeStatus as any) || 'approved',
+            createdAt: data.createdAt || new Date().toISOString(),
+            isFakeStore: data.isFakeStore || false,
+          });
+        }
+      });
+      usersStoreData = storeUsers;
+      updateCombined();
+    });
+
+    return () => {
+      unsubApps();
+      unsubUsers();
+    };
   }, [user]);
 
   const handleAddFakeStores = async () => {
@@ -231,6 +302,53 @@ export default function StoreApplicationsPage() {
       alert('Hata oluştu: ' + e.message);
     } finally {
       setSeeding(false);
+    }
+  };
+
+  const handleDeleteStore = async (app: StoreApp) => {
+    const storeTitle = app.storeName || app.userDisplayName || 'Mağaza';
+    if (!confirm(`"${storeTitle}" mağaza hesabını ve tüm verilerini (ilanlar dahil) kalıcı olarak silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`)) {
+      return;
+    }
+
+    setProcessingId(app.id);
+    try {
+      const targetId = app.userId || app.id;
+
+      // 1. Delete store_applications document(s)
+      await deleteDoc(doc(db, 'store_applications', app.id)).catch(() => {});
+      if (targetId !== app.id) {
+        await deleteDoc(doc(db, 'store_applications', targetId)).catch(() => {});
+      }
+
+      // 2. Delete user document(s)
+      await deleteDoc(doc(db, 'users', targetId)).catch(() => {});
+      if (targetId !== app.id) {
+        await deleteDoc(doc(db, 'users', app.id)).catch(() => {});
+      }
+
+      // 3. Delete store products
+      try {
+        const q1 = query(collection(db, 'products'), where('sellerId', '==', targetId));
+        const s1 = await getDocs(q1);
+        s1.docs.forEach(async pDoc => {
+          await deleteDoc(pDoc.ref).catch(() => {});
+        });
+
+        const q2 = query(collection(db, 'products'), where('userId', '==', targetId));
+        const s2 = await getDocs(q2);
+        s2.docs.forEach(async pDoc => {
+          await deleteDoc(pDoc.ref).catch(() => {});
+        });
+      } catch (e) {
+        console.warn('Listing cleanup error:', e);
+      }
+
+      alert(`"${storeTitle}" mağazası ve ilgili tüm verileri başarıyla silindi.`);
+    } catch (e: any) {
+      alert('Mağaza silinirken hata oluştu: ' + e.message);
+    } finally {
+      setProcessingId(null);
     }
   };
 
@@ -310,8 +428,8 @@ export default function StoreApplicationsPage() {
             <Building2 className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-2xl font-black text-white">Mağaza Başvuruları & SaaS</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Kurumsal mağaza başvurularını onaylayın ve web paneli giriş şifresi atayın</p>
+            <h1 className="text-2xl font-black text-white">Mağaza Hesapları & Başvuruları</h1>
+            <p className="text-xs text-slate-400 mt-0.5">Sistemdeki tüm kurumsal mağazaları görüntüleyin, yeni başvuruları onaylayın, şifre atayın veya mağaza silin.</p>
           </div>
         </div>
 
@@ -338,9 +456,9 @@ export default function StoreApplicationsPage() {
 
       {/* Filter Tabs & Search */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-        <div className="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-slate-800">
+        <div className="flex gap-2 bg-slate-900 p-1 rounded-2xl border border-slate-800 flex-wrap">
           {[
-            { id: 'all', label: `Tümü (${applications.length})` },
+            { id: 'all', label: `Tüm Mağazalar (${applications.length})` },
             { id: 'pending', label: `Bekleyenler (${applications.filter(a => a.status === 'pending').length})` },
             { id: 'approved', label: `Onaylananlar (${applications.filter(a => a.status === 'approved').length})` },
             { id: 'rejected', label: `Reddedilenler (${applications.filter(a => a.status === 'rejected').length})` },
@@ -375,12 +493,12 @@ export default function StoreApplicationsPage() {
       <div className="bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-sm">
         {loading ? (
           <div className="p-16 text-center text-xs text-slate-400 animate-pulse">
-            Mağaza başvuruları yükleniyor...
+            Mağaza hesapları ve başvurular yükleniyor...
           </div>
         ) : filtered.length === 0 ? (
           <div className="p-16 text-center text-slate-500 space-y-2">
             <Building2 className="w-10 h-10 text-slate-600 mx-auto" />
-            <p className="text-sm font-bold text-slate-400">Aramaya uygun mağaza başvurusu bulunamadı</p>
+            <p className="text-sm font-bold text-slate-400">Aramaya uygun mağaza kaydı bulunamadı</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -432,7 +550,7 @@ export default function StoreApplicationsPage() {
                     <td className="p-4 font-mono text-slate-300">
                       <div className="flex items-center gap-1">
                         <Phone className="w-3.5 h-3.5 text-slate-500" />
-                        <span>{app.phone}</span>
+                        <span>{app.phone || '-'}</span>
                       </div>
                     </td>
 
@@ -470,7 +588,7 @@ export default function StoreApplicationsPage() {
                             <button
                               onClick={() => handleReject(app)}
                               disabled={processingId === app.id}
-                              className="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 border border-rose-800/40 rounded-xl text-xs font-bold transition-all"
+                              className="px-3 py-1.5 bg-rose-950/40 hover:bg-rose-900/60 text-rose-400 border border-rose-800/40 rounded-xl text-xs font-bold transition-all flex items-center gap-1"
                             >
                               <X className="w-3.5 h-3.5" /> Reddet
                             </button>
@@ -480,7 +598,7 @@ export default function StoreApplicationsPage() {
                         <button
                           onClick={() => {
                             setCredModalApp(app);
-                            const cleanName = app.storeName.toLowerCase().replace(/[^a-z0-9]/g, '');
+                            const cleanName = (app.storeName || 'magaza').toLowerCase().replace(/[^a-z0-9]/g, '');
                             setWebEmail(`${cleanName}@adabazaar.com`);
                             setWebPassword(`Mağaza${Math.floor(100000 + Math.random() * 900000)}!`);
                             setCreatedCreds(null);
@@ -488,7 +606,17 @@ export default function StoreApplicationsPage() {
                           className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs transition-all shadow-md flex items-center gap-1.5"
                         >
                           <Key className="w-3.5 h-3.5" />
-                          <span>Web Girişi Tanımla</span>
+                          <span>Web Girişi</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteStore(app)}
+                          disabled={processingId === app.id}
+                          title="Mağazayı Tamamen Sil"
+                          className="px-2.5 py-1.5 bg-rose-950/60 hover:bg-rose-900 text-rose-400 border border-rose-800/60 rounded-xl text-xs font-bold transition-all flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span className="hidden sm:inline">Sil</span>
                         </button>
                       </div>
                     </td>
@@ -596,7 +724,7 @@ export default function StoreApplicationsPage() {
                   className="flex-1 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
                 >
                   <Key className="w-4 h-4" />
-                  <span>{credSaving ? 'Kaydediliyor...' : 'Giriş Yetkisini Kaydet'}</span>
+                  <span>{credSaving ? 'Kaydedilizce...' : 'Giriş Yetkisini Kaydet'}</span>
                 </button>
               </div>
             </form>
