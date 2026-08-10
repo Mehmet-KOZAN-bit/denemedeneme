@@ -161,18 +161,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const cleanEmail = email.trim().toLowerCase();
     const cleanPass = pass.trim();
 
-    // 1. Try standard Firebase Auth login first
+    // 1. Check Firestore FIRST for store vendor matching credentials (bypasses Firebase Auth rate limits)
     try {
-      await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
-      return;
-    } catch (err: any) {
-      console.log('Primary Auth login note:', err?.code, err?.message);
-
-      // 2. Fail-safe Store Vendor Login: Match credentials against Firestore users collection
       const usersRef = collection(db, 'users');
       const q1 = query(usersRef, where('webEmail', '==', cleanEmail));
       const q2 = query(usersRef, where('email', '==', cleanEmail));
-      
+
       let snap = await getDocs(q1);
       if (snap.empty) {
         snap = await getDocs(q2);
@@ -181,10 +175,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!snap.empty) {
         const matchDoc = snap.docs.find(d => {
           const data = d.data();
-          return (
-            (data.webEmail && data.webEmail.toLowerCase() === cleanEmail) ||
-            (data.email && data.email.toLowerCase() === cleanEmail)
-          ) && (data.webPassword === cleanPass || data.password === cleanPass);
+          const emailMatch = 
+            (data.webEmail && data.webEmail.toLowerCase().trim() === cleanEmail) ||
+            (data.email && data.email.toLowerCase().trim() === cleanEmail);
+          const passMatch = 
+            (data.webPassword && data.webPassword.trim() === cleanPass) ||
+            (data.password && data.password.trim() === cleanPass);
+
+          return emailMatch && passMatch;
         });
 
         if (matchDoc) {
@@ -220,14 +218,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return;
         }
       }
+    } catch (fsErr) {
+      console.warn('Firestore store credential check note:', fsErr);
+    }
 
+    // 2. Fallback to standard Firebase Auth login (for Admins / Standard Users)
+    try {
+      await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+      return;
+    } catch (err: any) {
       let friendlyMsg = 'E-posta adresi veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.';
       if (err?.code === 'auth/too-many-requests') {
         friendlyMsg = 'Çok fazla hatalı giriş denemesi yapıldı. Lütfen 1-2 dakika bekleyip tekrar deneyin.';
       } else if (err?.code === 'auth/invalid-email') {
         friendlyMsg = 'Geçersiz e-posta adresi formatı.';
       }
-
       throw new Error(friendlyMsg);
     }
   };
