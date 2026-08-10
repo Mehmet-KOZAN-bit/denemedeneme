@@ -27,15 +27,15 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     profile?.role === 'store' ||
     profile?.isVerifiedStore === true;
 
-  const isAdmin = profile?.role === 'admin';
+  const isSuperAdmin = profile?.role === 'admin' && profile?.accountType !== 'store';
 
-  // Redirect store vendor from any admin route to store dashboard
+  // Redirect store vendor from any non-store route to store dashboard
   useEffect(() => {
     if (loading || !user || !profile) return;
-    if (isStoreVendor && !isAdmin && !pathname.startsWith('/store')) {
+    if (isStoreVendor && !isSuperAdmin && !pathname.startsWith('/store')) {
       router.push('/store/dashboard');
     }
-  }, [loading, user, profile, isStoreVendor, isAdmin, pathname, router]);
+  }, [loading, user, profile, isStoreVendor, isSuperAdmin, pathname, router]);
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +44,9 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     setErrorMsg('');
     try {
       await loginWithEmail(email, password);
+      if (!pathname.startsWith('/store')) {
+        router.push('/store/dashboard');
+      }
     } catch (err: any) {
       setErrorMsg(err?.message || (isTr ? 'Giriş yapılamadı. Bilgilerinizi kontrol edin.' : 'Login failed. Please check credentials.'));
     } finally {
@@ -118,7 +121,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   }
 
   // If user is NOT admin AND NOT store vendor, show unauthorized block
-  if (!isAdmin && !isStoreVendor) {
+  if (!isSuperAdmin && !isStoreVendor) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 p-6 text-center space-y-4">
         <ShieldAlert className="w-16 h-16 text-rose-500 animate-bounce" />
@@ -136,7 +139,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   }
 
   // RENDER STORE VENDOR SAAS SHELL
-  if (isStoreVendor && !isAdmin) {
+  if (isStoreVendor && !isSuperAdmin) {
     if (!pathname.startsWith('/store')) {
       return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950">
