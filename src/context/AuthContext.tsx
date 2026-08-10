@@ -121,6 +121,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
       return;
     } catch (err: any) {
+      console.log('Primary signIn error:', err?.code, err?.message);
+
       // Fallback for Store vendors whose webPassword was assigned by Admin in Firestore
       const usersRef = collection(db, 'users');
       const q1 = query(usersRef, where('webEmail', '==', cleanEmail));
@@ -138,36 +140,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         });
 
         if (matchDoc) {
-          const SECONDARY_APP_NAME = 'StoreAuthSecondaryApp';
-          let secondaryApp;
-          if (getApps().some(a => a.name === SECONDARY_APP_NAME)) {
-            secondaryApp = getApp(SECONDARY_APP_NAME);
-          } else {
-            secondaryApp = initializeApp(firebaseConfig, SECONDARY_APP_NAME);
-          }
-          const secondaryAuth = getAuth(secondaryApp);
-
           try {
-            const userCred = await createUserWithEmailAndPassword(secondaryAuth, cleanEmail, cleanPass);
+            // Create user directly on primary auth since nobody is logged in on login page
+            const userCred = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPass);
             const newUid = userCred.user.uid;
-            await secondaryAuth.signOut();
 
-            // Link targetStoreUid to secondary doc
-            await setDoc(doc(db, 'users', newUid), {
-              accountType: 'store',
-              storeStatus: 'approved',
-              isVerifiedStore: true,
-              webEmail: cleanEmail,
-              webPassword: cleanPass,
-              email: cleanEmail,
-              targetStoreUid: matchDoc.id,
-              updatedAt: new Date().toISOString(),
-            }, { merge: true });
-
-            await signInWithEmailAndPassword(auth, cleanEmail, cleanPass);
+            if (newUid !== matchDoc.id) {
+              await setDoc(doc(db, 'users', newUid), {
+                accountType: 'store',
+                storeStatus: 'approved',
+                isVerifiedStore: true,
+                webEmail: cleanEmail,
+                webPassword: cleanPass,
+                email: cleanEmail,
+                targetStoreUid: matchDoc.id,
+                updatedAt: new Date().toISOString(),
+              }, { merge: true });
+            }
             return;
-          } catch (authErr: any) {
-            if (authErr.code === 'auth/email-already-in-use') {
+          } catch (createErr: any) {
+            console.log('Primary createUser error:', createErr?.code, createErr?.message);
+
+            if (createErr.code === 'auth/email-already-in-use') {
+              const SECONDARY_APP_NAME = 'StoreAuthSecondaryApp';
+              let secondaryApp = getApps().find(a => a.name === SECONDARY_APP_NAME) || initializeApp(firebaseConfig, SECONDARY_APP_NAME);
+              const secondaryAuth = getAuth(secondaryApp);
+
               const dData = matchDoc.data();
               const testPasses = [
                 cleanPass,
@@ -175,6 +173,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 dData.password,
                 '123456',
                 'Mağaza123456!',
+                'Mağaza132107!',
               ].filter(Boolean);
 
               for (const testP of testPasses) {
@@ -192,7 +191,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         }
       }
-      throw err;
+
+      let friendlyMsg = err?.message || 'Giriş yapılamadı.';
+      if (err?.code === 'auth/invalid-credential' || err?.code === 'auth/user-not-found' || err?.code === 'auth/wrong-password') {
+        friendlyMsg = 'E-posta adresi veya şifre hatalı. Lütfen bilgilerinizi kontrol edin.';
+      } else if (err?.code === 'auth/too-many-requests') {
+        friendlyMsg = 'Çok fazla hatalı giriş denemesi yapıldı. Lütfen 1-2 dakika bekleyip tekrar deneyin.';
+      } else if (err?.code === 'auth/invalid-email') {
+        friendlyMsg = 'Geçersiz e-posta adresi formatı.';
+      }
+
+      throw new Error(friendlyMsg);
     }
   };
 

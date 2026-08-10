@@ -45,7 +45,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     try {
       await loginWithEmail(email, password);
     } catch (err: any) {
-      setErrorMsg(isTr ? 'Giriş yapılamadı. Bilgilerinizi kontrol edin.' : 'Login failed. Please check credentials.');
+      setErrorMsg(err?.message || (isTr ? 'Giriş yapılamadı. Bilgilerinizi kontrol edin.' : 'Login failed. Please check credentials.'));
     } finally {
       setLoginLoading(false);
     }
