@@ -37,6 +37,7 @@ export default function StoreSettingsPage() {
   const [phone, setPhone] = useState('');
   const [taxId, setTaxId] = useState('');
   const [photoURL, setPhotoURL] = useState('');
+  const [bio, setBio] = useState('');
 
   const [saving, setSaving] = useState(false);
   const [successMsg, setSuccessMsg] = useState(false);
@@ -50,6 +51,7 @@ export default function StoreSettingsPage() {
     setPhone(profile.storeInfo?.phone || '');
     setTaxId(profile.storeInfo?.taxId || '');
     setPhotoURL(profile.photoURL || '');
+    setBio(profile.storeInfo?.bio || profile.bio || '');
   }, [profile]);
 
   const handleSave = async (e: React.FormEvent) => {
@@ -70,12 +72,14 @@ export default function StoreSettingsPage() {
         photoURL: photoURL.trim(),
         logoUrl: photoURL.trim(),
         storeLogo: photoURL.trim(),
+        bio: bio.trim(),
       };
 
       const updatePayload = {
         displayName: storeName.trim(),
         photoURL: photoURL.trim(),
         photoUrl: photoURL.trim(),
+        bio: bio.trim(),
         storeInfo: updatedStoreInfo,
         updatedAt: now,
       };
@@ -191,6 +195,21 @@ export default function StoreSettingsPage() {
               className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors"
             />
           </div>
+        </div>
+
+        {/* Hakkında & Mağaza Tanıtım Yazısı (Bio) */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold text-slate-300">Hakkında & Mağaza Tanıtım Yazısı</label>
+            <span className="text-[10px] text-slate-500 font-medium">Boş bırakılırsa varsayılan kurumsal tanıtım metni görünür</span>
+          </div>
+          <textarea
+            rows={4}
+            value={bio}
+            onChange={(e) => setBio(e.target.value)}
+            placeholder="Örn: 2010 yılından bu yana Lefkoşa'da hizmet veren kurumsal galeri/mağazayız. Kaliteli ve garantili ürünlerimiz için ilanlarımızı inceleyebilirsiniz."
+            className="w-full bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-emerald-500 transition-colors resize-none"
+          />
         </div>
 
         {/* Open Address */}

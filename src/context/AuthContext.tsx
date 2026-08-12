@@ -46,9 +46,11 @@ export interface UserProfile {
     photoURL?: string;
     storeLogo?: string;
     logoUrl?: string;
+    bio?: string;
   };
   photoURL?: string;
   photoUrl?: string;
+  bio?: string;
   targetStoreUid?: string;
   webEmail?: string;
   webPassword?: string;
