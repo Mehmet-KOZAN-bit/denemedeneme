@@ -171,6 +171,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (snap.empty) {
         snap = await getDocs(q2);
       }
+      if (snap.empty) {
+        snap = await getDocs(usersRef);
+      }
 
       if (!snap.empty) {
         const matchDoc = snap.docs.find(d => {
