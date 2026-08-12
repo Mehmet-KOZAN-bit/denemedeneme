@@ -11,7 +11,7 @@ import { useAuth, db } from '../context/AuthContext';
 import { collection, onSnapshot } from 'firebase/firestore';
 
 const navItems = [
-  { href: '/', icon: LayoutDashboard, labelTr: 'Dashboard', labelEn: 'Dashboard', badge: null },
+  { href: '/dashboard', icon: LayoutDashboard, labelTr: 'Dashboard', labelEn: 'Dashboard', badge: null },
   { href: '/store-applications', icon: Building2, labelTr: 'Mağaza Başvuruları', labelEn: 'Store Requests', badge: 'pending_stores' },
   { href: '/listings', icon: Package, labelTr: 'İlan Yönetimi', labelEn: 'Listings', badge: null },
   { href: '/users', icon: Users, labelTr: 'Kullanıcılar', labelEn: 'Users', badge: null },
@@ -51,7 +51,7 @@ export function Sidebar({ isTr, setIsTr, collapsed, setCollapsed }: SidebarProps
         {!collapsed && (
           <div className="min-w-0">
             <p className="font-extrabold text-sm text-teal-400 truncate">AdaBazar</p>
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Admin Portal</p>
+            <p className="text-[10px] font-bold text-teal-500 uppercase tracking-widest">Kurumsal Portal</p>
           </div>
         )}
         <button

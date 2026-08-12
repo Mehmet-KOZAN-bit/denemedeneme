@@ -25,18 +25,29 @@ import {
   Zap,
   Globe,
   Lock,
-  Check
+  Check,
+  User,
+  LogOut
 } from 'lucide-react';
-import { db } from '../../context/AuthContext';
+import { useAuth, db } from '../../context/AuthContext';
 import { collection, query, where, getDocs, limit, addDoc } from 'firebase/firestore';
 
 export default function LandingPage() {
+  const { user, profile, loginWithEmail, logout } = useAuth();
+
   const [products, setProducts] = useState<any[]>([]);
   const [stores, setStores] = useState<any[]>([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [showQrModal, setShowQrModal] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Portal Login Form State
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+  const [loginSubmitting, setLoginSubmitting] = useState(false);
 
   // Store Application Form State
   const [appName, setAppName] = useState('');
@@ -46,6 +57,12 @@ export default function LandingPage() {
   const [appNotes, setAppNotes] = useState('');
   const [appSubmitted, setAppSubmitted] = useState(false);
   const [appLoading, setAppLoading] = useState(false);
+
+  const isStoreVendor = 
+    profile?.accountType === 'store' || 
+    profile?.storeStatus === 'approved' || 
+    profile?.role === 'store' ||
+    profile?.isVerifiedStore === true;
 
   useEffect(() => {
     async function fetchData() {
@@ -73,6 +90,21 @@ export default function LandingPage() {
     }
     fetchData();
   }, []);
+
+  const handlePortalLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail || !loginPassword) return;
+    setLoginSubmitting(true);
+    setLoginError('');
+    try {
+      await loginWithEmail(loginEmail, loginPassword);
+      setShowLoginModal(false);
+    } catch (err: any) {
+      setLoginError(err?.message || 'Giriş yapılamadı. Bilgilerinizi kontrol edin.');
+    } finally {
+      setLoginSubmitting(false);
+    }
+  };
 
   const handleApplySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,7 +154,7 @@ export default function LandingPage() {
       </div>
 
       {/* 🧭 NAVIGATION HEADER */}
-      <header className="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/80 px-6 py-4">
+      <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-900/40">
@@ -150,13 +182,31 @@ export default function LandingPage() {
               <span>Mağaza Başvurusu</span>
             </button>
 
-            <a
-              href="/"
-              className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 flex items-center gap-1.5"
-            >
-              <Lock className="w-4 h-4" />
-              <span>Kurumsal Giriş</span>
-            </a>
+            {user ? (
+              <div className="flex items-center gap-2">
+                <a
+                  href={isStoreVendor ? '/store/dashboard' : '/dashboard'}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 flex items-center gap-1.5"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Portala Git ({profile?.displayName || 'Giriş Yapıldı'}) →</span>
+                </a>
+                <button
+                  onClick={logout}
+                  className="bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-800 transition-colors"
+                >
+                  Çıkış
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowLoginModal(true)}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-emerald-900/40 flex items-center gap-1.5"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Kurumsal Giriş</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -351,7 +401,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONNAYLI KURUMSAL MAĞAZALAR */}
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR */}
       <section id="stores" className="py-16 px-6">
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
@@ -487,11 +537,69 @@ export default function LandingPage() {
           <p>© 2026 AdaBazar C2C & B2B İlan Platformu. Tüm hakları saklıdır.</p>
 
           <div className="flex items-center gap-6">
-            <a href="/" className="hover:text-white transition-colors">Kurumsal Giriş</a>
+            <button onClick={() => setShowLoginModal(true)} className="hover:text-white transition-colors">Kurumsal Giriş</button>
             <button onClick={() => setShowApplyModal(true)} className="hover:text-white transition-colors">Mağaza Başvurusu</button>
           </div>
         </div>
       </footer>
+
+      {/* 🔐 PORTAL LOGIN MODAL */}
+      {showLoginModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 max-w-sm w-full space-y-6 relative">
+            <button
+              onClick={() => setShowLoginModal(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-white font-bold"
+            >
+              ✕
+            </button>
+
+            <div className="text-center space-y-2">
+              <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                <Lock className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-white">Kurumsal Portal Girişi</h3>
+              <p className="text-xs text-slate-400">Mağaza veya Yönetim panelinize erişin</p>
+            </div>
+
+            <form onSubmit={handlePortalLogin} className="space-y-4 text-left">
+              {loginError && <p className="text-xs text-rose-500 font-bold text-center bg-rose-950/40 p-2.5 rounded-xl border border-rose-800">{loginError}</p>}
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-300">E-posta Adresi</label>
+                <input
+                  type="email"
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  required
+                  placeholder="magaza@adabazaar.com"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-300">Şifre</label>
+                <input
+                  type="password"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  required
+                  placeholder="••••••••"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-emerald-500"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loginSubmitting}
+                className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+              >
+                <span>{loginSubmitting ? 'Giriş Yapılıyor...' : 'Giriş Yap'}</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* 📱 QR CODE MODAL */}
       {showQrModal && (
@@ -512,7 +620,7 @@ export default function LandingPage() {
             </p>
             <div className="w-48 h-48 bg-white rounded-2xl mx-auto p-3 flex items-center justify-center shadow-inner">
               <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://denemedeneme.vercel.app/landing"
+                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://denemedeneme.vercel.app"
                 alt="AdaBazar QR"
                 className="w-full h-full object-contain"
               />
