@@ -65,7 +65,13 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     );
   }
 
+  const isPublicRoute = pathname === '/landing' || pathname === '/home' || pathname === '/download' || pathname === '/showcase';
+
   if (!user) {
+    if (isPublicRoute) {
+      return <>{children}</>;
+    }
+
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 p-6 text-center space-y-6">
         <div className="space-y-4">
@@ -113,9 +119,18 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           </button>
         </form>
 
-        <button onClick={() => setIsTr(!isTr)} className="text-xs text-slate-500 hover:text-slate-300 transition-colors pt-2">
-          {isTr ? 'Switch to English' : 'Türkçeye Geç'}
-        </button>
+        <div className="flex flex-col items-center gap-2 pt-1">
+          <a
+            href="/landing"
+            className="text-xs font-bold text-emerald-400 hover:text-emerald-300 transition-colors flex items-center gap-1.5 bg-emerald-950/60 border border-emerald-800/80 px-4 py-2 rounded-xl shadow-sm"
+          >
+            <span>🌐 AdaBazar Tanıtım & İndirme Sitesine Git →</span>
+          </a>
+
+          <button onClick={() => setIsTr(!isTr)} className="text-xs text-slate-500 hover:text-slate-300 transition-colors pt-1">
+            {isTr ? 'Switch to English' : 'Türkçeye Geç'}
+          </button>
+        </div>
       </div>
     );
   }
