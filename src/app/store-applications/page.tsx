@@ -645,7 +645,7 @@ export default function StoreApplicationsPage() {
               </span>
               <h3 className="text-xl font-black text-white mt-2">{credModalApp.storeName}</h3>
               <p className="text-xs text-slate-400 mt-1">
-                Mağaza sahibinin web paneline (`denemedeneme.vercel.app`) giriş yapabilmesi için e-posta ve şifre belirleyin.
+                Mağaza sahibinin web paneline (`adabazaar.com.tr`) giriş yapabilmesi için e-posta ve şifre belirleyin.
               </p>
             </div>
 

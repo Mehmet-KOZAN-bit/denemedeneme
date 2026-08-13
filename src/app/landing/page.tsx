@@ -1017,7 +1017,7 @@ export default function LandingPage() {
             </p>
             <div className="w-48 h-48 bg-slate-50 border border-slate-200 rounded-2xl mx-auto p-3 flex items-center justify-center shadow-inner">
               <img
-                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://denemedeneme.vercel.app"
+                src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://adabazaar.com.tr"
                 alt="AdaBazaar QR"
                 className="w-full h-full object-contain"
               />

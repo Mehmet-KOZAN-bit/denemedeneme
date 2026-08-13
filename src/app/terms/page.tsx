@@ -109,7 +109,7 @@ export default function TermsOfServicePage() {
               <p>📍 Platform: AdaBazaar KKTC Pazaryeri</p>
               <p>📧 E-posta: destek@adabazaar.com</p>
               <p>💬 WhatsApp Destek: +90 542 879 89 18</p>
-              <p>🌐 Web: https://denemedeneme.vercel.app</p>
+              <p>🌐 Web: https://adabazaar.com.tr</p>
             </div>
           </section>
         </div>
