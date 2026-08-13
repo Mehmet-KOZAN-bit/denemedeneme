@@ -614,9 +614,9 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 🖼️ HERO PHONE IMAGE - PERFECT BALANCED SCALE WITH ROUNDED CORNERS */}
+          {/* 🖼️ HERO PHONE IMAGE - COMPACT ELEGANT SCALE WITH ROUNDED CORNERS */}
           <div className="lg:col-span-5 flex justify-center items-center relative">
-            <div className="rounded-[28px] overflow-hidden shadow-xl border-[2px] border-slate-200/90 hover:scale-105 transition-transform duration-500 max-w-[240px] sm:max-w-[260px] lg:max-w-[275px] w-full bg-white">
+            <div className="rounded-[28px] overflow-hidden shadow-xl border-[2px] border-slate-200/90 hover:scale-105 transition-transform duration-500 max-w-[220px] sm:max-w-[240px] lg:max-w-[255px] w-full bg-white">
               <img
                 src="/hero-banner.png"
                 alt="AdaBazaar Mobil Uygulaması"
