@@ -71,9 +71,7 @@ export function StoreSidebar({ isTr, setIsTr, collapsed, setCollapsed }: StoreSi
         <div className="h-16 px-4 flex items-center justify-between border-b border-slate-800">
           {!collapsed ? (
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-lg shadow-lg">
-                <Building2 className="w-5 h-5 text-white" />
-              </div>
+              <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-9 h-9 rounded-xl object-contain shadow-lg" />
               <div className="flex flex-col">
                 <span className="font-black text-sm text-white leading-tight">AdaBazar</span>
                 <span className="text-[10px] font-bold text-emerald-400 tracking-wider uppercase">MAĞAZA PORTALI</span>

@@ -87,9 +87,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 p-6 text-center space-y-6">
         <div className="space-y-4">
-          <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-3xl shadow-2xl mx-auto">
-            AB
-          </div>
+          <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-20 h-20 rounded-3xl object-contain shadow-2xl mx-auto" />
           <div>
             <h1 className="text-3xl font-black text-white">AdaBazar Kurumsal Portalı</h1>
             <p className="text-sm text-slate-400 mt-1 max-w-sm">

@@ -157,9 +157,7 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-900/40">
-              AB
-            </div>
+            <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-10 h-10 rounded-2xl object-contain shadow-lg shadow-emerald-900/40" />
             <div>
               <span className="text-lg font-black tracking-tight text-white block">AdaBazar</span>
               <span className="text-[10px] font-bold text-emerald-400 block -mt-1">KIBRIS MARKETPLACE</span>
@@ -496,9 +494,7 @@ export default function LandingPage() {
       {/* 📲 APP DOWNLOAD BANNER */}
       <section id="download" className="py-20 px-6 relative overflow-hidden">
         <div className="max-w-5xl mx-auto bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 border border-emerald-500/30 rounded-[40px] p-8 sm:p-12 text-center space-y-6 shadow-2xl relative">
-          <div className="w-16 h-16 rounded-3xl bg-emerald-500 text-white flex items-center justify-center mx-auto text-2xl font-black shadow-lg">
-            AB
-          </div>
+          <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-16 h-16 rounded-3xl object-contain mx-auto shadow-lg" />
           <h2 className="text-3xl sm:text-4xl font-black text-white">Tüm Ada Cebinde! Hemen İndir</h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed">
             AdaBazar mobil uygulamasını iOS veya Android cihazınıza indirerek ilanları inceleyin veya hemen ilan yayınlayın.
@@ -528,9 +524,7 @@ export default function LandingPage() {
       <footer className="bg-slate-950 border-t border-slate-800 py-12 px-6 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white font-black text-sm">
-              AB
-            </div>
+            <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-8 h-8 rounded-xl object-contain" />
             <span className="font-bold text-white text-sm">AdaBazar KKTC</span>
           </div>
 
