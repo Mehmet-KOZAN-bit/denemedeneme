@@ -47,10 +47,10 @@ export function Sidebar({ isTr, setIsTr, collapsed, setCollapsed }: SidebarProps
     <aside className={`${collapsed ? 'w-16' : 'w-64'} transition-all duration-300 shrink-0 hidden md:flex flex-col bg-slate-900 text-white h-screen sticky top-0 overflow-hidden`}>
       {/* Logo */}
       <div className={`flex items-center gap-3 px-4 py-5 border-b border-slate-800 ${collapsed ? 'justify-center' : ''}`}>
-        <img src="/yeniikon.png" className="w-9 h-9 rounded-xl object-contain shrink-0" alt="AdaBazar Logo" />
+        <img src="/yeniikon.png" className="w-9 h-9 rounded-xl object-contain shrink-0" alt="AdaBazaar Logo" />
         {!collapsed && (
           <div className="min-w-0">
-            <p className="font-extrabold text-sm text-teal-400 truncate">AdaBazar</p>
+            <p className="font-extrabold text-sm text-teal-400 truncate">AdaBazaar</p>
             <p className="text-[10px] font-bold text-teal-500 uppercase tracking-widest">Kurumsal Portal</p>
           </div>
         )}
@@ -146,7 +146,7 @@ export function MobileTopBar({ isTr, onMenuClick }: { isTr: boolean; onMenuClick
     <div className="md:hidden flex items-center justify-between px-4 py-3 bg-slate-900 text-white border-b border-slate-800">
       <div className="flex items-center gap-2">
         <div className="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center font-black text-xs">AB</div>
-        <span className="font-extrabold text-sm text-teal-400">AdaBazar Admin</span>
+        <span className="font-extrabold text-sm text-teal-400">AdaBazaar Admin</span>
       </div>
       <button onClick={onMenuClick}><Menu className="w-5 h-5" /></button>
     </div>

@@ -7,8 +7,8 @@ import AdminShell from "../components/AdminShell";
 const geist = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AdaBazar Admin Panel",
-  description: "Administrative dashboard for AdaBazar C2C Platform",
+  title: "AdaBazaar Admin Panel",
+  description: "Administrative dashboard for AdaBazaar C2C Platform",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

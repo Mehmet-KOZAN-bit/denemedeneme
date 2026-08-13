@@ -35,7 +35,7 @@ export default function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-black text-white">Yönetim Portalı Özeti</h1>
-          <p className="text-xs text-slate-400 mt-1">AdaBazar KKTC genel istatistikleri ve sistem durumu</p>
+          <p className="text-xs text-slate-400 mt-1">AdaBazaar KKTC genel istatistikleri ve sistem durumu</p>
         </div>
         <div className="flex items-center gap-2 bg-slate-900 border border-slate-800 text-emerald-400 text-xs font-bold px-4 py-2 rounded-2xl self-start sm:self-auto">
           <Activity className="w-4 h-4 text-emerald-400 animate-pulse" />

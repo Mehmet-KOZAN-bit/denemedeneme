@@ -38,13 +38,13 @@ import { collection, query, where, getDocs, limit, addDoc } from 'firebase/fires
 // 🌐 3-LANGUAGE I18N DICTIONARY (TR, EN, RU)
 const TRANSLATIONS = {
   tr: {
-    announcement: "AdaBazar Mobil Uygulaması Canlıda! KKTC'nin 1 Numaralı İlan & Kurumsal Mağaza Platformu",
+    announcement: "AdaBazaar Mobil Uygulaması Canlıda! KKTC'nin 1 Numaralı İlan & Kurumsal Mağaza Platformu",
     downloadNow: "Hemen İndir →",
     subTitle: "KIBRIS MARKETPLACE",
     navHome: "Ana Sayfa",
     navProducts: "Canlı İlanlar",
     navStores: "Kurumsal Mağazalar",
-    navWhyUs: "Neden AdaBazar?",
+    navWhyUs: "Neden AdaBazaar?",
     storeApply: "Mağaza Başvurusu",
     corporateLogin: "Kurumsal Giriş",
     goToPortal: "Portala Git",
@@ -52,7 +52,7 @@ const TRANSLATIONS = {
     badgeVerified: "KKTC'nin Doğrulanmış Yerel Pazaryeri Platformu",
     heroTitleLine1: "Kıbrıs'ta Al, Sat, Keşfet",
     heroTitleLine2: "Tüm Ada Cebinde!",
-    heroDesc: "Emlak, vasıta, ikinci el eşyalar ve KKTC'nin seçkin kurumsal mağazaları AdaBazar'da buluşuyor. Aracısız, hızlı ve %100 doğrudan iletişim ile ilan verin veya hayalinizdeki ürünü bulun.",
+    heroDesc: "Emlak, vasıta, ikinci el eşyalar ve KKTC'nin seçkin kurumsal mağazaları AdaBazaar'da buluşuyor. Aracısız, hızlı ve %100 doğrudan iletişim ile ilan verin veya hayalinizdeki ürünü bulun.",
     btnDownloadApp: "Uygulamayı Hemen İndir",
     btnBecomeStore: "Kurumsal Mağaza Ol",
     statDownloads: "Mobil İndirme",
@@ -69,10 +69,10 @@ const TRANSLATIONS = {
     inspectInApp: "İncele",
     trustedBusinessesTag: "GÜVENİLİR İŞLETMELER",
     storesTitle: "KKTC Onaylı Kurumsal Mağazalar",
-    storesSub: "AdaBazar doğrulama sisteminden geçmiş resmi işletmeler",
+    storesSub: "AdaBazaar doğrulama sisteminden geçmiş resmi işletmeler",
     verifiedBadge: "ONAYLI MAĞAZA",
     whyUsTag: "NEDEN BİZ?",
-    whyUsTitle: "AdaBazar Avantajları",
+    whyUsTitle: "AdaBazaar Avantajları",
     feat1Title: "30 Saniyede Ücretsiz İlan",
     feat1Desc: "Fotoğrafını çek, fiyatını belirle ve ilanını saniyeler içinde binlerce alıcıya ücretsiz ulaştır.",
     feat2Title: "Doğrulanmış Kurumsal Mağazalar",
@@ -86,10 +86,10 @@ const TRANSLATIONS = {
     feat6Title: "%100 Yerel Güvenilir Altyapı",
     feat6Desc: "Kıbrıs pazarına özel geliştirilmiş hızlı, güvenli ve kolay pazaryeri deneyimi.",
     bannerTitle: "Tüm Ada Cebinde! Hemen İndir",
-    bannerDesc: "AdaBazar mobil uygulamasını iOS veya Android cihazınıza indirerek ilanları inceleyin veya hemen ilan yayınlayın.",
+    bannerDesc: "AdaBazaar mobil uygulamasını iOS veya Android cihazınıza indirerek ilanları inceleyin veya hemen ilan yayınlayın.",
     downloadAppStore: "iOS App Store'dan İndir",
     downloadPlayStore: "Google Play'den İndir",
-    footerRights: "© 2026 AdaBazar C2C & B2B İlan Platformu. Tüm hakları saklıdır.",
+    footerRights: "© 2026 AdaBazaar C2C & B2B İlan Platformu. Tüm hakları saklıdır.",
     modalLoginTitle: "Kurumsal Portal Girişi",
     modalLoginSub: "Mağaza veya Yönetim panelinize erişin",
     emailLabel: "E-posta Adresi",
@@ -97,10 +97,10 @@ const TRANSLATIONS = {
     btnSigningIn: "Giriş Yapılıyor...",
     btnSignIn: "Giriş Yap",
     modalQrTitle: "Uygulamayı İndirin",
-    modalQrSub: "Telefonunuzun kamerasını QR koda tutarak AdaBazar uygulamasını hemen yükleyebilirsiniz.",
+    modalQrSub: "Telefonunuzun kamerasını QR koda tutarak AdaBazaar uygulamasını hemen yükleyebilirsiniz.",
     btnClose: "Kapat",
     modalApplyTitle: "Kurumsal Mağaza Başvurusu",
-    modalApplySub: "İşletmenizi AdaBazar'a dahil edin",
+    modalApplySub: "İşletmenizi AdaBazaar'a dahil edin",
     modalApplySuccessTitle: "Başvurunuz Alındı!",
     modalApplySuccessSub: "Ekibimiz en kısa sürede sizinle iletişime geçip web giriş bilgilerinizi tanımlayacaktır.",
     formStoreName: "İşletme / Mağaza Adı *",
@@ -117,13 +117,13 @@ const TRANSLATIONS = {
     sectorOther: "Diğer Hizmet"
   },
   en: {
-    announcement: "AdaBazar Mobile App is Live! TRNC's #1 Marketplace & Store Platform",
+    announcement: "AdaBazaar Mobile App is Live! TRNC's #1 Marketplace & Store Platform",
     downloadNow: "Download Now →",
     subTitle: "CYPRUS MARKETPLACE",
     navHome: "Home",
     navProducts: "Live Listings",
     navStores: "Verified Stores",
-    navWhyUs: "Why AdaBazar?",
+    navWhyUs: "Why AdaBazaar?",
     storeApply: "Store Application",
     corporateLogin: "Corporate Login",
     goToPortal: "Go to Portal",
@@ -131,7 +131,7 @@ const TRANSLATIONS = {
     badgeVerified: "TRNC's Verified Local Marketplace Platform",
     heroTitleLine1: "Buy, Sell & Discover in Cyprus",
     heroTitleLine2: "The Whole Island in Your Pocket!",
-    heroDesc: "Real estate, vehicles, secondhand items, and top verified stores in Northern Cyprus meet at AdaBazar. Post ads or find your dream item with 100% direct communication.",
+    heroDesc: "Real estate, vehicles, secondhand items, and top verified stores in Northern Cyprus meet at AdaBazaar. Post ads or find your dream item with 100% direct communication.",
     btnDownloadApp: "Download Mobile App Now",
     btnBecomeStore: "Become a Verified Store",
     statDownloads: "Mobile Downloads",
@@ -148,10 +148,10 @@ const TRANSLATIONS = {
     inspectInApp: "View Details",
     trustedBusinessesTag: "TRUSTED BUSINESSES",
     storesTitle: "TRNC Verified Corporate Stores",
-    storesSub: "Official verified stores approved by AdaBazar verification system",
+    storesSub: "Official verified stores approved by AdaBazaar verification system",
     verifiedBadge: "VERIFIED STORE",
     whyUsTag: "WHY CHOOSE US?",
-    whyUsTitle: "AdaBazar Advantages",
+    whyUsTitle: "AdaBazaar Advantages",
     feat1Title: "Free Listing in 30 Seconds",
     feat1Desc: "Snap photos, set your price, and publish to thousands of buyers for free in seconds.",
     feat2Title: "Verified Corporate Stores",
@@ -165,10 +165,10 @@ const TRANSLATIONS = {
     feat6Title: "100% Local & Reliable",
     feat6Desc: "Fast, secure and intuitive marketplace experience tailored for Cyprus.",
     bannerTitle: "The Island in Your Pocket! Download Now",
-    bannerDesc: "Download AdaBazar mobile app for iOS or Android to browse listings or publish your ads instantly.",
+    bannerDesc: "Download AdaBazaar mobile app for iOS or Android to browse listings or publish your ads instantly.",
     downloadAppStore: "Download on App Store",
     downloadPlayStore: "Get it on Google Play",
-    footerRights: "© 2026 AdaBazar C2C & B2B Marketplace Platform. All rights reserved.",
+    footerRights: "© 2026 AdaBazaar C2C & B2B Marketplace Platform. All rights reserved.",
     modalLoginTitle: "Corporate Portal Login",
     modalLoginSub: "Access your Store or Management dashboard",
     emailLabel: "Email Address",
@@ -176,10 +176,10 @@ const TRANSLATIONS = {
     btnSigningIn: "Logging in...",
     btnSignIn: "Sign In",
     modalQrTitle: "Download the App",
-    modalQrSub: "Scan the QR code with your phone camera to instantly download AdaBazar app.",
+    modalQrSub: "Scan the QR code with your phone camera to instantly download AdaBazaar app.",
     btnClose: "Close",
     modalApplyTitle: "Corporate Store Application",
-    modalApplySub: "Register your business on AdaBazar",
+    modalApplySub: "Register your business on AdaBazaar",
     modalApplySuccessTitle: "Application Received!",
     modalApplySuccessSub: "Our team will contact you shortly to assign your store login credentials.",
     formStoreName: "Business / Store Name *",
@@ -196,7 +196,7 @@ const TRANSLATIONS = {
     sectorOther: "Other Services"
   },
   ru: {
-    announcement: "Мобильное приложение AdaBazar запущено! Платформа №1 на ТРСК",
+    announcement: "Мобильное приложение AdaBazaar запущено! Платформа №1 на ТРСК",
     downloadNow: "Скачать сейчас →",
     subTitle: "КИПРСКИЙ МАРКЕТПЛЕЙС",
     navHome: "Главная",
@@ -210,7 +210,7 @@ const TRANSLATIONS = {
     badgeVerified: "Проверенная локальная платформа Северного Кипра",
     heroTitleLine1: "Покупайте и продавайте на Кипре",
     heroTitleLine2: "Весь остров в вашем кармане!",
-    heroDesc: "Недвижимость, авто, б/у товары и лучшие проверенные магазины Северного Кипра на AdaBazar. Размещайте объявления и общайтесь напрямую без комиссий.",
+    heroDesc: "Недвижимость, авто, б/у товары и лучшие проверенные магазины Северного Кипра на AdaBazaar. Размещайте объявления и общайтесь напрямую без комиссий.",
     btnDownloadApp: "Скачать приложение",
     btnBecomeStore: "Стать магазином",
     statDownloads: "Скачиваний",
@@ -227,10 +227,10 @@ const TRANSLATIONS = {
     inspectInApp: "Подробнее",
     trustedBusinessesTag: "ПРОВЕРЕННЫЙ БИЗНЕС",
     storesTitle: "Проверенные магазины ТРСК",
-    storesSub: "Официальные компании, прошедшие верификацию AdaBazar",
+    storesSub: "Официальные компании, прошедшие верификацию AdaBazaar",
     verifiedBadge: "ПРОВЕРЕННЫЙ МАГАЗИН",
     whyUsTag: "ПОЧЕМУ МЫ?",
-    whyUsTitle: "Преимущества AdaBazar",
+    whyUsTitle: "Преимущества AdaBazaar",
     feat1Title: "Публикация за 30 секунд",
     feat1Desc: "Сделайте фото, укажите цену и бесплатно опубликуйте объявление за считанные секунды.",
     feat2Title: "Проверенные компании",
@@ -244,10 +244,10 @@ const TRANSLATIONS = {
     feat6Title: "100% Локально и надежно",
     feat6Desc: "Быстрый, безопасный и удобный интерфейс, созданный специально для Кипра.",
     bannerTitle: "Весь остров в вашем кармане! Скачайте сейчас",
-    bannerDesc: "Загрузите приложение AdaBazar для iOS или Android, чтобы просматривать объявления или продавать свои товары.",
+    bannerDesc: "Загрузите приложение AdaBazaar для iOS или Android, чтобы просматривать объявления или продавать свои товары.",
     downloadAppStore: "Скачать в App Store",
     downloadPlayStore: "Скачать в Google Play",
-    footerRights: "© 2026 Маркетплейс AdaBazar C2C & B2B. Все права защищены.",
+    footerRights: "© 2026 Маркетплейс AdaBazaar C2C & B2B. Все права защищены.",
     modalLoginTitle: "Вход в бизнес-портал",
     modalLoginSub: "Доступ к панели управления магазина",
     emailLabel: "Электронная почта",
@@ -255,10 +255,10 @@ const TRANSLATIONS = {
     btnSigningIn: "Вход...",
     btnSignIn: "Войти",
     modalQrTitle: "Скачать приложение",
-    modalQrSub: "Отсканируйте QR-код камерой телефона, чтобы установить приложение AdaBazar.",
+    modalQrSub: "Отсканируйте QR-код камерой телефона, чтобы установить приложение AdaBazaar.",
     btnClose: "Закрыть",
     modalApplyTitle: "Заявка для магазинов",
-    modalApplySub: "Зарегистрируйте свой бизнес на AdaBazar",
+    modalApplySub: "Зарегистрируйте свой бизнес на AdaBazaar",
     modalApplySuccessTitle: "Заявка принята!",
     modalApplySuccessSub: "Наша команда свяжется с вами в ближайшее время для предоставления доступа.",
     formStoreName: "Название компании / магазина *",
@@ -405,9 +405,9 @@ export default function LandingPage() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 px-6 py-4 shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-10 h-10 rounded-2xl object-contain shadow-md" />
+            <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-10 h-10 rounded-2xl object-contain shadow-md" />
             <div>
-              <span className="text-lg font-black tracking-tight text-slate-900 block">AdaBazar</span>
+              <span className="text-lg font-black tracking-tight text-slate-900 block">AdaBazaar</span>
               <span className="text-[10px] font-bold text-emerald-600 block -mt-1 tracking-wider uppercase">{t.subTitle}</span>
             </div>
           </div>
@@ -525,7 +525,7 @@ export default function LandingPage() {
           <div className="lg:col-span-5 flex justify-center items-center relative">
             <img
               src="/hero-banner.png"
-              alt="AdaBazar Mobil Uygulaması"
+              alt="AdaBazaar Mobil Uygulaması"
               className="w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[340px] max-h-[490px] h-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
             />
           </div>
@@ -751,7 +751,7 @@ export default function LandingPage() {
 
           <div className="relative z-10 space-y-6">
             <div className="w-20 h-20 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-2 mx-auto shadow-2xl flex items-center justify-center">
-              <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-full h-full object-contain" />
+              <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-full h-full object-contain" />
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">{t.bannerTitle}</h2>
@@ -800,8 +800,8 @@ export default function LandingPage() {
       <footer className="bg-white border-t border-slate-200 py-12 px-6 text-xs text-slate-600">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-8 h-8 rounded-xl object-contain" />
-            <span className="font-bold text-slate-900 text-sm">AdaBazar KKTC</span>
+            <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-8 h-8 rounded-xl object-contain" />
+            <span className="font-bold text-slate-900 text-sm">AdaBazaar KKTC</span>
           </div>
 
           <p>{t.footerRights}</p>
@@ -891,7 +891,7 @@ export default function LandingPage() {
             <div className="w-48 h-48 bg-slate-50 border border-slate-200 rounded-2xl mx-auto p-3 flex items-center justify-center shadow-inner">
               <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://denemedeneme.vercel.app"
-                alt="AdaBazar QR"
+                alt="AdaBazaar QR"
                 className="w-full h-full object-contain"
               />
             </div>
