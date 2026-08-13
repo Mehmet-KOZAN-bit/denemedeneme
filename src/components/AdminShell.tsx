@@ -30,13 +30,14 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const isSuperAdmin = profile?.role === 'admin' && profile?.accountType !== 'store';
 
   // Check if current page is the Public Landing Page / Website / Public Legal Pages
+  const cleanPath = (pathname || '/').replace(/\/$/, '') || '/';
   const isPublicWebsite = 
-    pathname === '/' || 
-    pathname === '/landing' || 
-    pathname === '/download' || 
-    pathname === '/showcase' ||
-    pathname === '/privacy' ||
-    pathname === '/terms';
+    cleanPath === '/' || 
+    cleanPath === '/landing' || 
+    cleanPath === '/download' || 
+    cleanPath === '/showcase' ||
+    cleanPath === '/privacy' ||
+    cleanPath === '/terms';
 
   // If on public website, render children directly without any sidebar frame!
   if (isPublicWebsite) {
