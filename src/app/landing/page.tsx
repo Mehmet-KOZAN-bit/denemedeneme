@@ -515,14 +515,14 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 🚀 HERO SECTION (ELEVATED POSITION & COMPACT PHONE SCALE) */}
-      <section id="hero" className="relative pt-2 sm:pt-4 pb-8 px-6 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-slate-50/60 border-b border-slate-200/60">
+      {/* 🚀 HERO SECTION (OPTIMIZED HEIGHT & STORE BUTTONS ONLY) */}
+      <section id="hero" className="relative pt-6 sm:pt-10 pb-16 sm:pb-20 px-6 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-slate-50/60 border-b border-slate-200/60">
         {/* Glow Ambient Circles & Mesh Dots */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-          <div className="lg:col-span-7 space-y-3 text-center lg:text-left">
+          <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>{t.badgeVerified}</span>
@@ -539,8 +539,8 @@ export default function LandingPage() {
               {t.heroDesc}
             </p>
 
-            {/* Official Store Buttons & Store Apply */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+            {/* Official App Store & Play Store Download Buttons */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
               {/* Apple App Store Button */}
               <button
                 onClick={() => handleSmartDownload('ios')}
@@ -570,14 +570,6 @@ export default function LandingPage() {
                   <span className="text-[9px] uppercase tracking-wider text-slate-400 block font-bold">Google Play</span>
                   <span className="text-xs font-bold text-white block leading-tight">{t.downloadPlayStore}</span>
                 </div>
-              </button>
-
-              {/* Become Store Button */}
-              <button
-                onClick={() => setShowApplyModal(true)}
-                className="bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-xs px-4 py-3 rounded-2xl transition-all shadow-sm flex items-center gap-2 hover:scale-105"
-              >
-                <span>{t.btnBecomeStore}</span>
               </button>
             </div>
           </div>
