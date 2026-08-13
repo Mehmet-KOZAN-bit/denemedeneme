@@ -384,6 +384,43 @@ export default function LandingPage() {
     }
   };
 
+  // Smart device detection & download handler
+  const handleSmartDownload = (platformPreference?: 'ios' | 'android') => {
+    if (typeof window === 'undefined') return;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    const iosLink = 'https://apps.apple.com/app/id6741000000';
+    const androidLink = 'https://play.google.com/store/apps/details?id=com.adabazaar.kibrismarket';
+
+    if (platformPreference === 'ios') {
+      if (isIOS || isAndroid) {
+        window.open(iosLink, '_blank');
+        return;
+      }
+    } else if (platformPreference === 'android') {
+      if (isIOS || isAndroid) {
+        window.open(androidLink, '_blank');
+        return;
+      }
+    } else {
+      // Smart Auto-detection from main "Uygulamayı Hemen İndir" button
+      if (isIOS) {
+        window.open(iosLink, '_blank');
+        return;
+      }
+      if (isAndroid) {
+        window.open(androidLink, '_blank');
+        return;
+      }
+    }
+
+    // Desktop/Laptop user -> Show QR code modal to scan with phone
+    setShowQrModal(true);
+  };
+
   const filteredProducts = products.filter(p => {
     const matchesCat = selectedCategory === 'all' || p.category === selectedCategory || p.categoryType === selectedCategory;
     const matchesSearch = !searchQuery || p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || p.city?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -396,9 +433,9 @@ export default function LandingPage() {
       <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 text-white py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2 shadow-sm">
         <Sparkles className="w-4 h-4 animate-pulse text-emerald-200" />
         <span>{t.announcement}</span>
-        <a href="#download" className="underline hover:text-emerald-200 transition-colors ml-2 font-black">
+        <button onClick={() => handleSmartDownload()} className="underline hover:text-emerald-200 transition-colors ml-2 font-black">
           {t.downloadNow}
-        </a>
+        </button>
       </div>
 
       {/* 🧭 NAVIGATION HEADER */}
@@ -505,7 +542,7 @@ export default function LandingPage() {
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
               <button
-                onClick={() => setShowQrModal(true)}
+                onClick={() => handleSmartDownload()}
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-emerald-600/25 flex items-center gap-2.5 hover:scale-105"
               >
                 <Download className="w-5 h-5" />
@@ -763,7 +800,7 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center justify-center gap-5 pt-4">
               {/* Apple App Store Button */}
               <button
-                onClick={() => setShowQrModal(true)}
+                onClick={() => handleSmartDownload('ios')}
                 className="bg-slate-950/90 hover:bg-slate-900 border border-slate-700/90 hover:border-emerald-500/50 text-white px-6 py-3.5 rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-3.5 group text-left"
               >
                 <svg className="w-8 h-8 fill-current text-white shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
@@ -777,7 +814,7 @@ export default function LandingPage() {
 
               {/* Google Play Store Button */}
               <button
-                onClick={() => setShowQrModal(true)}
+                onClick={() => handleSmartDownload('android')}
                 className="bg-slate-950/90 hover:bg-slate-900 border border-slate-700/90 hover:border-emerald-500/50 text-white px-6 py-3.5 rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-3.5 group text-left"
               >
                 <svg className="w-8 h-8 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
