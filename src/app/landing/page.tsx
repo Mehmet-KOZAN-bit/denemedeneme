@@ -589,11 +589,11 @@ export default function LandingPage() {
 
       {/* 🛍️ CANLI İLANLAR VİTRİNİ */}
       <section id="products" className="py-16 px-6 bg-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-8">
+        <div className="max-w-6xl mx-auto space-y-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">{t.liveFeedTag}</span>
-              <h2 className="text-3xl font-black text-slate-900">{t.liveFeedTitle}</h2>
+              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{t.liveFeedTitle}</h2>
             </div>
 
             {/* Category Selector */}
@@ -608,7 +608,7 @@ export default function LandingPage() {
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`text-xs font-bold px-4 py-2 rounded-xl transition-all ${
+                  className={`text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all ${
                     selectedCategory === cat.id
                       ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
                       : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
@@ -620,39 +620,39 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Products Grid - 6 Column Grid on Desktop */}
+          {/* Products Grid - 4 Column Grid on Desktop */}
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12 bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-3">
               <ShoppingBag className="w-12 h-12 text-slate-400 mx-auto" />
               <p className="text-sm font-bold text-slate-600">{t.noProducts}</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {filteredProducts.map(p => (
                 <div key={p.id} className="group bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-2xl overflow-hidden transition-all shadow-sm hover:shadow-md flex flex-col justify-between">
-                  <div className="aspect-square bg-slate-100 relative overflow-hidden">
+                  <div className="aspect-[4/3] bg-slate-100 relative overflow-hidden">
                     <img
                       src={p.images?.[0] || p.imageUrl || 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=400'}
                       alt={p.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-md text-emerald-700 text-[11px] font-black px-2 py-0.5 rounded-full border border-slate-200 shadow-sm">
+                    <div className="absolute top-2.5 right-2.5 bg-white/95 backdrop-blur-md text-emerald-700 text-xs font-black px-2.5 py-0.5 rounded-full border border-slate-200 shadow-sm">
                       {p.currency === 'GBP' ? '£' : p.currency === 'USD' ? '$' : '₺'}{p.price}
                     </div>
                   </div>
 
-                  <div className="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
+                  <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-bold text-xs text-slate-900 line-clamp-2 leading-snug">{p.title}</h3>
-                      <div className="flex items-center gap-1 text-[10px] text-slate-500 mt-1">
-                        <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+                      <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 line-clamp-2 leading-snug">{p.title}</h3>
+                      <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-1.5 font-medium">
+                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                         <span className="truncate">{p.city || 'KKTC'} {p.district ? `/ ${p.district}` : ''}</span>
                       </div>
                     </div>
 
                     <button
                       onClick={() => setShowQrModal(true)}
-                      className="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-600/30 text-[11px] font-bold py-2 rounded-lg transition-all flex items-center justify-center gap-1 mt-1"
+                      className="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-600/30 text-xs font-bold py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 mt-1"
                     >
                       <Smartphone className="w-3.5 h-3.5" />
                       <span>{t.inspectInApp}</span>
@@ -665,19 +665,20 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (SLIM & NARROW COMPACT SHOWCASE) */}
-      <section id="stores" className="py-5 px-4 bg-gradient-to-b from-slate-50/50 via-white to-slate-50/50 border-b border-slate-200/80">
-        <div className="max-w-2xl mx-auto space-y-4">
-          <div className="text-center max-w-xs mx-auto space-y-0.5">
-            <span className="inline-flex items-center gap-1 text-[8px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
-              <Building2 className="w-2.5 h-2.5 text-emerald-600" />
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (STANDARD PROFESSIONAL 3-COLUMN SHOWCASE) */}
+      <section id="stores" className="py-16 px-6 bg-slate-50/70 border-b border-slate-200/80">
+        <div className="max-w-6xl mx-auto space-y-10">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full uppercase tracking-wider">
+              <Building2 className="w-3.5 h-3.5 text-emerald-600" />
               {t.trustedBusinessesTag}
             </span>
-            <h2 className="text-base sm:text-lg font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
-            <p className="text-[10px] text-slate-500 font-medium">{t.storesSub}</p>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">{t.storesSub}</p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Real Registered Stores */}
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
@@ -686,65 +687,103 @@ export default function LandingPage() {
               const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
-                <div key={s.id} className="w-full sm:w-[250px] bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-lg p-3 space-y-2 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group">
-                  {/* Glowing Corner Badge */}
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 truncate">
-                      <div className="relative shrink-0">
-                        <img src={logo} alt={name} className="w-8 h-8 rounded-md object-cover border border-slate-100 shadow-sm" />
-                        <div className="absolute -bottom-0.5 -right-0.5 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
-                          <Check className="w-2 h-2 stroke-[3]" />
+                <div key={s.id} className="bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-2xl p-5 space-y-4 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <img src={logo} alt={name} className="w-12 h-12 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0" />
+                        <div>
+                          <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center gap-1.5">
+                            <span>{name}</span>
+                            <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                          </h3>
+                          <p className="text-xs text-slate-500 font-medium">{sector}</p>
                         </div>
                       </div>
-                      <div className="truncate">
-                        <h3 className="font-extrabold text-[11px] text-slate-900 group-hover:text-emerald-700 transition-colors truncate">
-                          {name}
-                        </h3>
-                        <p className="text-[9px] text-slate-500 font-medium truncate">{sector}</p>
-                      </div>
                     </div>
+
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      {t.verifiedBadge}
+                    </span>
                   </div>
 
-                  <div className="space-y-1 text-[9px] text-slate-600 pt-1.5 border-t border-slate-100">
-                    <div className="flex items-center justify-between font-medium">
-                      <div className="flex items-center gap-1 truncate">
-                        <MapPin className="w-2.5 h-2.5 text-emerald-600 shrink-0" />
-                        <span className="truncate">{city}</span>
-                      </div>
-                      {phone && (
+                  <div className="space-y-2 text-xs text-slate-600 pt-3 border-t border-slate-100">
+                    <div className="flex items-center gap-1.5 font-medium">
+                      <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>{city}</span>
+                    </div>
+                    {phone && (
+                      <div className="flex items-center justify-between pt-1">
+                        <a
+                          href={`tel:${phone}`}
+                          className="flex items-center gap-1.5 font-bold text-slate-800 hover:text-emerald-600 transition-colors"
+                        >
+                          <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>{phone}</span>
+                        </a>
                         <a
                           href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-[8px] font-bold px-1.5 py-0.5 rounded transition-colors flex items-center gap-0.5 shrink-0"
+                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1 rounded-lg transition-colors flex items-center gap-1.5"
                         >
-                          <MessageCircle className="w-2 h-2 text-emerald-600" />
+                          <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                           <span>WhatsApp</span>
                         </a>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
             })}
 
-            {/* Always Present "Mağaza Ol" CTA Card */}
-            <div className="w-full sm:w-[250px] bg-gradient-to-br from-emerald-900 via-slate-900 to-teal-950 text-white rounded-lg p-3 flex flex-col justify-between space-y-2 shadow-sm border border-emerald-500/30 relative overflow-hidden group">
-              <div className="space-y-1 relative z-10">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-6 h-6 rounded-md bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
-                    <Store className="w-3 h-3" />
+            {/* Showcase Store Placeholder 1 (If few stores) */}
+            {stores.length < 2 && (
+              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 shadow-sm relative overflow-hidden flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center font-bold text-lg shrink-0">
+                      🏢
+                    </div>
+                    <div>
+                      <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
+                        <span>KKTC Emlak & Galeri</span>
+                        <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                      </h3>
+                      <p className="text-xs text-slate-500 font-medium">Gayrimenkul & Emlak</p>
+                    </div>
                   </div>
-                  <h3 className="text-[11px] font-black text-white leading-tight">Kurumsal Mağaza Açın</h3>
+
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-700 bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    {t.verifiedBadge}
+                  </span>
                 </div>
-                <p className="text-[9px] text-slate-300 leading-relaxed font-medium">
-                  Binlerce alıcıya aracısız ulaşın, hemen satış yapın.
+
+                <div className="space-y-2 text-xs text-slate-600 pt-3 border-t border-slate-100">
+                  <div className="flex items-center gap-1.5 font-medium">
+                    <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>Girne / KKTC</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Always Present "Mağaza Ol" CTA Card */}
+            <div className="bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-md border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
+              <div className="space-y-2 relative z-10">
+                <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
+                  <Store className="w-5 h-5" />
+                </div>
+                <h3 className="text-base font-black text-white leading-snug">Kurumsal Mağazanızı Açın</h3>
+                <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                  KKTC genelindeki binlerce alıcıya %100 doğrudan ulaşın, komisyonsuz satış yapın.
                 </p>
               </div>
 
               <button
                 onClick={() => setShowApplyModal(true)}
-                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[9px] px-2.5 py-1 rounded transition-all shadow-sm flex items-center justify-center gap-1 relative z-10"
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 relative z-10"
               >
                 <span>{t.storeApply} →</span>
               </button>
