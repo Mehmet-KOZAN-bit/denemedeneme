@@ -677,7 +677,7 @@ export default function LandingPage() {
             <p className="text-[11px] text-slate-500 font-medium">{t.storesSub}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-4 max-w-3xl mx-auto">
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
@@ -686,7 +686,7 @@ export default function LandingPage() {
               const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
-                <div key={s.id} className="bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-xl p-4 space-y-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
+                <div key={s.id} className="w-full sm:w-[320px] bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-xl p-4 space-y-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 relative overflow-hidden group">
                   {/* Glowing Corner Badge */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
@@ -734,7 +734,7 @@ export default function LandingPage() {
             })}
 
             {/* Always Present "Mağaza Ol" CTA Card */}
-            <div className="bg-gradient-to-br from-emerald-900 via-slate-900 to-teal-950 text-white rounded-xl p-4 flex flex-col justify-between space-y-3 shadow-sm border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
+            <div className="w-full sm:w-[320px] bg-gradient-to-br from-emerald-900 via-slate-900 to-teal-950 text-white rounded-xl p-4 flex flex-col justify-between space-y-3 shadow-sm border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
               <div className="space-y-1.5 relative z-10">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
