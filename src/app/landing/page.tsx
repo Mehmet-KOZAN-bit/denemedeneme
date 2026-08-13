@@ -27,7 +27,10 @@ import {
   Lock,
   Check,
   User,
-  LogOut
+  LogOut,
+  Camera,
+  PlusCircle,
+  MessageSquare
 } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, query, where, getDocs, limit, addDoc } from 'firebase/firestore';
@@ -42,6 +45,9 @@ export default function LandingPage() {
   const [showQrModal, setShowQrModal] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // Phone Mockup Active Slide State (0..4)
+  const [phoneSlide, setPhoneSlide] = useState(0);
 
   // Portal Login Form State
   const [loginEmail, setLoginEmail] = useState('');
@@ -63,6 +69,14 @@ export default function LandingPage() {
     profile?.storeStatus === 'approved' || 
     profile?.role === 'store' ||
     profile?.isVerifiedStore === true;
+
+  // Phone Carousel Auto-play (every 3.5 seconds)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPhoneSlide((prev) => (prev + 1) % 5);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -141,6 +155,14 @@ export default function LandingPage() {
     const matchesSearch = !searchQuery || p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || p.city?.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCat && matchesSearch;
   });
+
+  const slideNames = [
+    { title: 'Ana Sayfa Vitrini', desc: 'Canlı İlan Akışı' },
+    { title: 'İlan Detayı', desc: 'Aracısız İletişim' },
+    { title: 'Onaylı Mağazalar', desc: 'Güvenilir İşletmeler' },
+    { title: 'İlan Verme', desc: '30 Saniyede Foto Paylaş' },
+    { title: 'Canlı Mesajlaşma', desc: 'Anlık Chat' },
+  ];
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500 selection:text-white">
@@ -270,53 +292,233 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Phone Mockup Preview */}
-          <div className="lg:col-span-5 flex justify-center relative">
+          {/* 📱 INTERACTIVE ANIMATED PHONE MOCKUP */}
+          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
             <div className="relative w-72 sm:w-80 h-[560px] bg-slate-900 rounded-[48px] border-4 border-slate-800 shadow-2xl p-4 flex flex-col justify-between overflow-hidden group">
               {/* Notch */}
-              <div className="w-32 h-5 bg-slate-950 rounded-full mx-auto mb-3 shrink-0" />
+              <div className="w-32 h-5 bg-slate-950 rounded-full mx-auto mb-2 shrink-0 z-20" />
               
-              {/* App Content Preview */}
-              <div className="flex-1 bg-slate-950 rounded-3xl p-3 space-y-3 overflow-hidden border border-slate-800">
-                <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                  <span className="text-xs font-black text-emerald-400">AdaBazar KKTC</span>
-                  <span className="text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-bold">CANLI FEED</span>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="bg-slate-900 p-2.5 rounded-2xl border border-slate-800 flex gap-2.5 items-center">
-                    <div className="w-12 h-12 rounded-xl bg-slate-800 shrink-0 overflow-hidden">
-                      <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=200" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-white truncate">iPhone 14 Pro Max 256GB</p>
-                      <p className="text-[10px] text-slate-400">Girne / KKTC</p>
-                      <p className="text-xs font-black text-emerald-400 mt-0.5">₺32.500</p>
-                    </div>
+              {/* App Display Window */}
+              <div className="flex-1 bg-slate-950 rounded-3xl p-3 space-y-3 overflow-hidden border border-slate-800 relative z-10 flex flex-col justify-between">
+                
+                {/* Header Status Bar inside Phone */}
+                <div className="flex items-center justify-between pb-2 border-b border-slate-800 shrink-0">
+                  <div className="flex items-center gap-1.5">
+                    <img src="/yeniikon.png" alt="Logo" className="w-4 h-4 object-contain" />
+                    <span className="text-xs font-black text-emerald-400">AdaBazar</span>
                   </div>
-
-                  <div className="bg-slate-900 p-2.5 rounded-2xl border border-slate-800 flex gap-2.5 items-center">
-                    <div className="w-12 h-12 rounded-xl bg-slate-800 shrink-0 overflow-hidden">
-                      <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=200" className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-white truncate">Dereboyu 2+1 Lüks Daire</p>
-                      <p className="text-[10px] text-slate-400">Lefkoşa / KKTC</p>
-                      <p className="text-xs font-black text-emerald-400 mt-0.5">£650 / ay</p>
-                    </div>
-                  </div>
+                  <span className="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full font-bold border border-emerald-800">
+                    {slideNames[phoneSlide].desc.toUpperCase()}
+                  </span>
                 </div>
 
-                <div className="bg-emerald-950/60 border border-emerald-800/60 p-3 rounded-2xl text-center space-y-1">
-                  <ShieldCheck className="w-6 h-6 text-emerald-400 mx-auto" />
-                  <p className="text-[11px] font-bold text-white">KOZAN Teknoloji</p>
-                  <p className="text-[9px] text-emerald-400 font-bold">ONAYLI KURUMSAL MAĞAZA</p>
+                {/* 🔄 ANIMATED SCREEN SLIDES */}
+                <div className="flex-1 overflow-hidden relative">
+
+                  {/* 🟢 SCREEN 0: HOME FEED & SEARCH */}
+                  {phoneSlide === 0 && (
+                    <div className="space-y-2 animate-fade-in">
+                      <div className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center gap-2 text-slate-400 text-[10px]">
+                        <Search className="w-3 h-3 text-emerald-400" />
+                        <span>Kıbrıs'ta ilan ara...</span>
+                      </div>
+
+                      <div className="flex gap-1 overflow-x-auto pb-1 text-[9px] font-bold">
+                        <span className="bg-emerald-600 text-white px-2 py-0.5 rounded-md">Tüm</span>
+                        <span className="bg-slate-900 text-slate-400 px-2 py-0.5 rounded-md border border-slate-800">Vasıta</span>
+                        <span className="bg-slate-900 text-slate-400 px-2 py-0.5 rounded-md border border-slate-800">Emlak</span>
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-2xl border border-slate-800 flex gap-2 items-center">
+                        <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=200" className="w-11 h-11 rounded-xl object-cover shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[11px] font-bold text-white truncate">iPhone 14 Pro Max 256GB</p>
+                          <p className="text-[9px] text-slate-400">Girne / KKTC</p>
+                          <p className="text-xs font-black text-emerald-400 mt-0.5">₺32.500</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-2xl border border-slate-800 flex gap-2 items-center">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=200" className="w-11 h-11 rounded-xl object-cover shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[11px] font-bold text-white truncate">Dereboyu 2+1 Lüks Daire</p>
+                          <p className="text-[9px] text-slate-400">Lefkoşa / KKTC</p>
+                          <p className="text-xs font-black text-emerald-400 mt-0.5">£650 / ay</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 🔵 SCREEN 1: PRODUCT DETAIL */}
+                  {phoneSlide === 1 && (
+                    <div className="space-y-2 animate-fade-in">
+                      <div className="h-28 rounded-2xl bg-slate-900 overflow-hidden relative border border-slate-800">
+                        <img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=400" className="w-full h-full object-cover" />
+                        <span className="absolute bottom-2 right-2 bg-slate-950/90 text-emerald-400 text-[10px] font-black px-2 py-0.5 rounded-full border border-slate-800">
+                          ₺32.500
+                        </span>
+                      </div>
+
+                      <div className="space-y-1">
+                        <p className="text-xs font-extrabold text-white leading-tight">iPhone 14 Pro Max 256GB Derin Mor</p>
+                        <p className="text-[9px] text-slate-400 flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-emerald-400" /> Girne / KKTC (3 saat önce)
+                        </p>
+                      </div>
+
+                      <div className="bg-emerald-950/60 border border-emerald-800/60 p-2 rounded-xl flex items-center gap-2">
+                        <img src="/yeniikon.png" className="w-7 h-7 rounded-lg object-contain shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold text-white truncate">KOZAN Teknoloji</p>
+                          <p className="text-[8px] font-bold text-emerald-400">DOĞRULANMIŞ MAĞAZA</p>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-1.5 pt-1">
+                        <div className="bg-emerald-600 text-white text-[9px] font-bold py-1.5 rounded-lg text-center flex items-center justify-center gap-1">
+                          <Phone className="w-3 h-3" /> Hemen Ara
+                        </div>
+                        <div className="bg-emerald-800 text-white text-[9px] font-bold py-1.5 rounded-lg text-center flex items-center justify-center gap-1">
+                          <MessageCircle className="w-3 h-3" /> WhatsApp
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 🟣 SCREEN 2: VERIFIED STORES */}
+                  {phoneSlide === 2 && (
+                    <div className="space-y-2 animate-fade-in">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-300">Onaylı Mağazalar (50+)</span>
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-2xl border border-slate-800 flex items-center gap-2">
+                        <img src="/yeniikon.png" className="w-9 h-9 rounded-xl object-contain bg-slate-950 p-1 shrink-0" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold text-white truncate">KOZAN Teknoloji</p>
+                          <p className="text-[8px] text-slate-400">Lefkoşa / Teknoloji</p>
+                          <span className="text-[8px] font-bold text-emerald-400">ONAYLI MAĞAZA</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-2xl border border-slate-800 flex items-center gap-2">
+                        <div className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-teal-400 font-bold text-xs shrink-0">
+                          GA
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold text-white truncate">Girne Auto Gallery</p>
+                          <p className="text-[8px] text-slate-400">Girne / Vasıta</p>
+                          <span className="text-[8px] font-bold text-emerald-400">ONAYLI MAĞAZA</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-2xl border border-slate-800 flex items-center gap-2">
+                        <div className="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-blue-400 font-bold text-xs shrink-0">
+                          LE
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-bold text-white truncate">Lefkoşa Emlak Acentesi</p>
+                          <p className="text-[8px] text-slate-400">Lefkoşa / Emlak</p>
+                          <span className="text-[8px] font-bold text-emerald-400">ONAYLI MAĞAZA</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 🟠 SCREEN 3: ADD LISTING */}
+                  {phoneSlide === 3 && (
+                    <div className="space-y-2 animate-fade-in text-left">
+                      <div className="flex items-center justify-between pb-1 border-b border-slate-800">
+                        <span className="text-[10px] font-bold text-white">Yeni İlan Yayınla</span>
+                        <Zap className="w-3.5 h-3.5 text-emerald-400" />
+                      </div>
+
+                      <div className="h-16 border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/50 flex flex-col items-center justify-center text-slate-400 gap-1">
+                        <Camera className="w-4 h-4 text-emerald-400" />
+                        <span className="text-[8px] font-bold">Fotoğrafları Seç (0/5)</span>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[9px] text-slate-400">
+                          İlan Başlığı (Örn: Renault Megane)
+                        </div>
+                        <div className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[9px] text-slate-400">
+                          Kategori: Vasıta & Otomobil
+                        </div>
+                        <div className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[9px] text-slate-400">
+                          Fiyat: ₺480.000
+                        </div>
+                      </div>
+
+                      <div className="bg-emerald-600 text-white font-bold text-[9px] py-2 rounded-xl text-center shadow-md">
+                        🚀 30 Saniyede Yayına Al
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 🔴 SCREEN 4: LIVE CHAT */}
+                  {phoneSlide === 4 && (
+                    <div className="space-y-2 animate-fade-in text-left">
+                      <div className="flex items-center justify-between pb-1 border-b border-slate-800">
+                        <span className="text-[10px] font-bold text-white">Canlı Sohbetler</span>
+                        <MessageSquare className="w-3.5 h-3.5 text-emerald-400" />
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-xl border border-slate-800 flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-emerald-950 border border-emerald-700 flex items-center justify-center text-emerald-400 font-bold text-[9px] shrink-0">
+                          KT
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-bold text-white truncate">KOZAN Teknoloji</p>
+                            <span className="text-[8px] text-slate-500">14:20</span>
+                          </div>
+                          <p className="text-[8px] text-emerald-400 font-medium truncate">İlanınız için mesaj gönderdim.</p>
+                        </div>
+                        <span className="w-4 h-4 bg-emerald-600 text-white text-[8px] font-bold rounded-full flex items-center justify-center shrink-0">1</span>
+                      </div>
+
+                      <div className="bg-slate-900 p-2 rounded-xl border border-slate-800 flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold text-[9px] shrink-0">
+                          AY
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-bold text-white truncate">Ahmet Y.</p>
+                            <span className="text-[8px] text-slate-500">Dün</span>
+                          </div>
+                          <p className="text-[8px] text-slate-400 truncate">Araba duruyor mu son fiyat ne olur?</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                 </div>
+
+                {/* Bottom Home Indicator Bar */}
+                <div className="w-28 h-1 bg-slate-700 rounded-full mx-auto shrink-0 mt-1" />
               </div>
-
-              {/* Bottom bar */}
-              <div className="w-28 h-1 bg-slate-700 rounded-full mx-auto mt-3 shrink-0" />
             </div>
+
+            {/* 🎯 CAROUSEL CONTROLLER DOTS */}
+            <div className="flex items-center gap-2 mt-4">
+              {slideNames.map((s, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setPhoneSlide(idx)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    phoneSlide === idx ? 'w-8 bg-emerald-500' : 'w-2.5 bg-slate-800 hover:bg-slate-700'
+                  }`}
+                  title={s.title}
+                />
+              ))}
+            </div>
+
+            {/* Active Slide Name Label */}
+            <p className="text-xs font-bold text-emerald-400 mt-2">
+              {slideNames[phoneSlide].title} <span className="text-slate-500 font-normal">({slideNames[phoneSlide].desc})</span>
+            </p>
           </div>
         </div>
       </section>
