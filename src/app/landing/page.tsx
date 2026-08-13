@@ -673,258 +673,97 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR */}
-      <section id="stores" className="py-16 px-6 bg-slate-50/60 border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">{t.trustedBusinessesTag}</span>
-            <h2 className="text-3xl font-black text-slate-900">{t.storesTitle}</h2>
-            <p className="text-xs text-slate-500">{t.storesSub}</p>
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (PRO SHOWCASE) */}
+      <section id="stores" className="py-20 px-6 bg-gradient-to-b from-slate-50/50 via-white to-slate-50/50 border-b border-slate-200/80">
+        <div className="max-w-7xl mx-auto space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+              <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+              {t.trustedBusinessesTag}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">{t.storesSub}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
-              const city = s.storeInfo?.city || s.city || 'KKTC';
+              const city = s.storeInfo?.city || s.city || 'Lefkoşa / KKTC';
               const phone = s.storeInfo?.phone || s.phone || '';
+              const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
-                <div key={s.id} className="bg-white border border-slate-200 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-md hover:border-emerald-500/40 transition-all">
-                  <div className="flex items-center gap-4">
-                    <img src={logo} alt={name} className="w-14 h-14 rounded-2xl object-cover border border-slate-200 shrink-0" />
-                    <div>
-                      <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
-                        <span>{name}</span>
-                        <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                      </h3>
-                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-1 border border-emerald-200">
-                        {t.verifiedBadge}
-                      </span>
+                <div key={s.id} className="bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-[32px] p-7 space-y-6 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+                  {/* Glowing Corner Badge */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="relative">
+                      <img src={logo} alt={name} className="w-16 h-16 rounded-2xl object-cover border-2 border-slate-100 shadow-md group-hover:scale-105 transition-transform" />
+                      <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-1 shadow-md border-2 border-white">
+                        <Check className="w-3 h-3 stroke-[3]" />
+                      </div>
                     </div>
+
+                    <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      {t.verifiedBadge}
+                    </span>
                   </div>
 
-                  <div className="space-y-1.5 text-xs text-slate-500 pt-2 border-t border-slate-100">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-base text-slate-900 flex items-center gap-2 group-hover:text-emerald-700 transition-colors">
+                      <span>{name}</span>
+                    </h3>
+                    <p className="text-xs text-slate-500 font-semibold">{sector}</p>
+                  </div>
+
+                  <div className="space-y-2 text-xs text-slate-600 pt-3 border-t border-slate-100/80">
+                    <div className="flex items-center gap-2 font-medium">
                       <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>{city} / KKTC</span>
+                      <span>{city}</span>
                     </div>
                     {phone && (
-                      <div className="flex items-center gap-2">
-                        <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span>{phone}</span>
+                      <div className="flex items-center justify-between pt-1">
+                        <a
+                          href={`tel:${phone}`}
+                          className="flex items-center gap-2 font-bold text-slate-800 hover:text-emerald-600 transition-colors"
+                        >
+                          <Phone className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span>{phone}</span>
+                        </a>
+                        <a
+                          href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-extrabold px-3 py-1.5 rounded-xl transition-colors flex items-center gap-1.5"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>WhatsApp</span>
+                        </a>
                       </div>
                     )}
                   </div>
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
 
-      {/* 🌟 NEDEN ADABAZAR? (VERTICAL VISUAL STORY SHOWCASE) */}
-      <section id="features" className="py-24 px-6 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200/80 overflow-hidden">
-        <div className="max-w-7xl mx-auto space-y-24">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-              <Sparkles className="w-4 h-4 text-emerald-600" />
-              {t.whyUsTag}
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">{t.whyUsTitle}</h2>
-          </div>
-
-          {/* Vertical Feature 1: 30 Saniyede Ücretsiz İlan */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 flex items-center justify-center font-black">
-                <Zap className="w-7 h-7" />
+            {/* Always Present "Mağaza Ol" CTA Card */}
+            <div className="bg-gradient-to-br from-emerald-900 via-slate-900 to-teal-950 text-white rounded-[32px] p-7 flex flex-col justify-between space-y-6 shadow-xl border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.02] transition-transform">
+              <div className="space-y-3 relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400">
+                  <Store className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-black text-white leading-snug">İşletmenizi AdaBazaar'a Dahil Edin</h3>
+                <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                  KKTC genelindeki binlerce potansiyel müşteriye aracısız ulaşın, kurumsal mağaza kimliği ile güvenle satış yapın.
+                </p>
               </div>
-              <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase">Hızlı & Kolay</span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat1Title}</h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-                {t.feat1Desc}
-              </p>
-              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  <span>Sadece 30 saniyede fotoğraf çek ve yayınla</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  <span>Sıfır komisyon ile %100 ücretsiz ilan imkanı</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-                  <span>Tüm KKTC genelindeki binlerce alıcıya anında ulaş</span>
-                </div>
-              </div>
-            </div>
 
-            <div className="lg:col-span-6 flex justify-center">
-              <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 p-6 sm:p-10 rounded-[40px] border border-emerald-500/20 shadow-xl relative w-full max-w-[420px]">
-                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
-                  <img src="/hero-banner.png" alt="30 Saniyede İlan" className="w-full h-auto object-contain block" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Vertical Feature 2: Doğrulanmış Kurumsal Mağazalar (Reversed Layout) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 order-2 lg:order-1 flex justify-center">
-              <div className="bg-gradient-to-br from-teal-500/10 to-blue-500/10 p-6 sm:p-10 rounded-[40px] border border-teal-500/20 shadow-xl relative w-full max-w-[420px]">
-                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
-                  <img src="/hero-banner.png" alt="Doğrulanmış Kurumsal Mağazalar" className="w-full h-auto object-contain block" />
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-600 flex items-center justify-center font-black">
-                <ShieldCheck className="w-7 h-7" />
-              </div>
-              <span className="text-xs font-black text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full uppercase">Güvenli Ticaret</span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat2Title}</h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-                {t.feat2Desc}
-              </p>
-              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
-                  <span>AdaBazaar sisteminden geçmiş resmi kayıtlı işletmeler</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
-                  <span>Emlak, Oto Galeri ve Teknoloji mağazalarından güvenle alışveriş</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
-                  <span>Kurumsal mağaza profili ve direkt iletişim bilgileri</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Vertical Feature 3: Doğrudan & Aracısız İletişim */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 flex items-center justify-center font-black">
-                <Phone className="w-7 h-7" />
-              </div>
-              <span className="text-xs font-black text-blue-600 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase">Sıfır Komisyon</span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat3Title}</h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-                {t.feat3Desc}
-              </p>
-              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
-                  <span>WhatsApp veya direkt arama ile 1-tıkla iletişim</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
-                  <span>Aracı veya komisyon olmadan elden pazarlık imkanı</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
-                  <span>Uygulama içi anlık bildirimli canlı sohbet</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 flex justify-center">
-              <div className="bg-gradient-to-br from-blue-500/10 to-emerald-500/10 p-6 sm:p-10 rounded-[40px] border border-blue-500/20 shadow-xl relative w-full max-w-[420px]">
-                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
-                  <img src="/hero-banner.png" alt="Doğrudan İletişim" className="w-full h-auto object-contain block" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Vertical Feature 4: Konum Bazlı Ada Araması (Reversed Layout) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 order-2 lg:order-1 flex justify-center">
-              <div className="bg-gradient-to-br from-emerald-500/10 to-amber-500/10 p-6 sm:p-10 rounded-[40px] border border-emerald-500/20 shadow-xl relative w-full max-w-[420px]">
-                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
-                  <img src="/hero-banner.png" alt="Konum Bazlı Ada Araması" className="w-full h-auto object-contain block" />
-                </div>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
-              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center font-black">
-                <MapPin className="w-7 h-7" />
-              </div>
-              <span className="text-xs font-black text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full uppercase">KKTC Şehir Filtresi</span>
-              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat4Title}</h3>
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
-                {t.feat4Desc}
-              </p>
-              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-amber-600 shrink-0" />
-                  <span>Lefkoşa, Girne, Gazimağusa, İskele, Güzelyurt ve Lefke aramaları</span>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <CheckCircle2 className="w-5 h-5 text-amber-600 shrink-0" />
-                  <span>Size en yakın ilanları anında harita ve şehir filtresiyle görün</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* 📲 APP DOWNLOAD BANNER (ULTRA-MODERN GLASSMORPHISM) */}
-      <section id="download" className="py-20 px-6 relative overflow-hidden bg-slate-50">
-        <div className="max-w-5xl mx-auto bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 border border-emerald-500/30 text-white rounded-[44px] p-10 sm:p-14 text-center space-y-8 shadow-2xl relative overflow-hidden">
-          {/* Ambient Glow Circles */}
-          <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="relative z-10 space-y-6">
-            <div className="w-20 h-20 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-2 mx-auto shadow-2xl flex items-center justify-center">
-              <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-full h-full object-contain" />
-            </div>
-
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">{t.bannerTitle}</h2>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed font-medium">
-              {t.bannerDesc}
-            </p>
-
-            {/* Official Store Buttons */}
-            <div className="flex flex-wrap items-center justify-center gap-5 pt-4">
-              {/* Apple App Store Button */}
               <button
-                onClick={() => handleSmartDownload('ios')}
-                className="bg-slate-950/90 hover:bg-slate-900 border border-slate-700/90 hover:border-emerald-500/50 text-white px-6 py-3.5 rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-3.5 group text-left"
+                onClick={() => setShowApplyModal(true)}
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-5 py-3 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 relative z-10"
               >
-                <svg className="w-8 h-8 fill-current text-white shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.86c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.61.71-1.14 1.86-1 2.97 1.08.08 2.15-.56 2.81-1.37z" />
-                </svg>
-                <div>
-                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">App Store</span>
-                  <span className="text-sm font-black text-white block leading-tight">{t.downloadAppStore}</span>
-                </div>
-              </button>
-
-              {/* Google Play Store Button */}
-              <button
-                onClick={() => handleSmartDownload('android')}
-                className="bg-slate-950/90 hover:bg-slate-900 border border-slate-700/90 hover:border-emerald-500/50 text-white px-6 py-3.5 rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-3.5 group text-left"
-              >
-                <svg className="w-8 h-8 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
-                  <path fill="#410593" d="M3.609 1.814L13.792 12 3.61 22.186A2.37 2.37 0 0 1 3 20.57V3.43c0-.623.23-1.22.609-1.616z"/>
-                  <path fill="#00e5ff" d="M17.07 8.72l-3.278 3.28 3.278 3.28 3.708-2.126a1.44 1.44 0 0 0 0-2.308z"/>
-                  <path fill="#ff3a44" d="M3.609 1.814l10.183 10.186 3.278-3.28-11.89-6.816a1.44 1.44 0 0 0-1.571.91z"/>
-                  <path fill="#00e676" d="M3.609 22.186l11.89-6.816-3.278-3.28L2.038 22.276a1.44 1.44 0 0 0 1.571-.09z"/>
-                </svg>
-                <div>
-                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Google Play</span>
-                  <span className="text-sm font-black text-white block leading-tight">{t.downloadPlayStore}</span>
-                </div>
+                <span>{t.storeApply} →</span>
               </button>
             </div>
           </div>
