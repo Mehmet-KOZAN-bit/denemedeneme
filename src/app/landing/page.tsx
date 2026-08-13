@@ -110,6 +110,19 @@ const TRANSLATIONS = {
     formNotes: "Ek Notlar (İsteğe Bağlı)",
     btnSubmitting: "Gönderiliyor...",
     btnSubmitApply: "Başvuruyu Gönder",
+    citiesTag: "KKTC GENELİNDE HİZMET",
+    citiesTitle: "Ada'nın Tüm Şehirlerinde İlanlar ve Mağazalar",
+    howItWorksTag: "KOLAY VE HIZLI KULLANIM",
+    howItWorksTitle: "3 Adımda AdaBazaar Nasıl Çalışır?",
+    step1Tag: "ADIM 01",
+    step1Title: "Fotoğraf Çek & Fiyatını Gir",
+    step1Desc: "Saniyeler içinde ikinci el eşyanın, aracının veya gayrimenkulünün fotoğraflarını çek, fiyatını belirle.",
+    step2Tag: "ADIM 02",
+    step2Title: "Tek Tıkla İlanını Yayınla",
+    step2Desc: "30 saniyede ücretsiz ilanını tüm KKTC halkına ve binlerce potansiyel alıcıya anında ulaştır.",
+    step3Tag: "ADIM 03",
+    step3Title: "Doğrudan & Aracısız İletişim",
+    step3Desc: "Alıcı ve satıcılarla WhatsApp veya telefon üzerinden sıfır komisyon ile anında el sıkışın.",
     sectorRealEstate: "Emlak & Gayrimenkul",
     sectorAuto: "Oto Galeri & Vasıta",
     sectorElectronics: "Teknoloji & Elektronik",
@@ -189,6 +202,19 @@ const TRANSLATIONS = {
     formNotes: "Additional Notes (Optional)",
     btnSubmitting: "Submitting...",
     btnSubmitApply: "Submit Application",
+    citiesTag: "SERVING ALL TRNC",
+    citiesTitle: "Listings and Stores Across All Cyprus Cities",
+    howItWorksTag: "EASY & FAST STEP-BY-STEP",
+    howItWorksTitle: "How AdaBazaar Works in 3 Easy Steps",
+    step1Tag: "STEP 01",
+    step1Title: "Snap Photos & Set Price",
+    step1Desc: "Take photos of your secondhand item, vehicle, or real estate and set your price in seconds.",
+    step2Tag: "STEP 02",
+    step2Title: "Publish Instant Listing",
+    step2Desc: "Publish your free ad in 30 seconds to reach thousands of potential buyers across TRNC.",
+    step3Tag: "STEP 03",
+    step3Title: "Direct & Zero Commission",
+    step3Desc: "Connect directly with buyers and sellers via WhatsApp or phone with zero commission fees.",
     sectorRealEstate: "Real Estate",
     sectorAuto: "Auto & Vehicles",
     sectorElectronics: "Tech & Electronics",
@@ -268,6 +294,19 @@ const TRANSLATIONS = {
     formNotes: "Дополнительные примечания",
     btnSubmitting: "Отправка...",
     btnSubmitApply: "Отправить заявку",
+    citiesTag: "ПО ВСЕМУ СЕВЕРНОМУ КИПРУ",
+    citiesTitle: "Объявления и магазины во всех городах Кипра",
+    howItWorksTag: "ПРОСТО И БЫСТРО",
+    howItWorksTitle: "Как работает AdaBazaar за 3 шага?",
+    step1Tag: "ШАГ 01",
+    step1Title: "Сделайте фото и укажите цену",
+    step1Desc: "Сфотографируйте товар, авто или недвижимость и укажите цену за считанные секунды.",
+    step2Tag: "ШАГ 02",
+    step2Title: "Опубликуйте объявление",
+    step2Desc: "Бесплатно опубликуйте объявление за 30 секунд для тысяч покупателей по всему ТРСК.",
+    step3Tag: "ШАГ 03",
+    step3Title: "Прямая связь без комиссий",
+    step3Desc: "Связывайтесь с покупателями и продавцами напрямую в WhatsApp или по телефону без комиссий.",
     sectorRealEstate: "Недвижимость",
     sectorAuto: "Автомобили",
     sectorElectronics: "Электроника и техника",
@@ -593,6 +632,43 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* 🏙️ KKTC ŞEHİR ŞERİDİ (CITIES BANNER STRIP) */}
+      <section className="bg-slate-900 py-8 px-6 border-y border-slate-800 text-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3 shrink-0 text-center lg:text-left">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+              <MapPin className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block">{t.citiesTag}</span>
+              <h3 className="text-sm font-extrabold text-white">{t.citiesTitle}</h3>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {[
+              { name: 'Lefkoşa', desc: 'Başkent & Merkez', badge: '100+ İlan' },
+              { name: 'Girne', desc: 'Liman & Turizm', badge: '90+ İlan' },
+              { name: 'Gazimağusa', desc: 'Üniversite & Liman', badge: '85+ İlan' },
+              { name: 'İskele', desc: 'Yeni Gözde Sahil', badge: '60+ İlan' },
+              { name: 'Güzelyurt', desc: 'Narenciye & Batı', badge: '40+ İlan' },
+              { name: 'Lefke', desc: 'Körfez & Üniversite', badge: '30+ İlan' },
+            ].map((city, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-emerald-500/40 px-4 py-2 rounded-2xl transition-all flex items-center gap-2.5 text-xs group cursor-default shadow-sm"
+              >
+                <div className="w-2 h-2 rounded-full bg-emerald-500 group-hover:scale-125 transition-transform" />
+                <div>
+                  <span className="font-extrabold text-white block leading-tight">{city.name}</span>
+                  <span className="text-[10px] text-slate-400 block">{city.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 🛍️ CANLI İLANLAR VİTRİNİ */}
       <section id="products" className="py-16 px-6 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-8">
@@ -717,6 +793,66 @@ export default function LandingPage() {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* 🚀 3 ADIMDA NASIL ÇALIŞIR? (HOW IT WORKS SECTION) */}
+      <section className="py-20 px-6 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 text-white border-b border-slate-800 relative overflow-hidden">
+        {/* Background ambient glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto space-y-12 relative z-10">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              {t.howItWorksTag}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">{t.howItWorksTitle}</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            {/* Step 1 */}
+            <div className="bg-slate-800/60 border border-slate-700/80 hover:border-emerald-500/50 rounded-[32px] p-8 space-y-5 shadow-xl hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/20 group-hover:scale-110 transition-transform">
+                  <Camera className="w-7 h-7" />
+                </div>
+                <span className="text-xs font-black text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full">{t.step1Tag}</span>
+              </div>
+              <h3 className="text-xl font-black text-white">{t.step1Title}</h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                {t.step1Desc}
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="bg-slate-800/60 border border-slate-700/80 hover:border-emerald-500/50 rounded-[32px] p-8 space-y-5 shadow-xl hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center shadow-lg shadow-teal-600/20 group-hover:scale-110 transition-transform">
+                  <Zap className="w-7 h-7" />
+                </div>
+                <span className="text-xs font-black text-teal-400 bg-teal-500/10 border border-teal-500/30 px-3 py-1 rounded-full">{t.step2Tag}</span>
+              </div>
+              <h3 className="text-xl font-black text-white">{t.step2Title}</h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                {t.step2Desc}
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="bg-slate-800/60 border border-slate-700/80 hover:border-emerald-500/50 rounded-[32px] p-8 space-y-5 shadow-xl hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden group">
+              <div className="flex items-center justify-between">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-600 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-110 transition-transform">
+                  <Phone className="w-7 h-7" />
+                </div>
+                <span className="text-xs font-black text-blue-400 bg-blue-500/10 border border-blue-500/30 px-3 py-1 rounded-full">{t.step3Tag}</span>
+              </div>
+              <h3 className="text-xl font-black text-white">{t.step3Title}</h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+                {t.step3Desc}
+              </p>
+            </div>
           </div>
         </div>
       </section>
