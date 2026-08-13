@@ -582,25 +582,14 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 🖼️ HERO IMAGE WITH INTERACTIVE FLOATING LIVE LISTING CARD */}
+          {/* 🖼️ HERO PHONE IMAGE - ROUNDED DEVICE FRAME WITHOUT FLOATING CHIP */}
           <div className="lg:col-span-5 flex justify-center items-center relative">
-            <img
-              src="/hero-banner.png"
-              alt="AdaBazaar Mobil Uygulaması"
-              className="w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[420px] max-h-[560px] h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 relative z-10"
-            />
-
-            {/* Floating Live Listing Chip */}
-            <div className="absolute -bottom-2 -left-4 sm:-left-8 bg-white/95 backdrop-blur-xl border border-emerald-500/30 rounded-2xl p-3 shadow-2xl z-20 hidden sm:flex items-center gap-3 hover:scale-105 transition-transform">
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping shrink-0" />
-              <div>
-                <div className="flex items-center gap-1.5 text-[10px] font-black text-emerald-700 uppercase tracking-wider">
-                  <Sparkles className="w-3 h-3 text-emerald-600" />
-                  <span>Son Eklenen Canlı İlan</span>
-                </div>
-                <p className="text-xs font-bold text-slate-900 leading-tight mt-0.5">Megane 1.3 TCe • ₺1.300.000</p>
-                <p className="text-[10px] text-slate-500">📍 Lefkoşa • Yenişehir</p>
-              </div>
+            <div className="rounded-[40px] overflow-hidden shadow-2xl border-4 border-slate-900/10 hover:scale-105 transition-transform duration-500 max-w-[320px] sm:max-w-[380px] lg:max-w-[420px] max-h-[560px]">
+              <img
+                src="/hero-banner.png"
+                alt="AdaBazaar Mobil Uygulaması"
+                className="w-full h-auto object-contain"
+              />
             </div>
           </div>
         </div>
