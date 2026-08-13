@@ -582,9 +582,9 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 🖼️ HERO PHONE IMAGE - FULL SCREENSHOT WITH ROUNDED DEVICE CORNERS */}
+          {/* 🖼️ HERO PHONE IMAGE - PERFECTLY SIZED FULL SCREENSHOT WITH ROUNDED CORNERS */}
           <div className="lg:col-span-5 flex justify-center items-center relative">
-            <div className="rounded-[36px] overflow-hidden shadow-2xl border-[3px] border-slate-200/90 hover:scale-105 transition-transform duration-500 max-w-[280px] sm:max-w-[320px] lg:max-w-[350px] w-full bg-white">
+            <div className="rounded-[32px] overflow-hidden shadow-2xl border-[3px] border-slate-200/90 hover:scale-105 transition-transform duration-500 max-w-[240px] sm:max-w-[270px] lg:max-w-[290px] w-full bg-white">
               <img
                 src="/hero-banner.png"
                 alt="AdaBazaar Mobil Uygulaması"
