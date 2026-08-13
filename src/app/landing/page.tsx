@@ -562,7 +562,7 @@ export default function LandingPage() {
         <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-          <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
+          <div className="lg:col-span-7 space-y-4 text-center lg:text-left lg:pl-8 sm:lg:pl-10">
             <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-4 py-1.5 rounded-full shadow-sm">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>{t.badgeVerified}</span>
