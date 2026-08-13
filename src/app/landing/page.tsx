@@ -83,7 +83,7 @@ export default function LandingPage() {
       try {
         // Fetch Live Active Products
         const prodSnap = await getDocs(
-          query(collection(db, 'products'), where('status', '==', 'active'), limit(12))
+          query(collection(db, 'products'), where('status', '==', 'active'), limit(18))
         );
         const prodList = prodSnap.docs.map(d => ({ id: d.id, ...d.data() }));
         setProducts(prodList);
@@ -359,42 +359,42 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Products Grid */}
+          {/* Products Grid - 6 Column Grid on Desktop */}
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12 bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-3">
               <ShoppingBag className="w-12 h-12 text-slate-400 mx-auto" />
               <p className="text-sm font-bold text-slate-600">Bu kategoride gösterilecek canlı ilan bulunuyor.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
               {filteredProducts.map(p => (
-                <div key={p.id} className="group bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-3xl overflow-hidden transition-all shadow-sm hover:shadow-md flex flex-col justify-between">
+                <div key={p.id} className="group bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-2xl overflow-hidden transition-all shadow-sm hover:shadow-md flex flex-col justify-between">
                   <div className="aspect-square bg-slate-100 relative overflow-hidden">
                     <img
                       src={p.images?.[0] || p.imageUrl || 'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?auto=format&fit=crop&q=80&w=400'}
                       alt={p.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-md text-emerald-700 text-xs font-black px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                    <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-md text-emerald-700 text-[11px] font-black px-2 py-0.5 rounded-full border border-slate-200 shadow-sm">
                       {p.currency === 'GBP' ? '£' : p.currency === 'USD' ? '$' : '₺'}{p.price}
                     </div>
                   </div>
 
-                  <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-bold text-sm text-slate-900 line-clamp-2 leading-snug">{p.title}</h3>
-                      <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-2">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                        <span>{p.city || 'KKTC'} {p.district ? `/ ${p.district}` : ''}</span>
+                      <h3 className="font-bold text-xs text-slate-900 line-clamp-2 leading-snug">{p.title}</h3>
+                      <div className="flex items-center gap-1 text-[10px] text-slate-500 mt-1">
+                        <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+                        <span className="truncate">{p.city || 'KKTC'} {p.district ? `/ ${p.district}` : ''}</span>
                       </div>
                     </div>
 
                     <button
                       onClick={() => setShowQrModal(true)}
-                      className="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-600/30 text-xs font-bold py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 mt-2"
+                      className="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-600/30 text-[11px] font-bold py-2 rounded-lg transition-all flex items-center justify-center gap-1 mt-1"
                     >
-                      <Smartphone className="w-4 h-4" />
-                      <span>Uygulamada İncele</span>
+                      <Smartphone className="w-3.5 h-3.5" />
+                      <span>İncele</span>
                     </button>
                   </div>
                 </div>
