@@ -74,11 +74,17 @@ const TRANSLATIONS = {
     whyUsTag: "NEDEN BİZ?",
     whyUsTitle: "AdaBazar Avantajları",
     feat1Title: "30 Saniyede Ücretsiz İlan",
-    feat1Desc: "Fotoğrafını çek, fiyatını belirle ve ilanını saniyeler içinde binlerce alıcıya ulaştır.",
-    feat2Title: "Doğrulanmış Mağazalar",
-    feat2Desc: "KKTC genelindeki güvenilir kurumsal işletmelerden güvenle alışveriş yapın.",
-    feat3Title: "Doğrudan İletişim",
-    feat3Desc: "WhatsApp veya telefon ile aracısız, komisyonsuz doğrudan alıcı ve satıcıyla görüşün.",
+    feat1Desc: "Fotoğrafını çek, fiyatını belirle ve ilanını saniyeler içinde binlerce alıcıya ücretsiz ulaştır.",
+    feat2Title: "Doğrulanmış Kurumsal Mağazalar",
+    feat2Desc: "KKTC genelindeki resmi işletmelerden komisyonsuz ve %100 doğrudan alışveriş yapın.",
+    feat3Title: "Doğrudan & Aracısız İletişim",
+    feat3Desc: "WhatsApp veya telefon ile komisyonsuz, doğrudan alıcı ve satıcıyla anında görüşün.",
+    feat4Title: "Konum Bazlı Ada Araması",
+    feat4Desc: "Lefkoşa, Girne, Mağusa ve tüm KKTC şehirlerinde filtrelenmiş nokta atışı ilan araması yapın.",
+    feat5Title: "Anlık Canlı Mesajlaşma",
+    feat5Desc: "Mobil uygulama içi sohbet ile ilan sahipleriyle anlık bildirimli mesajlaşın.",
+    feat6Title: "%100 Yerel Güvenilir Altyapı",
+    feat6Desc: "Kıbrıs pazarına özel geliştirilmiş hızlı, güvenli ve kolay pazaryeri deneyimi.",
     bannerTitle: "Tüm Ada Cebinde! Hemen İndir",
     bannerDesc: "AdaBazar mobil uygulamasını iOS veya Android cihazınıza indirerek ilanları inceleyin veya hemen ilan yayınlayın.",
     downloadAppStore: "iOS App Store'dan İndir",
@@ -147,11 +153,17 @@ const TRANSLATIONS = {
     whyUsTag: "WHY CHOOSE US?",
     whyUsTitle: "AdaBazar Advantages",
     feat1Title: "Free Listing in 30 Seconds",
-    feat1Desc: "Snap photos, set price, and publish your ad to thousands of buyers in seconds.",
-    feat2Title: "Verified Businesses",
-    feat2Desc: "Shop with confidence from verified corporate stores across Northern Cyprus.",
+    feat1Desc: "Snap photos, set your price, and publish to thousands of buyers for free in seconds.",
+    feat2Title: "Verified Corporate Stores",
+    feat2Desc: "Shop with 100% confidence from official verified corporate stores across TRNC.",
     feat3Title: "Direct Communication",
-    feat3Desc: "Connect directly with buyers and sellers via WhatsApp or phone with zero commission.",
+    feat3Desc: "Connect directly with buyers and sellers via WhatsApp or call with zero middlemen.",
+    feat4Title: "Location-Based Search",
+    feat4Desc: "Search filtered listings across Nicosia, Kyrenia, Famagusta & all TRNC cities.",
+    feat5Title: "Instant Live Messaging",
+    feat5Desc: "Chat live with listing owners with instant mobile push notifications.",
+    feat6Title: "100% Local & Reliable",
+    feat6Desc: "Fast, secure and intuitive marketplace experience tailored for Cyprus.",
     bannerTitle: "The Island in Your Pocket! Download Now",
     bannerDesc: "Download AdaBazar mobile app for iOS or Android to browse listings or publish your ads instantly.",
     downloadAppStore: "Download on App Store",
@@ -219,12 +231,18 @@ const TRANSLATIONS = {
     verifiedBadge: "ПРОВЕРЕННЫЙ МАГАЗИН",
     whyUsTag: "ПОЧЕМУ МЫ?",
     whyUsTitle: "Преимущества AdaBazar",
-    feat1Title: "Бесплатное объявление за 30 сек",
-    feat1Desc: "Сделайте фото, укажите цену и опубликуйте объявление за считанные секунды.",
+    feat1Title: "Публикация за 30 секунд",
+    feat1Desc: "Сделайте фото, укажите цену и бесплатно опубликуйте объявление за считанные секунды.",
     feat2Title: "Проверенные компании",
-    feat2Desc: "Покупайте с уверенностью у официальных магазинов по всему Северному Кипру.",
-    feat3Title: "Прямая связь",
+    feat2Desc: "Покупайте без комиссий в официальных верифицированных магазинах по всему ТРСК.",
+    feat3Title: "Прямая связь без комиссий",
     feat3Desc: "Общайтесь с продавцами напрямую в WhatsApp или по телефону без посредников.",
+    feat4Title: "Поиск по городам ТРСК",
+    feat4Desc: "Удобный фильтрованный поиск объявлений в Никосии, Кирении, Фамагусте и др.",
+    feat5Title: "Чат в реальном времени",
+    feat5Desc: "Общайтесь с авторами объявлений во встроенном чате приложения с мгновенными уведомлениями.",
+    feat6Title: "100% Локально и надежно",
+    feat6Desc: "Быстрый, безопасный и удобный интерфейс, созданный специально для Кипра.",
     bannerTitle: "Весь остров в вашем кармане! Скачайте сейчас",
     bannerDesc: "Загрузите приложение AdaBazar для iOS или Android, чтобы просматривать объявления или продавать свои товары.",
     downloadAppStore: "Скачать в App Store",
@@ -653,34 +671,71 @@ export default function LandingPage() {
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">{t.whyUsTitle}</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group bg-white border border-slate-200/90 rounded-[32px] p-8 space-y-5 shadow-sm hover:shadow-xl hover:border-emerald-500/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/25 group-hover:scale-110 transition-transform">
-                <Zap className="w-7 h-7" />
+          {/* 6-Item Compact Features Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Feature 1 */}
+            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Zap className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-black text-slate-900">{t.feat1Title}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              <h3 className="text-sm font-extrabold text-slate-900">{t.feat1Title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
                 {t.feat1Desc}
               </p>
             </div>
 
-            <div className="group bg-white border border-slate-200/90 rounded-[32px] p-8 space-y-5 shadow-sm hover:shadow-xl hover:border-emerald-500/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center shadow-lg shadow-teal-600/25 group-hover:scale-110 transition-transform">
-                <ShieldCheck className="w-7 h-7" />
+            {/* Feature 2 */}
+            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-black text-slate-900">{t.feat2Title}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              <h3 className="text-sm font-extrabold text-slate-900">{t.feat2Title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
                 {t.feat2Desc}
               </p>
             </div>
 
-            <div className="group bg-white border border-slate-200/90 rounded-[32px] p-8 space-y-5 shadow-sm hover:shadow-xl hover:border-emerald-500/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-600 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/25 group-hover:scale-110 transition-transform">
-                <MessageCircle className="w-7 h-7" />
+            {/* Feature 3 */}
+            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Phone className="w-5 h-5" />
               </div>
-              <h3 className="text-xl font-black text-slate-900">{t.feat3Title}</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
+              <h3 className="text-sm font-extrabold text-slate-900">{t.feat3Title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
                 {t.feat3Desc}
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-extrabold text-slate-900">{t.feat4Title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                {t.feat4Desc}
+              </p>
+            </div>
+
+            {/* Feature 5 */}
+            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <MessageSquare className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-extrabold text-slate-900">{t.feat5Title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                {t.feat5Desc}
+              </p>
+            </div>
+
+            {/* Feature 6 */}
+            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
+              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Globe className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-extrabold text-slate-900">{t.feat6Title}</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                {t.feat6Desc}
               </p>
             </div>
           </div>
