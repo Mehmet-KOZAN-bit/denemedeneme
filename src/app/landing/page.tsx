@@ -587,19 +587,19 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (SQUARE CARDS WITH 30PX LOGOS) */}
-      <section id="stores" className="py-4 px-4 bg-slate-50/60 border-b border-slate-200/80">
-        <div className="max-w-5xl mx-auto space-y-2.5">
-          <div className="text-center max-w-sm mx-auto flex items-center justify-center gap-2">
-            <span className="inline-flex items-center gap-1 text-[9px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
-              <Building2 className="w-2.5 h-2.5 text-emerald-600" />
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (CLEAN BALANCED MODERN SHOWCASE) */}
+      <section id="stores" className="py-8 px-6 bg-slate-50/70 border-b border-slate-200/80">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="text-center max-w-md mx-auto space-y-1">
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-0.5 rounded-full uppercase tracking-wider">
+              <Building2 className="w-3 h-3 text-emerald-600" />
               {t.trustedBusinessesTag}
             </span>
-            <h2 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
+            <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {/* Real Registered Stores - Square Cards with 30px x 30px Logos */}
+          <div className="flex flex-wrap items-center justify-center gap-4 max-w-4xl mx-auto">
+            {/* Real Registered Stores */}
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
@@ -610,40 +610,32 @@ export default function LandingPage() {
               return (
                 <div
                   key={s.id}
-                  className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-xl p-2.5 flex items-center gap-3 shadow-sm hover:shadow-md transition-all duration-300 group"
+                  className="w-full sm:w-[320px] h-[68px] bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-2xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:shadow-md transition-all group"
                 >
-                  {/* 30px x 30px Square Store Logo */}
-                  <div className="relative shrink-0">
-                    <img src={logo} alt={name} className="w-[30px] h-[30px] rounded-lg object-cover border border-slate-100 shadow-sm group-hover:scale-105 transition-transform" />
-                    <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
-                      <Check className="w-1.5 h-1.5 stroke-[3]" />
+                  <div className="flex items-center gap-3 truncate">
+                    <div className="relative shrink-0">
+                      <img src={logo} alt={name} className="w-10 h-10 rounded-xl object-cover border border-slate-100 shadow-sm" />
+                      <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
+                        <Check className="w-1.5 h-1.5 stroke-[3]" />
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Store Name & Info */}
-                  <div className="pr-1">
-                    <div className="flex items-center gap-1">
-                      <h3 className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
-                        {name}
+                    <div className="truncate">
+                      <h3 className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center gap-1 truncate">
+                        <span className="truncate">{name}</span>
+                        <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       </h3>
-                      <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
-                    </div>
-                    <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
-                      <span>{sector}</span>
-                      <span>•</span>
-                      <span className="text-slate-400">{city}</span>
+                      <p className="text-[11px] text-slate-500 font-medium truncate">{sector} • {city}</p>
                     </div>
                   </div>
 
-                  {/* WhatsApp Action Button */}
                   {phone && (
                     <a
                       href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold px-2 py-1 rounded-lg transition-colors flex items-center gap-1 shrink-0"
+                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-[11px] font-bold px-2.5 py-1 rounded-xl transition-colors flex items-center gap-1 shrink-0"
                     >
-                      <MessageCircle className="w-3 h-3 text-emerald-600" />
+                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
                       <span>WhatsApp</span>
                     </a>
                   )}
@@ -651,16 +643,25 @@ export default function LandingPage() {
               );
             })}
 
-            {/* Always Present "Mağaza Ol" CTA Card */}
-            <button
+            {/* Always Present "Mağaza Ol" CTA Card - Twin Proportions */}
+            <div
               onClick={() => setShowApplyModal(true)}
-              className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white border border-emerald-500/40 rounded-xl px-3.5 py-2 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 transition-all group"
+              className="w-full sm:w-[320px] h-[68px] bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white border border-emerald-500/40 rounded-2xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer group"
             >
-              <div className="w-5 h-5 rounded-md bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
-                <Store className="w-3 h-3" />
+              <div className="flex items-center gap-3 truncate">
+                <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
+                  <Store className="w-5 h-5" />
+                </div>
+                <div className="truncate">
+                  <h3 className="text-xs font-black text-white leading-tight">Kurumsal Mağaza Açın</h3>
+                  <p className="text-[10px] text-slate-300 font-medium truncate">Doğrudan müşteriye ulaşın</p>
+                </div>
               </div>
-              <span className="text-xs font-black text-white whitespace-nowrap">Kurumsal Mağaza Açın →</span>
-            </button>
+
+              <span className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] px-2.5 py-1 rounded-lg transition-colors shrink-0">
+                Başvur →
+              </span>
+            </div>
           </div>
         </div>
       </section>
