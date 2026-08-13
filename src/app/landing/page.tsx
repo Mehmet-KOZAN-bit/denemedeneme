@@ -587,7 +587,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (ROUNDED PILL CAPSULE SHOWCASE) */}
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (SQUARE CARDS WITH 30PX LOGOS) */}
       <section id="stores" className="py-4 px-4 bg-slate-50/60 border-b border-slate-200/80">
         <div className="max-w-5xl mx-auto space-y-2.5">
           <div className="text-center max-w-sm mx-auto flex items-center justify-center gap-2">
@@ -599,7 +599,7 @@ export default function LandingPage() {
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
-            {/* Real Registered Stores - Rounded Capsule Cards */}
+            {/* Real Registered Stores - Square Cards with 30px x 30px Logos */}
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
@@ -610,20 +610,20 @@ export default function LandingPage() {
               return (
                 <div
                   key={s.id}
-                  className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-full px-3 py-1.5 flex items-center gap-2.5 shadow-sm hover:shadow-md transition-all duration-300 group"
+                  className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-xl p-2.5 flex items-center gap-3 shadow-sm hover:shadow-md transition-all duration-300 group"
                 >
-                  {/* Round Store Logo */}
+                  {/* 30px x 30px Square Store Logo */}
                   <div className="relative shrink-0">
-                    <img src={logo} alt={name} className="w-9 h-9 rounded-full object-cover border border-slate-100 ring-2 ring-emerald-500/20 group-hover:scale-105 transition-transform" />
-                    <div className="absolute -bottom-0.5 -right-0.5 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
+                    <img src={logo} alt={name} className="w-[30px] h-[30px] rounded-lg object-cover border border-slate-100 shadow-sm group-hover:scale-105 transition-transform" />
+                    <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
                       <Check className="w-1.5 h-1.5 stroke-[3]" />
                     </div>
                   </div>
 
-                  {/* Store Name & City */}
+                  {/* Store Name & Info */}
                   <div className="pr-1">
                     <div className="flex items-center gap-1">
-                      <h3 className="font-black text-xs text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
+                      <h3 className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
                         {name}
                       </h3>
                       <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
@@ -641,7 +641,7 @@ export default function LandingPage() {
                       href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold px-2.5 py-1 rounded-full transition-colors flex items-center gap-1 shrink-0"
+                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold px-2 py-1 rounded-lg transition-colors flex items-center gap-1 shrink-0"
                     >
                       <MessageCircle className="w-3 h-3 text-emerald-600" />
                       <span>WhatsApp</span>
@@ -651,12 +651,12 @@ export default function LandingPage() {
               );
             })}
 
-            {/* Always Present "Mağaza Ol" CTA Pill Button */}
+            {/* Always Present "Mağaza Ol" CTA Card */}
             <button
               onClick={() => setShowApplyModal(true)}
-              className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white border border-emerald-500/40 rounded-full px-4 py-2 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 transition-all group"
+              className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white border border-emerald-500/40 rounded-xl px-3.5 py-2 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 transition-all group"
             >
-              <div className="w-6 h-6 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
+              <div className="w-5 h-5 rounded-md bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
                 <Store className="w-3 h-3" />
               </div>
               <span className="text-xs font-black text-white whitespace-nowrap">Kurumsal Mağaza Açın →</span>
