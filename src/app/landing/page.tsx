@@ -515,11 +515,11 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 🚀 HERO SECTION */}
-      <section id="hero" className="relative pt-12 pb-24 px-6 overflow-hidden bg-gradient-to-b from-white via-slate-50 to-white border-b border-slate-200/60">
-        {/* Glow Ambient Circles */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-10 w-[400px] h-[400px] bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+      {/* 🚀 HERO SECTION (PASTEL MESH GRADIENT & FLOATING LIVE CARD) */}
+      <section id="hero" className="relative pt-12 pb-24 px-6 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-slate-50/60 border-b border-slate-200/60">
+        {/* Glow Ambient Circles & Mesh Dots */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
@@ -582,13 +582,26 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 🖼️ SINGLE HERO IMAGE FROM github-resim/2.png - ENHANCED SIZE & NO DYNAMIC ISLAND */}
+          {/* 🖼️ HERO IMAGE WITH INTERACTIVE FLOATING LIVE LISTING CARD */}
           <div className="lg:col-span-5 flex justify-center items-center relative">
             <img
               src="/hero-banner.png"
               alt="AdaBazaar Mobil Uygulaması"
-              className="w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[420px] max-h-[560px] h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              className="w-full max-w-[320px] sm:max-w-[380px] lg:max-w-[420px] max-h-[560px] h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500 relative z-10"
             />
+
+            {/* Floating Live Listing Chip */}
+            <div className="absolute -bottom-2 -left-4 sm:-left-8 bg-white/95 backdrop-blur-xl border border-emerald-500/30 rounded-2xl p-3 shadow-2xl z-20 hidden sm:flex items-center gap-3 hover:scale-105 transition-transform">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping shrink-0" />
+              <div>
+                <div className="flex items-center gap-1.5 text-[10px] font-black text-emerald-700 uppercase tracking-wider">
+                  <Sparkles className="w-3 h-3 text-emerald-600" />
+                  <span>Son Eklenen Canlı İlan</span>
+                </div>
+                <p className="text-xs font-bold text-slate-900 leading-tight mt-0.5">Megane 1.3 TCe • ₺1.300.000</p>
+                <p className="text-[10px] text-slate-500">📍 Lefkoşa • Yenişehir</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
