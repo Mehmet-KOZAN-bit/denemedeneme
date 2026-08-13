@@ -290,38 +290,13 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 📱 REAL APP SCREENSHOTS CAROUSEL */}
-          <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            <div className="relative w-80 sm:w-96 md:w-[410px] h-[600px] sm:h-[650px]">
-              {slideScreens.map((slide, idx) => (
-                <div
-                  key={slide.id}
-                  className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
-                    phoneSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                  }`}
-                >
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-contain drop-shadow-xl"
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* 🎯 CAROUSEL CONTROLLER DOTS */}
-            <div className="flex items-center gap-2 mt-5">
-              {slideScreens.map((s, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setPhoneSlide(idx)}
-                  className={`h-2.5 rounded-full transition-all duration-300 ${
-                    phoneSlide === idx ? 'w-8 bg-emerald-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'
-                  }`}
-                  title={s.title}
-                />
-              ))}
-            </div>
+          {/* 🖼️ SINGLE HERO IMAGE FROM github-resim/2.png */}
+          <div className="lg:col-span-5 flex justify-center items-center relative">
+            <img
+              src="/hero-banner.png"
+              alt="AdaBazar Mobil Uygulaması"
+              className="w-full max-w-md sm:max-w-lg h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+            />
           </div>
         </div>
       </section>
