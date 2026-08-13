@@ -30,7 +30,8 @@ import {
   LogOut,
   Camera,
   PlusCircle,
-  MessageSquare
+  MessageSquare,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, query, where, getDocs, limit, addDoc } from 'firebase/firestore';
@@ -290,6 +291,7 @@ export default function LandingPage() {
   const [showQrModal, setShowQrModal] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   // Portal Login Form State
   const [loginEmail, setLoginEmail] = useState('');
@@ -763,19 +765,201 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 📜 FOOTER */}
-      <footer className="bg-white border-t border-slate-200 py-12 px-6 text-xs text-slate-600">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-8 h-8 rounded-xl object-contain" />
-            <span className="font-bold text-slate-900 text-sm">AdaBazaar KKTC</span>
+      {/* 📦 İÇERİDE NE VAR? (WHAT'S INSIDE SHOWCASE) */}
+      <section id="inside" className="py-16 px-6 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-6xl mx-auto space-y-10 relative z-10">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              AdaBazaar Dünyası
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">İçeride Ne Var?</h2>
+            <p className="text-xs sm:text-sm text-slate-400">KKTC genelinde ihtiyacınız olan tüm kategoriler ve dijital hizmetler AdaBazaar'da!</p>
           </div>
 
-          <p>{t.footerRights}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition-transform">
+                🏡
+              </div>
+              <h3 className="text-base font-black text-white">Emlak & Gayrimenkul</h3>
+              <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                KKTC genelinde satılık/kiralık daireler, villalar, arsalar ve iş yerleri.
+              </p>
+            </div>
 
-          <div className="flex items-center gap-6">
-            <button onClick={() => setShowLoginModal(true)} className="hover:text-emerald-600 font-bold transition-colors">{t.corporateLogin}</button>
-            <button onClick={() => setShowApplyModal(true)} className="hover:text-emerald-600 font-bold transition-colors">{t.storeApply}</button>
+            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 text-2xl group-hover:scale-110 transition-transform">
+                🚗
+              </div>
+              <h3 className="text-base font-black text-white">Vasıta & Oto Galeri</h3>
+              <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                Sahibinden ve KKTC onaylı galerilerden temiz ikinci el araçlar.
+              </p>
+            </div>
+
+            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition-transform">
+                📱
+              </div>
+              <h3 className="text-base font-black text-white">Elektronik & İkinci El</h3>
+              <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                Telefon, bilgisayar, ev eşyaları ve giyim ilanları kapınızda.
+              </p>
+            </div>
+
+            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
+              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 text-2xl group-hover:scale-110 transition-transform">
+                🤝
+              </div>
+              <h3 className="text-base font-black text-white">%100 Doğrudan İletişim</h3>
+              <p className="text-xs text-slate-400 leading-relaxed font-medium">
+                Sıfır komisyon, sıfır aracı. Satıcı ile doğrudan WhatsApp veya arama ile görüşün.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ❓ SIKÇA SORULAN SORULAR (FAQ ACCORDION) */}
+      <section id="faq" className="py-16 px-6 bg-slate-50/70 border-b border-slate-200/80">
+        <div className="max-w-4xl mx-auto space-y-8">
+          <div className="text-center max-w-xl mx-auto space-y-2">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full uppercase tracking-wider">
+              <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+              Merak Edilenler
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">Sıkça Sorulan Sorular</h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">AdaBazaar platformu hakkında tüm merak ettiklerinizin yanıtları burada!</p>
+          </div>
+
+          <div className="space-y-3">
+            {[
+              {
+                q: "AdaBazaar'da ilan vermek ücretli mi?",
+                a: "Hayır! AdaBazaar'da bireysel kullanıcılar için ilan oluşturmak %100 ücretsizdir. Dilediğiniz kadar ürünü fotoğraflarıyla birlikte saniyeler içinde yayınlayabilirsiniz."
+              },
+              {
+                q: "Kurumsal Mağaza başvurusu nasıl yapılır?",
+                a: "Sayfanın üst kısmındaki 'Mağaza Başvurusu' butonuna tıklayarak işletme adı, şehir ve iletişim bilgilerinizi iletebilirsiniz. Müşteri ekibimiz en kısa sürede sizinle iletişime geçer."
+              },
+              {
+                q: "Alıcı ve satıcı iletişimi nasıl sağlanır?",
+                a: "AdaBazaar'da komisyon ve aracı sistemi yoktur. İlan kartının üzerindeki WhatsApp veya Telefon butonlarına tıklayarak doğrudan ilan sahibiyle iletişim kurabilirsiniz."
+              },
+              {
+                q: "Mobil uygulamayı nereden indirebilirim?",
+                a: "Web sitemizin üst alanındaki App Store ve Google Play butonlarına tıklayarak iPhone veya Android cihazınıza saniyeler içinde mobil uygulamayı indirebilirsiniz."
+              },
+              {
+                q: "Hangi KKTC şehirlerinde hizmet veriyorsunuz?",
+                a: "AdaBazaar, Kuzey Kıbrıs'ın tamamında (Lefkoşa, Girne, Gazimağusa, İskele, Güzelyurt, Lefke) aktif olarak hizmet vermektedir."
+              }
+            ].map((faq, idx) => (
+              <div
+                key={idx}
+                className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-sm transition-all"
+              >
+                <button
+                  onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                  className="w-full p-5 text-left font-black text-sm text-slate-900 flex items-center justify-between gap-4 hover:text-emerald-700 transition-colors"
+                >
+                  <span>{faq.q}</span>
+                  <span className={`w-7 h-7 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500 shrink-0 font-bold transition-transform ${openFaqIndex === idx ? 'rotate-180 bg-emerald-50 text-emerald-700' : ''}`}>
+                    ↓
+                  </span>
+                </button>
+                {openFaqIndex === idx && (
+                  <div className="px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3 font-medium">
+                    {faq.a}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 🏢 HAKKIMIZDA BÖLÜMÜ (ABOUT US BANNER) */}
+      <section id="about" className="py-16 px-6 bg-white border-b border-slate-200/80">
+        <div className="max-w-5xl mx-auto bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center gap-8 justify-between">
+          <div className="space-y-4 max-w-xl text-center md:text-left">
+            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-white/10 border border-white/20 px-3 py-1 rounded-full uppercase tracking-wider">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              AdaBazaar Hakkında
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-white leading-tight">
+              Kıbrıs'ın %100 Yerel ve Güvenilir Dijital Pazaryeri
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-medium">
+              AdaBazaar, Kuzey Kıbrıs Türk Cumhuriyeti'ndeki (KKTC) tüm alıcı ve satıcıları tek bir çatı altında birleştirmek üzere geliştirilmiştir. Komisyonsuz, aracısız ve %100 şeffaf altyapımız ile Kıbrıs'ta alışverişi dijitalleştiriyoruz.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
+            <button
+              onClick={() => setShowApplyModal(true)}
+              className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs px-6 py-3.5 rounded-2xl transition-all shadow-lg text-center"
+            >
+              Mağaza Başvurusu Yap →
+            </button>
+            <button
+              onClick={() => handleSmartDownload()}
+              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold text-xs px-6 py-3.5 rounded-2xl transition-all text-center"
+            >
+              Uygulamayı İndir
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 📜 FOOTER WITH RICH CORPORATE & POLICY LINKS */}
+      <footer className="bg-slate-900 text-slate-400 py-12 px-6 text-xs">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 mb-8 pb-8 border-b border-slate-800">
+          <div className="md:col-span-4 space-y-3">
+            <div className="flex items-center gap-3">
+              <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-10 h-10 rounded-2xl object-contain shadow-md" />
+              <div>
+                <span className="text-base font-black text-white block">AdaBazaar</span>
+                <span className="text-[10px] font-bold text-emerald-400 block -mt-1 uppercase tracking-wider">KKTC Pazaryeri</span>
+              </div>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
+              KKTC'nin lider doğrulanmış pazaryeri platformu. Emlak, vasıta ve kurumsal mağaza ilanları tek tıkla elinizin altında.
+            </p>
+          </div>
+
+          <div className="md:col-span-3 space-y-2">
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider">Hızlı Bağlantılar</h4>
+            <ul className="space-y-1.5 font-medium">
+              <li><a href="#hero" className="hover:text-emerald-400 transition-colors">Ana Sayfa</a></li>
+              <li><a href="#stores" className="hover:text-emerald-400 transition-colors">Kurumsal Mağazalar</a></li>
+              <li><a href="#products" className="hover:text-emerald-400 transition-colors">Canlı İlan Akışı</a></li>
+              <li><a href="#inside" className="hover:text-emerald-400 transition-colors">İçeride Ne Var?</a></li>
+              <li><a href="#faq" className="hover:text-emerald-400 transition-colors">Sıkça Sorulan Sorular</a></li>
+            </ul>
+          </div>
+
+          <div className="md:col-span-5 space-y-2">
+            <h4 className="font-extrabold text-white text-xs uppercase tracking-wider">Kurumsal & Yasal Bağlantılar</h4>
+            <div className="grid grid-cols-2 gap-2 text-slate-400 font-medium">
+              <a href="https://kibrito.com/kibrito-content/about.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Kibrito / AdaBazaar Hakkında</a>
+              <a href="https://kibrito.com/kibrito-content/policy.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Gizlilik Politikası</a>
+              <a href="https://kibrito.com/kibrito-content/destek.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Destek & Yardım</a>
+              <a href="https://kibrito.com/kibrito-content/partnership.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Ortaklar İçin</a>
+              <a href="https://kibrito.com/kibrito-content/services-and-prices.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Hizmetler ve Fiyatlar</a>
+              <a href="https://kibrito.com/kibrito-content/public-offer.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Fırsatlar (Kamu Sözleşmesi)</a>
+              <a href="https://kibrito.com/kibrito-content/refund-policy.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">İade Politikası</a>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-500 font-medium">
+          <p>{t.footerRights}</p>
+          <div className="flex items-center gap-4">
+            <button onClick={() => setShowLoginModal(true)} className="hover:text-emerald-400 font-bold transition-colors">{t.corporateLogin}</button>
+            <button onClick={() => setShowApplyModal(true)} className="hover:text-emerald-400 font-bold transition-colors">{t.storeApply}</button>
           </div>
         </div>
       </footer>
