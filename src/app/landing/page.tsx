@@ -292,32 +292,23 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 📱 REAL APP SCREENSHOTS ANIMATED PHONE MOCKUP */}
+          {/* 📱 REAL APP SCREENSHOTS CAROUSEL */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            <div className="relative w-72 sm:w-80 h-[580px] bg-slate-900 rounded-[48px] border-4 border-slate-800 shadow-2xl p-3 flex flex-col justify-between overflow-hidden group">
-              {/* Notch */}
-              <div className="w-32 h-5 bg-slate-950 rounded-full mx-auto mb-2 shrink-0 z-20" />
-              
-              {/* App Screenshot Window */}
-              <div className="flex-1 bg-slate-950 rounded-[32px] overflow-hidden relative z-10 border border-slate-800">
-                {slideScreens.map((slide, idx) => (
-                  <div
-                    key={slide.id}
-                    className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
-                      phoneSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
-                    }`}
-                  >
-                    <img
-                      src={slide.image}
-                      alt={slide.title}
-                      className="w-full h-full object-cover object-top"
-                    />
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom Home Indicator Bar */}
-              <div className="w-28 h-1 bg-slate-700 rounded-full mx-auto shrink-0 mt-2 z-20" />
+            <div className="relative w-72 sm:w-80 h-[560px] rounded-[36px] overflow-hidden shadow-2xl border border-slate-200/80 bg-white">
+              {slideScreens.map((slide, idx) => (
+                <div
+                  key={slide.id}
+                  className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out ${
+                    phoneSlide === idx ? 'opacity-100 z-10' : 'opacity-0 z-0'
+                  }`}
+                >
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              ))}
             </div>
 
             {/* 🎯 CAROUSEL CONTROLLER DOTS */}
@@ -333,11 +324,6 @@ export default function LandingPage() {
                 />
               ))}
             </div>
-
-            {/* Active Slide Name Label */}
-            <p className="text-xs font-bold text-emerald-700 mt-2 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              {slideScreens[phoneSlide].title} <span className="text-slate-500 font-normal">({slideScreens[phoneSlide].desc})</span>
-            </p>
           </div>
         </div>
       </section>
