@@ -665,7 +665,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (STANDARD PROFESSIONAL 3-COLUMN SHOWCASE) */}
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (100% REAL DATA ONLY) */}
       <section id="stores" className="py-16 px-6 bg-slate-50/70 border-b border-slate-200/80">
         <div className="max-w-6xl mx-auto space-y-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
@@ -677,7 +677,7 @@ export default function LandingPage() {
             <p className="text-xs sm:text-sm text-slate-500 font-medium">{t.storesSub}</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="flex flex-wrap items-stretch justify-center gap-6 max-w-5xl mx-auto">
             {/* Real Registered Stores */}
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
@@ -687,7 +687,7 @@ export default function LandingPage() {
               const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
-                <div key={s.id} className="bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-2xl p-5 space-y-4 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
+                <div key={s.id} className="w-full sm:w-[320px] bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-2xl p-5 space-y-4 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
@@ -738,39 +738,8 @@ export default function LandingPage() {
               );
             })}
 
-            {/* Showcase Store Placeholder 1 (If few stores) */}
-            {stores.length < 2 && (
-              <div className="bg-white border border-slate-200/90 rounded-2xl p-5 space-y-4 shadow-sm relative overflow-hidden flex flex-col justify-between">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center font-bold text-lg shrink-0">
-                      🏢
-                    </div>
-                    <div>
-                      <h3 className="font-extrabold text-sm text-slate-900 flex items-center gap-1.5">
-                        <span>KKTC Emlak & Galeri</span>
-                        <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                      </h3>
-                      <p className="text-xs text-slate-500 font-medium">Gayrimenkul & Emlak</p>
-                    </div>
-                  </div>
-
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-teal-700 bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-                    {t.verifiedBadge}
-                  </span>
-                </div>
-
-                <div className="space-y-2 text-xs text-slate-600 pt-3 border-t border-slate-100">
-                  <div className="flex items-center gap-1.5 font-medium">
-                    <MapPin className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Girne / KKTC</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
             {/* Always Present "Mağaza Ol" CTA Card */}
-            <div className="bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-md border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
+            <div className="w-full sm:w-[320px] bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-2xl p-6 flex flex-col justify-between space-y-4 shadow-md border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
               <div className="space-y-2 relative z-10">
                 <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
                   <Store className="w-5 h-5" />
