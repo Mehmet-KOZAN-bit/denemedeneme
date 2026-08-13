@@ -479,13 +479,13 @@ export default function LandingPage() {
       </div>
 
       {/* 🧭 NAVIGATION HEADER */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 px-6 py-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-10 h-10 rounded-2xl object-contain shadow-md" />
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 px-3 sm:px-6 py-3 sm:py-4 shadow-sm">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            <img src="/yeniikon.png" alt="AdaBazaar Logo" className="w-8 h-8 sm:w-10 sm:h-10 rounded-2xl object-contain shadow-md" />
             <div>
-              <span className="text-lg font-black tracking-tight text-slate-900 block">AdaBazaar</span>
-              <span className="text-[10px] font-bold text-emerald-600 block -mt-1 tracking-wider uppercase">{t.subTitle}</span>
+              <span className="text-base sm:text-lg font-black tracking-tight text-slate-900 block leading-none">AdaBazaar</span>
+              <span className="hidden sm:block text-[10px] font-bold text-emerald-600 -mt-0.5 tracking-wider uppercase">{t.subTitle}</span>
             </div>
           </div>
 
@@ -496,24 +496,24 @@ export default function LandingPage() {
             <a href="#features" className="hover:text-emerald-600 transition-colors">{t.navWhyUs}</a>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {/* 🌐 LANGUAGE SELECTOR (TR | EN | RU) */}
-            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+            <div className="flex items-center gap-0.5 sm:gap-1 bg-slate-100 p-0.5 sm:p-1 rounded-xl border border-slate-200 text-[10px] sm:text-xs font-bold">
               <button
                 onClick={() => setLang('tr')}
-                className={`px-2 py-1 rounded-lg transition-all ${lang === 'tr' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
+                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg transition-all ${lang === 'tr' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 TR
               </button>
               <button
                 onClick={() => setLang('en')}
-                className={`px-2 py-1 rounded-lg transition-all ${lang === 'en' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
+                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg transition-all ${lang === 'en' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 EN
               </button>
               <button
                 onClick={() => setLang('ru')}
-                className={`px-2 py-1 rounded-lg transition-all ${lang === 'ru' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
+                className={`px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-lg transition-all ${lang === 'ru' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
               >
                 RU
               </button>
