@@ -292,6 +292,7 @@ export default function LandingPage() {
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [policyModal, setPolicyModal] = useState<string | null>(null);
 
   // Portal Login Form State
   const [loginEmail, setLoginEmail] = useState('');
@@ -943,14 +944,14 @@ export default function LandingPage() {
 
           <div className="md:col-span-5 space-y-2">
             <h4 className="font-extrabold text-white text-xs uppercase tracking-wider">Kurumsal & Yasal Bağlantılar</h4>
-            <div className="grid grid-cols-2 gap-2 text-slate-400 font-medium">
-              <a href="https://kibrito.com/kibrito-content/about.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Kibrito / AdaBazaar Hakkında</a>
-              <a href="https://kibrito.com/kibrito-content/policy.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Gizlilik Politikası</a>
-              <a href="https://kibrito.com/kibrito-content/destek.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Destek & Yardım</a>
-              <a href="https://kibrito.com/kibrito-content/partnership.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Ortaklar İçin</a>
-              <a href="https://kibrito.com/kibrito-content/services-and-prices.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Hizmetler ve Fiyatlar</a>
-              <a href="https://kibrito.com/kibrito-content/public-offer.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">Fırsatlar (Kamu Sözleşmesi)</a>
-              <a href="https://kibrito.com/kibrito-content/refund-policy.html" target="_blank" rel="noreferrer" className="hover:text-emerald-400 transition-colors">İade Politikası</a>
+            <div className="grid grid-cols-2 gap-2 text-slate-400 font-medium text-left">
+              <button onClick={() => setPolicyModal('about')} className="hover:text-emerald-400 text-left transition-colors">AdaBazaar Hakkında</button>
+              <button onClick={() => setPolicyModal('privacy')} className="hover:text-emerald-400 text-left transition-colors">Gizlilik Politikası</button>
+              <button onClick={() => setPolicyModal('support')} className="hover:text-emerald-400 text-left transition-colors">Destek & Yardım</button>
+              <button onClick={() => setPolicyModal('partnership')} className="hover:text-emerald-400 text-left transition-colors">Ortaklar İçin</button>
+              <button onClick={() => setPolicyModal('services')} className="hover:text-emerald-400 text-left transition-colors">Hizmetler ve Fiyatlar</button>
+              <button onClick={() => setPolicyModal('public-offer')} className="hover:text-emerald-400 text-left transition-colors">Kullanıcı Sözleşmesi (Fırsatlar)</button>
+              <button onClick={() => setPolicyModal('refund')} className="hover:text-emerald-400 text-left transition-colors">İade Politikası</button>
             </div>
           </div>
         </div>
@@ -1160,6 +1161,122 @@ export default function LandingPage() {
                 </button>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* 📜 CUSTOM ADABAZAAR POLICY & CORPORATE MODAL */}
+      {policyModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 max-w-xl w-full space-y-6 relative shadow-2xl max-h-[85vh] overflow-y-auto">
+            <button
+              onClick={() => setPolicyModal(null)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 font-bold w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center transition-colors"
+            >
+              ✕
+            </button>
+
+            {(() => {
+              const data: Record<string, { title: string; subtitle: string; content: string[] }> = {
+                about: {
+                  title: "AdaBazaar KKTC Hakkında",
+                  subtitle: "Kıbrıs'ın %100 Yerel ve Doğrulanmış Dijital Pazaryeri Platformu",
+                  content: [
+                    "AdaBazaar, Kuzey Kıbrıs Türk Cumhuriyeti (KKTC) genelindeki tüm bireysel alıcıları, satıcıları ve kurumsal mağazaları tek bir güvenli dijital platformda buluşturmak amacıyla kurulmuştur.",
+                    "Amacımız; emlak, vasıta, ikinci el eşya ve kurumsal hizmet alışverişlerinde komisyoncuları ve aracıları ortadan kaldırarak alıcı ve satıcı arasında %100 doğrudan, hızlı ve şeffaf iletişim sağlamaktır.",
+                    "Kıbrıs'ın yerel dinamiklerine tam uyumlu olan AdaBazaar; Lefkoşa, Girne, Gazimağusa, İskele, Güzelyurt ve Lefke şehirlerindeki kullanıcılara ücretsiz ilan verme ve anında iletişim imkanı sunar."
+                  ]
+                },
+                privacy: {
+                  title: "Gizlilik & KVKK Politikası",
+                  subtitle: "Kişisel Verilerin Korunması ve Güvenliği Beyanı",
+                  content: [
+                    "AdaBazaar, kullanıcılarının gizliliğine ve kişisel verilerinin korunmasına en üst düzeyde önem verir.",
+                    "Toplanan Kişisel Veriler: Kayıt esnasında ve ilan yayınlarken sağlanan ad-soyad, telefon numarası, e-posta adresi ve ilan konumu verileridir.",
+                    "Kullanım Amacı: Verileriniz yalnızca platform içi iletişimi sağlamak, mağaza doğrulama işlemlerini yürütmek ve mobil bildirimler iletmek amacıyla işlenir.",
+                    "Üçüncü Şahıslarla Paylaşım: Kişisel verileriniz hiçbir koşulda pazarlama amacıyla üçüncü taraf kurum veya kişilerle paylaşılmaz ve satılmaz.",
+                    "Güvenlik: Verileriniz 256-bit SSL şifreleme ve Firebase şifreli veritabanı altyapısıyla güvenli şekilde saklanmaktadır."
+                  ]
+                },
+                support: {
+                  title: "Destek & Müşteri Hizmetleri",
+                  subtitle: "AdaBazaar Destek Ekibine 7/24 Ulaşın",
+                  content: [
+                    "AdaBazaar platformu ile ilgili tüm soru, görüş, şikayet ve teknik destek talepleriniz için ekibimiz hizmetinizdedir.",
+                    "E-posta Desteği: destek@adabazaar.com",
+                    "WhatsApp Destek Hattı: +90 542 879 89 18",
+                    "Çalışma Saatleri: Pazartesi - Cumartesi: 09:00 - 18:00 (Mesai saatleri dışındaki mesajlara ilk iş gününde yanıt verilir).",
+                    "Kurumsal mağaza yetkilileri admin paneli üzerinden veya doğrudan müşteri temsilcisiyle iletişime geçebilir."
+                  ]
+                },
+                partnership: {
+                  title: "Ortaklar İçin (Kurumsal Mağaza Programı)",
+                  subtitle: "KKTC İşletmeleri ve Galerileri İçin Dijital Büyüme Çözümleri",
+                  content: [
+                    "AdaBazaar Ortaklık Programı, KKTC'deki oto galeriler, emlak acenteleri, teknoloji mağazaları ve kurumsal işletmeler için tasarlanmıştır.",
+                    "Avantajlar: Resmi 'Onaylı Mağaza' rozeti, sınırsız ilan yayınlama hakkı, kurumsal mağaza profili, doğrudan WhatsApp ve telefon yönlendirmesi.",
+                    "Nasıl Ortak Olunur?: Web sitemizdeki 'Mağaza Başvurusu' formunu doldurarak kurumsal üyelik talebinde bulunabilirsiniz. Müşteri ekibimiz 24 saat içinde işletmenizi doğrular ve giriş şifrelerinizi iletir."
+                  ]
+                },
+                services: {
+                  title: "Hizmetler ve Fiyatlandırma",
+                  subtitle: "Şeffaf, Adil ve %100 Ücretsiz Bireysel Kullanım",
+                  content: [
+                    "Bireysel İlanlar: AdaBazaar'da bireysel kullanıcılar için ilan vermek, fotoğraf eklemek ve mesajlaşmak tamamen ÜCRETSİZDİR.",
+                    "Kurumsal Mağaza Paketleri: İşletmeler için sunulan kurumsal mağaza üyelikleri ilk 3 ay ücretsiz deneme süresiyle sunulmaktadır.",
+                    "Öne Çıkarılan İlanlar (Doping): İlanınızı ana sayfada ve arama sonuçlarında en üstte göstermek için opsiyonel öne çıkarma paketlerimiz mevcuttur."
+                  ]
+                },
+                'public-offer': {
+                  title: "Kullanıcı Sözleşmesi & Kamu Teklifi",
+                  subtitle: "Platform Kullanım Şartları ve Yasal Kurallar",
+                  content: [
+                    "AdaBazaar platformuna üye olan veya ilan veren tüm kullanıcılar aşağıdaki kuralları kabul etmiş sayılır:",
+                    "1. İlan İçeriği: Kullanıcılar yayınladıkları ilanların doğruluğundan ve yasal mevzuata uygunluğundan bizzat sorumludur.",
+                    "2. Yasaklı Ürünler: Sahte, çalıntı, yasadışı veya KKTC yasalarına aykırı ürün ve hizmetlerin ilan verilmesi kesinlikle yasaktır.",
+                    "3. İletişim Sorumluluğu: AdaBazaar alıcı ve satıcı arasındaki pazarlıklara ve ödeme süreçlerine taraf değildir; platform yalnızca ilan yayınlama mecrasıdır."
+                  ]
+                },
+                refund: {
+                  title: "İade & İptal Politikası",
+                  subtitle: "Dijital Hizmetler ve Mağaza Üyelikleri İade Kuralları",
+                  content: [
+                    "Dijital Üyelikler: Kurumsal mağaza üyeliklerinde ilk 14 gün içerisinde sebep göstermeksizin iptal ve ücret iadesi hakkınız mevcuttur.",
+                    "İlan Öne Çıkara (Doping) Hizmetleri: Yayınlanan ve aktif hale gelen doping/öne çıkarma hizmetlerinde dijital tüketim gerçekleştiği için iade yapılmamaktadır.",
+                    "İade Süreci: İade taleplerinizi destek@adabazaar.com adresine iletebilirsiniz. İadeler 3-7 iş günü içerisinde orijinal ödeme yönteminize aktarılır."
+                  ]
+                }
+              };
+
+              const p = data[policyModal] || data.about;
+
+              return (
+                <div className="space-y-4 text-left">
+                  <div className="space-y-1">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                      AdaBazaar Kurumsal
+                    </span>
+                    <h3 className="text-xl font-black text-slate-900">{p.title}</h3>
+                    <p className="text-xs text-slate-500 font-medium">{p.subtitle}</p>
+                  </div>
+
+                  <div className="space-y-3 pt-2 text-xs text-slate-600 leading-relaxed font-medium border-t border-slate-100">
+                    {p.content.map((paragraph, i) => (
+                      <p key={i} className="bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-slate-700">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+
+                  <button
+                    onClick={() => setPolicyModal(null)}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md shadow-emerald-600/20"
+                  >
+                    Anladım, Kapat
+                  </button>
+                </div>
+              );
+            })()}
           </div>
         </div>
       )}
