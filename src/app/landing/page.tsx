@@ -519,12 +519,12 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* 🖼️ SINGLE HERO IMAGE FROM github-resim/2.png */}
+          {/* 🖼️ SINGLE HERO IMAGE FROM github-resim/2.png - OPTIMIZED SIZE */}
           <div className="lg:col-span-5 flex justify-center items-center relative">
             <img
               src="/hero-banner.png"
               alt="AdaBazar Mobil Uygulaması"
-              className="w-full max-w-md sm:max-w-lg h-auto object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-500"
+              className="w-full max-w-[280px] sm:max-w-[320px] lg:max-w-[340px] max-h-[490px] h-auto object-contain drop-shadow-xl hover:scale-105 transition-transform duration-500"
             />
           </div>
         </div>
