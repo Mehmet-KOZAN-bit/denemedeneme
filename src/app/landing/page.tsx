@@ -294,7 +294,7 @@ export default function LandingPage() {
 
           {/* 📱 REAL APP SCREENSHOTS CAROUSEL */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            <div className="relative w-72 sm:w-80 h-[560px] rounded-[36px] overflow-hidden shadow-2xl border border-slate-200/80 bg-white">
+            <div className="relative w-72 sm:w-80 h-[540px]">
               {slideScreens.map((slide, idx) => (
                 <div
                   key={slide.id}
@@ -305,7 +305,7 @@ export default function LandingPage() {
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="w-full h-full object-contain"
+                    className="w-full h-full object-contain drop-shadow-xl"
                   />
                 </div>
               ))}
