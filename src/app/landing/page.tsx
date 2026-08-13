@@ -642,26 +642,6 @@ export default function LandingPage() {
                 </div>
               );
             })}
-
-            {/* Always Present "Mağaza Ol" CTA Card - Twin Proportions */}
-            <div
-              onClick={() => setShowApplyModal(true)}
-              className="w-full sm:w-[320px] h-[68px] bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white border border-emerald-500/40 rounded-2xl px-4 py-2.5 flex items-center justify-between shadow-sm hover:shadow-md hover:scale-[1.02] transition-all cursor-pointer group"
-            >
-              <div className="flex items-center gap-3 truncate">
-                <div className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
-                  <Store className="w-5 h-5" />
-                </div>
-                <div className="truncate">
-                  <h3 className="text-xs font-black text-white leading-tight">Kurumsal Mağaza Açın</h3>
-                  <p className="text-[10px] text-slate-300 font-medium truncate">Doğrudan müşteriye ulaşın</p>
-                </div>
-              </div>
-
-              <span className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] px-2.5 py-1 rounded-lg transition-colors shrink-0">
-                Başvur →
-              </span>
-            </div>
           </div>
         </div>
       </section>
