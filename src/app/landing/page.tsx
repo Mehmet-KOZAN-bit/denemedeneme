@@ -473,7 +473,7 @@ export default function LandingPage() {
               <span>{t.badgeVerified}</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight tracking-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight tracking-tight">
               {t.heroTitleLine1} <br />
               <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
                 {t.heroTitleLine2}
@@ -500,22 +500,6 @@ export default function LandingPage() {
               >
                 <span>{t.btnBecomeStore}</span>
               </button>
-            </div>
-
-            {/* Stats Row */}
-            <div className="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0">
-              <div>
-                <p className="text-2xl sm:text-3xl font-black text-slate-900">10.000+</p>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">{t.statDownloads}</p>
-              </div>
-              <div>
-                <p className="text-2xl sm:text-3xl font-black text-emerald-600">500+</p>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">{t.statListings}</p>
-              </div>
-              <div>
-                <p className="text-2xl sm:text-3xl font-black text-slate-900">50+</p>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">{t.statStores}</p>
-              </div>
             </div>
           </div>
 
@@ -658,41 +642,44 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🌟 NEDEN ADABAZAR? (FEATURES) */}
-      <section id="features" className="py-16 px-6 bg-white border-b border-slate-200/80">
+      {/* 🌟 NEDEN ADABAZAR? (FEATURES - MODERNIZED) */}
+      <section id="features" className="py-20 px-6 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">{t.whyUsTag}</span>
-            <h2 className="text-3xl font-black text-slate-900">{t.whyUsTitle}</h2>
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+              {t.whyUsTag}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">{t.whyUsTitle}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-4 shadow-sm hover:shadow-md transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700">
-                <Zap className="w-6 h-6" />
+            <div className="group bg-white border border-slate-200/90 rounded-[32px] p-8 space-y-5 shadow-sm hover:shadow-xl hover:border-emerald-500/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-lg shadow-emerald-600/25 group-hover:scale-110 transition-transform">
+                <Zap className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">{t.feat1Title}</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <h3 className="text-xl font-black text-slate-900">{t.feat1Title}</h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                 {t.feat1Desc}
               </p>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-4 shadow-sm hover:shadow-md transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center text-teal-700">
-                <ShieldCheck className="w-6 h-6" />
+            <div className="group bg-white border border-slate-200/90 rounded-[32px] p-8 space-y-5 shadow-sm hover:shadow-xl hover:border-emerald-500/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-teal-500 to-emerald-600 text-white flex items-center justify-center shadow-lg shadow-teal-600/25 group-hover:scale-110 transition-transform">
+                <ShieldCheck className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">{t.feat2Title}</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <h3 className="text-xl font-black text-slate-900">{t.feat2Title}</h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                 {t.feat2Desc}
               </p>
             </div>
 
-            <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-4 shadow-sm hover:shadow-md transition-all">
-              <div className="w-12 h-12 rounded-2xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-700">
-                <MessageCircle className="w-6 h-6" />
+            <div className="group bg-white border border-slate-200/90 rounded-[32px] p-8 space-y-5 shadow-sm hover:shadow-xl hover:border-emerald-500/40 hover:-translate-y-1.5 transition-all duration-300 relative overflow-hidden">
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-600 to-blue-600 text-white flex items-center justify-center shadow-lg shadow-blue-600/25 group-hover:scale-110 transition-transform">
+                <MessageCircle className="w-7 h-7" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">{t.feat3Title}</h3>
-              <p className="text-xs text-slate-600 leading-relaxed">
+              <h3 className="text-xl font-black text-slate-900">{t.feat3Title}</h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-medium">
                 {t.feat3Desc}
               </p>
             </div>
