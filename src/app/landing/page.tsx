@@ -421,6 +421,39 @@ export default function LandingPage() {
     setShowQrModal(true);
   };
 
+  // Smart product inspection handler (Deep Link & App Store/Play Store fallback on mobile, QR modal on desktop)
+  const handleProductInspect = (productId?: string) => {
+    if (typeof window === 'undefined') return;
+
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+
+    const iosStoreLink = 'https://apps.apple.com/app/id6741000000';
+    const androidStoreLink = 'https://play.google.com/store/apps/details?id=com.adabazaar.kibrismarket';
+
+    if (isIOS || isAndroid) {
+      const deepLink = productId ? `adabazaar://listing/${productId}` : `adabazaar://home`;
+      const fallbackStore = isIOS ? iosStoreLink : androidStoreLink;
+
+      // 1) Attempt custom scheme deep link opening directly on mobile device
+      const startTime = Date.now();
+      window.location.href = deepLink;
+
+      // 2) If app is not installed, window focus stays on web page after ~1.5s -> Redirect to App Store or Play Store
+      setTimeout(() => {
+        if (Date.now() - startTime < 2500) {
+          window.location.href = fallbackStore;
+        }
+      }, 1500);
+
+      return;
+    }
+
+    // Desktop/Laptop user -> Show QR code modal to scan with phone camera
+    setShowQrModal(true);
+  };
+
   const filteredProducts = products.filter(p => {
     const matchesCat = selectedCategory === 'all' || p.category === selectedCategory || p.categoryType === selectedCategory;
     const matchesSearch = !searchQuery || p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || p.city?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -716,7 +749,7 @@ export default function LandingPage() {
                     </div>
 
                     <button
-                      onClick={() => setShowQrModal(true)}
+                      onClick={() => handleProductInspect(p.id)}
                       className="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-600/30 text-xs font-bold py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 mt-1"
                     >
                       <Smartphone className="w-3.5 h-3.5" />
