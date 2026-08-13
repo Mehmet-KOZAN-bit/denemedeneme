@@ -528,30 +528,54 @@ export default function LandingPage() {
               <span>{t.badgeVerified}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight tracking-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 leading-tight tracking-tight">
               {t.heroTitleLine1} <br />
               <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
                 {t.heroTitleLine2}
               </span>
             </h1>
 
-            <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed mx-auto lg:mx-0 font-medium">
+            <p className="text-xs sm:text-sm text-slate-500 max-w-xl leading-relaxed mx-auto lg:mx-0 font-normal">
               {t.heroDesc}
             </p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+            {/* Official Store Buttons & Store Apply */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+              {/* Apple App Store Button */}
               <button
-                onClick={() => handleSmartDownload()}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-emerald-600/25 flex items-center gap-2.5 hover:scale-105"
+                onClick={() => handleSmartDownload('ios')}
+                className="bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center gap-3 text-left border border-slate-700"
               >
-                <Download className="w-5 h-5" />
-                <span>{t.btnDownloadApp}</span>
+                <svg className="w-6 h-6 fill-current text-white shrink-0" viewBox="0 0 24 24">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.86c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.61.71-1.14 1.86-1 2.97 1.08.08 2.15-.56 2.81-1.37z" />
+                </svg>
+                <div>
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 block font-bold">App Store</span>
+                  <span className="text-xs font-bold text-white block leading-tight">{t.downloadAppStore}</span>
+                </div>
               </button>
 
+              {/* Google Play Store Button */}
+              <button
+                onClick={() => handleSmartDownload('android')}
+                className="bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-2xl transition-all shadow-lg hover:scale-105 flex items-center gap-3 text-left border border-slate-700"
+              >
+                <svg className="w-6 h-6 shrink-0" viewBox="0 0 24 24">
+                  <path fill="#410593" d="M3.609 1.814L13.792 12 3.61 22.186A2.37 2.37 0 0 1 3 20.57V3.43c0-.623.23-1.22.609-1.616z"/>
+                  <path fill="#00e5ff" d="M17.07 8.72l-3.278 3.28 3.278 3.28 3.708-2.126a1.44 1.44 0 0 0 0-2.308z"/>
+                  <path fill="#ff3a44" d="M3.609 1.814l10.183 10.186 3.278-3.28-11.89-6.816a1.44 1.44 0 0 0-1.571.91z"/>
+                  <path fill="#00e676" d="M3.609 22.186l11.89-6.816-3.278-3.28L2.038 22.276a1.44 1.44 0 0 0 1.571-.09z"/>
+                </svg>
+                <div>
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 block font-bold">Google Play</span>
+                  <span className="text-xs font-bold text-white block leading-tight">{t.downloadPlayStore}</span>
+                </div>
+              </button>
+
+              {/* Become Store Button */}
               <button
                 onClick={() => setShowApplyModal(true)}
-                className="bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-sm px-6 py-3.5 rounded-2xl transition-all shadow-sm flex items-center gap-2 hover:scale-105"
+                className="bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-xs px-5 py-3.5 rounded-2xl transition-all shadow-sm flex items-center gap-2 hover:scale-105"
               >
                 <span>{t.btnBecomeStore}</span>
               </button>
