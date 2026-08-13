@@ -723,85 +723,157 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🌟 NEDEN ADABAZAR? (FEATURES - MODERNIZED) */}
-      <section id="features" className="py-20 px-6 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200/80">
-        <div className="max-w-7xl mx-auto space-y-12">
+      {/* 🌟 NEDEN ADABAZAR? (VERTICAL VISUAL STORY SHOWCASE) */}
+      <section id="features" className="py-24 px-6 bg-gradient-to-b from-white via-slate-50/50 to-white border-b border-slate-200/80 overflow-hidden">
+        <div className="max-w-7xl mx-auto space-y-24">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-black text-emerald-700 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+              <Sparkles className="w-4 h-4 text-emerald-600" />
               {t.whyUsTag}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">{t.whyUsTitle}</h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">{t.whyUsTitle}</h2>
           </div>
 
-          {/* 6-Item Compact Features Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Feature 1 */}
-            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Zap className="w-5 h-5" />
+          {/* Vertical Feature 1: 30 Saniyede Ücretsiz İlan */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 flex items-center justify-center font-black">
+                <Zap className="w-7 h-7" />
               </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{t.feat1Title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <span className="text-xs font-black text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase">Hızlı & Kolay</span>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat1Title}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
                 {t.feat1Desc}
               </p>
+              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <span>Sadece 30 saniyede fotoğraf çek ve yayınla</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <span>Sıfır komisyon ile %100 ücretsiz ilan imkanı</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                  <span>Tüm KKTC genelindeki binlerce alıcıya anında ulaş</span>
+                </div>
+              </div>
             </div>
 
-            {/* Feature 2 */}
-            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="w-11 h-11 rounded-xl bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <ShieldCheck className="w-5 h-5" />
+            <div className="lg:col-span-6 flex justify-center">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 p-6 sm:p-10 rounded-[40px] border border-emerald-500/20 shadow-xl relative w-full max-w-[420px]">
+                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
+                  <img src="/hero-banner.png" alt="30 Saniyede İlan" className="w-full h-auto object-contain block" />
+                </div>
               </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{t.feat2Title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                {t.feat2Desc}
-              </p>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 border border-blue-200 text-blue-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Phone className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{t.feat3Title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                {t.feat3Desc}
-              </p>
-            </div>
-
-            {/* Feature 4 */}
-            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{t.feat4Title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                {t.feat4Desc}
-              </p>
-            </div>
-
-            {/* Feature 5 */}
-            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="w-11 h-11 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <MessageSquare className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{t.feat5Title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                {t.feat5Desc}
-              </p>
-            </div>
-
-            {/* Feature 6 */}
-            <div className="group bg-white border border-slate-200/90 rounded-3xl p-6 space-y-3 shadow-sm hover:shadow-lg hover:border-emerald-500/40 hover:-translate-y-1 transition-all duration-300 relative overflow-hidden">
-              <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Globe className="w-5 h-5" />
-              </div>
-              <h3 className="text-sm font-extrabold text-slate-900">{t.feat6Title}</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
-                {t.feat6Desc}
-              </p>
             </div>
           </div>
+
+          {/* Vertical Feature 2: Doğrulanmış Kurumsal Mağazalar (Reversed Layout) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 order-2 lg:order-1 flex justify-center">
+              <div className="bg-gradient-to-br from-teal-500/10 to-blue-500/10 p-6 sm:p-10 rounded-[40px] border border-teal-500/20 shadow-xl relative w-full max-w-[420px]">
+                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
+                  <img src="/hero-banner.png" alt="Doğrulanmış Kurumsal Mağazalar" className="w-full h-auto object-contain block" />
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-teal-500/10 border border-teal-500/20 text-teal-600 flex items-center justify-center font-black">
+                <ShieldCheck className="w-7 h-7" />
+              </div>
+              <span className="text-xs font-black text-teal-600 bg-teal-50 border border-teal-200 px-3 py-1 rounded-full uppercase">Güvenli Ticaret</span>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat2Title}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
+                {t.feat2Desc}
+              </p>
+              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
+                  <span>AdaBazaar sisteminden geçmiş resmi kayıtlı işletmeler</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
+                  <span>Emlak, Oto Galeri ve Teknoloji mağazalarından güvenle alışveriş</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
+                  <span>Kurumsal mağaza profili ve direkt iletişim bilgileri</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Vertical Feature 3: Doğrudan & Aracısız İletişim */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-600 flex items-center justify-center font-black">
+                <Phone className="w-7 h-7" />
+              </div>
+              <span className="text-xs font-black text-blue-600 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full uppercase">Sıfır Komisyon</span>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat3Title}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
+                {t.feat3Desc}
+              </p>
+              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
+                  <span>WhatsApp veya direkt arama ile 1-tıkla iletişim</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
+                  <span>Aracı veya komisyon olmadan elden pazarlık imkanı</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-blue-600 shrink-0" />
+                  <span>Uygulama içi anlık bildirimli canlı sohbet</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 flex justify-center">
+              <div className="bg-gradient-to-br from-blue-500/10 to-emerald-500/10 p-6 sm:p-10 rounded-[40px] border border-blue-500/20 shadow-xl relative w-full max-w-[420px]">
+                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
+                  <img src="/hero-banner.png" alt="Doğrudan İletişim" className="w-full h-auto object-contain block" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Vertical Feature 4: Konum Bazlı Ada Araması (Reversed Layout) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-6 order-2 lg:order-1 flex justify-center">
+              <div className="bg-gradient-to-br from-emerald-500/10 to-amber-500/10 p-6 sm:p-10 rounded-[40px] border border-emerald-500/20 shadow-xl relative w-full max-w-[420px]">
+                <div className="rounded-[32px] overflow-hidden shadow-2xl border-4 border-white max-w-[240px] sm:max-w-[260px] mx-auto bg-white">
+                  <img src="/hero-banner.png" alt="Konum Bazlı Ada Araması" className="w-full h-auto object-contain block" />
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-6 order-1 lg:order-2 space-y-6">
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center font-black">
+                <MapPin className="w-7 h-7" />
+              </div>
+              <span className="text-xs font-black text-amber-600 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full uppercase">KKTC Şehir Filtresi</span>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">{t.feat4Title}</h3>
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-medium">
+                {t.feat4Desc}
+              </p>
+              <div className="space-y-3 pt-2 text-xs sm:text-sm font-semibold text-slate-700">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-amber-600 shrink-0" />
+                  <span>Lefkoşa, Girne, Gazimağusa, İskele, Güzelyurt ve Lefke aramaları</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 className="w-5 h-5 text-amber-600 shrink-0" />
+                  <span>Size en yakın ilanları anında harita ve şehir filtresiyle görün</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
