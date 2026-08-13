@@ -925,6 +925,8 @@ export default function LandingPage() {
               <a href="#products" className="hover:text-emerald-400 transition-colors">Canlı İlan Akışı</a>
               <a href="#inside" className="hover:text-emerald-400 transition-colors">İçeride Ne Var?</a>
               <a href="#faq" className="hover:text-emerald-400 transition-colors">Sıkça Sorulan Sorular</a>
+              <a href="/privacy" className="hover:text-emerald-400 transition-colors">Gizlilik Politikası</a>
+              <a href="/terms" className="hover:text-emerald-400 transition-colors">Kullanıcı Sözleşmesi</a>
             </div>
           </div>
         </div>
