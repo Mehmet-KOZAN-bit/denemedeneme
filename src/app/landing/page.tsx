@@ -35,8 +35,235 @@ import {
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, query, where, getDocs, limit, addDoc } from 'firebase/firestore';
 
+// 🌐 3-LANGUAGE I18N DICTIONARY (TR, EN, RU)
+const TRANSLATIONS = {
+  tr: {
+    announcement: "AdaBazar Mobil Uygulaması Canlıda! KKTC'nin 1 Numaralı İlan & Kurumsal Mağaza Platformu",
+    downloadNow: "Hemen İndir →",
+    subTitle: "KIBRIS MARKETPLACE",
+    navHome: "Ana Sayfa",
+    navProducts: "Canlı İlanlar",
+    navStores: "Kurumsal Mağazalar",
+    navWhyUs: "Neden AdaBazar?",
+    storeApply: "Mağaza Başvurusu",
+    corporateLogin: "Kurumsal Giriş",
+    goToPortal: "Portala Git",
+    logout: "Çıkış",
+    badgeVerified: "KKTC'nin Doğrulanmış Yerel Pazaryeri Platformu",
+    heroTitleLine1: "Kıbrıs'ta Al, Sat, Keşfet",
+    heroTitleLine2: "Tüm Ada Cebinde!",
+    heroDesc: "Emlak, vasıta, ikinci el eşyalar ve KKTC'nin seçkin kurumsal mağazaları AdaBazar'da buluşuyor. Aracısız, hızlı ve %100 doğrudan iletişim ile ilan verin veya hayalinizdeki ürünü bulun.",
+    btnDownloadApp: "Uygulamayı Hemen İndir",
+    btnBecomeStore: "Kurumsal Mağaza Ol",
+    statDownloads: "Mobil İndirme",
+    statListings: "Aktif İlan",
+    statStores: "Onaylı Mağaza",
+    liveFeedTag: "CANLI İLAN AKIŞI",
+    liveFeedTitle: "Platformdaki Güncel İlanlar",
+    catAll: "Tüm İlanlar",
+    catRealEstate: "Emlak",
+    catAuto: "Vasıta",
+    catElectronics: "Elektronik",
+    catFashion: "Moda",
+    noProducts: "Bu kategoride gösterilecek canlı ilan bulunmuyor.",
+    inspectInApp: "İncele",
+    trustedBusinessesTag: "GÜVENİLİR İŞLETMELER",
+    storesTitle: "KKTC Onaylı Kurumsal Mağazalar",
+    storesSub: "AdaBazar doğrulama sisteminden geçmiş resmi işletmeler",
+    verifiedBadge: "ONAYLI MAĞAZA",
+    whyUsTag: "NEDEN BİZ?",
+    whyUsTitle: "AdaBazar Avantajları",
+    feat1Title: "30 Saniyede Ücretsiz İlan",
+    feat1Desc: "Fotoğrafını çek, fiyatını belirle ve ilanını saniyeler içinde binlerce alıcıya ulaştır.",
+    feat2Title: "Doğrulanmış Mağazalar",
+    feat2Desc: "KKTC genelindeki güvenilir kurumsal işletmelerden güvenle alışveriş yapın.",
+    feat3Title: "Doğrudan İletişim",
+    feat3Desc: "WhatsApp veya telefon ile aracısız, komisyonsuz doğrudan alıcı ve satıcıyla görüşün.",
+    bannerTitle: "Tüm Ada Cebinde! Hemen İndir",
+    bannerDesc: "AdaBazar mobil uygulamasını iOS veya Android cihazınıza indirerek ilanları inceleyin veya hemen ilan yayınlayın.",
+    downloadAppStore: "iOS App Store'dan İndir",
+    downloadPlayStore: "Google Play'den İndir",
+    footerRights: "© 2026 AdaBazar C2C & B2B İlan Platformu. Tüm hakları saklıdır.",
+    modalLoginTitle: "Kurumsal Portal Girişi",
+    modalLoginSub: "Mağaza veya Yönetim panelinize erişin",
+    emailLabel: "E-posta Adresi",
+    passLabel: "Şifre",
+    btnSigningIn: "Giriş Yapılıyor...",
+    btnSignIn: "Giriş Yap",
+    modalQrTitle: "Uygulamayı İndirin",
+    modalQrSub: "Telefonunuzun kamerasını QR koda tutarak AdaBazar uygulamasını hemen yükleyebilirsiniz.",
+    btnClose: "Kapat",
+    modalApplyTitle: "Kurumsal Mağaza Başvurusu",
+    modalApplySub: "İşletmenizi AdaBazar'a dahil edin",
+    modalApplySuccessTitle: "Başvurunuz Alındı!",
+    modalApplySuccessSub: "Ekibimiz en kısa sürede sizinle iletişime geçip web giriş bilgilerinizi tanımlayacaktır.",
+    formStoreName: "İşletme / Mağaza Adı *",
+    formCity: "Şehir *",
+    formSector: "Sektör *",
+    formPhone: "İletişim Telefonu *",
+    formNotes: "Ek Notlar (İsteğe Bağlı)",
+    btnSubmitting: "Gönderiliyor...",
+    btnSubmitApply: "Başvuruyu Gönder",
+    sectorRealEstate: "Emlak & Gayrimenkul",
+    sectorAuto: "Oto Galeri & Vasıta",
+    sectorElectronics: "Teknoloji & Elektronik",
+    sectorFashion: "Giyim & Moda",
+    sectorOther: "Diğer Hizmet"
+  },
+  en: {
+    announcement: "AdaBazar Mobile App is Live! TRNC's #1 Marketplace & Store Platform",
+    downloadNow: "Download Now →",
+    subTitle: "CYPRUS MARKETPLACE",
+    navHome: "Home",
+    navProducts: "Live Listings",
+    navStores: "Verified Stores",
+    navWhyUs: "Why AdaBazar?",
+    storeApply: "Store Application",
+    corporateLogin: "Corporate Login",
+    goToPortal: "Go to Portal",
+    logout: "Logout",
+    badgeVerified: "TRNC's Verified Local Marketplace Platform",
+    heroTitleLine1: "Buy, Sell & Discover in Cyprus",
+    heroTitleLine2: "The Whole Island in Your Pocket!",
+    heroDesc: "Real estate, vehicles, secondhand items, and top verified stores in Northern Cyprus meet at AdaBazar. Post ads or find your dream item with 100% direct communication.",
+    btnDownloadApp: "Download Mobile App Now",
+    btnBecomeStore: "Become a Verified Store",
+    statDownloads: "Mobile Downloads",
+    statListings: "Active Listings",
+    statStores: "Verified Stores",
+    liveFeedTag: "LIVE FEED",
+    liveFeedTitle: "Recent Listings on Platform",
+    catAll: "All Listings",
+    catRealEstate: "Real Estate",
+    catAuto: "Vehicles",
+    catElectronics: "Electronics",
+    catFashion: "Fashion",
+    noProducts: "No active listings found in this category.",
+    inspectInApp: "View Details",
+    trustedBusinessesTag: "TRUSTED BUSINESSES",
+    storesTitle: "TRNC Verified Corporate Stores",
+    storesSub: "Official verified stores approved by AdaBazar verification system",
+    verifiedBadge: "VERIFIED STORE",
+    whyUsTag: "WHY CHOOSE US?",
+    whyUsTitle: "AdaBazar Advantages",
+    feat1Title: "Free Listing in 30 Seconds",
+    feat1Desc: "Snap photos, set price, and publish your ad to thousands of buyers in seconds.",
+    feat2Title: "Verified Businesses",
+    feat2Desc: "Shop with confidence from verified corporate stores across Northern Cyprus.",
+    feat3Title: "Direct Communication",
+    feat3Desc: "Connect directly with buyers and sellers via WhatsApp or phone with zero commission.",
+    bannerTitle: "The Island in Your Pocket! Download Now",
+    bannerDesc: "Download AdaBazar mobile app for iOS or Android to browse listings or publish your ads instantly.",
+    downloadAppStore: "Download on App Store",
+    downloadPlayStore: "Get it on Google Play",
+    footerRights: "© 2026 AdaBazar C2C & B2B Marketplace Platform. All rights reserved.",
+    modalLoginTitle: "Corporate Portal Login",
+    modalLoginSub: "Access your Store or Management dashboard",
+    emailLabel: "Email Address",
+    passLabel: "Password",
+    btnSigningIn: "Logging in...",
+    btnSignIn: "Sign In",
+    modalQrTitle: "Download the App",
+    modalQrSub: "Scan the QR code with your phone camera to instantly download AdaBazar app.",
+    btnClose: "Close",
+    modalApplyTitle: "Corporate Store Application",
+    modalApplySub: "Register your business on AdaBazar",
+    modalApplySuccessTitle: "Application Received!",
+    modalApplySuccessSub: "Our team will contact you shortly to assign your store login credentials.",
+    formStoreName: "Business / Store Name *",
+    formCity: "City *",
+    formSector: "Sector *",
+    formPhone: "Contact Phone *",
+    formNotes: "Additional Notes (Optional)",
+    btnSubmitting: "Submitting...",
+    btnSubmitApply: "Submit Application",
+    sectorRealEstate: "Real Estate",
+    sectorAuto: "Auto & Vehicles",
+    sectorElectronics: "Tech & Electronics",
+    sectorFashion: "Fashion & Clothing",
+    sectorOther: "Other Services"
+  },
+  ru: {
+    announcement: "Мобильное приложение AdaBazar запущено! Платформа №1 на ТРСК",
+    downloadNow: "Скачать сейчас →",
+    subTitle: "КИПРСКИЙ МАРКЕТПЛЕЙС",
+    navHome: "Главная",
+    navProducts: "Объявления",
+    navStores: "Магазины",
+    navWhyUs: "Почему мы?",
+    storeApply: "Заявка магазина",
+    corporateLogin: "Вход для бизнеса",
+    goToPortal: "В портал",
+    logout: "Выйти",
+    badgeVerified: "Проверенная локальная платформа Северного Кипра",
+    heroTitleLine1: "Покупайте и продавайте на Кипре",
+    heroTitleLine2: "Весь остров в вашем кармане!",
+    heroDesc: "Недвижимость, авто, б/у товары и лучшие проверенные магазины Северного Кипра на AdaBazar. Размещайте объявления и общайтесь напрямую без комиссий.",
+    btnDownloadApp: "Скачать приложение",
+    btnBecomeStore: "Стать магазином",
+    statDownloads: "Скачиваний",
+    statListings: "Активных объявлений",
+    statStores: "Проверенных магазинов",
+    liveFeedTag: "ПРЯМОЙ ЭФИР",
+    liveFeedTitle: "Актуальные объявления",
+    catAll: "Все",
+    catRealEstate: "Недвижимость",
+    catAuto: "Авто",
+    catElectronics: "Электроника",
+    catFashion: "Мода",
+    noProducts: "В этой категории пока нет объявлений.",
+    inspectInApp: "Подробнее",
+    trustedBusinessesTag: "ПРОВЕРЕННЫЙ БИЗНЕС",
+    storesTitle: "Проверенные магазины ТРСК",
+    storesSub: "Официальные компании, прошедшие верификацию AdaBazar",
+    verifiedBadge: "ПРОВЕРЕННЫЙ МАГАЗИН",
+    whyUsTag: "ПОЧЕМУ МЫ?",
+    whyUsTitle: "Преимущества AdaBazar",
+    feat1Title: "Бесплатное объявление за 30 сек",
+    feat1Desc: "Сделайте фото, укажите цену и опубликуйте объявление за считанные секунды.",
+    feat2Title: "Проверенные компании",
+    feat2Desc: "Покупайте с уверенностью у официальных магазинов по всему Северному Кипру.",
+    feat3Title: "Прямая связь",
+    feat3Desc: "Общайтесь с продавцами напрямую в WhatsApp или по телефону без посредников.",
+    bannerTitle: "Весь остров в вашем кармане! Скачайте сейчас",
+    bannerDesc: "Загрузите приложение AdaBazar для iOS или Android, чтобы просматривать объявления или продавать свои товары.",
+    downloadAppStore: "Скачать в App Store",
+    downloadPlayStore: "Скачать в Google Play",
+    footerRights: "© 2026 Маркетплейс AdaBazar C2C & B2B. Все права защищены.",
+    modalLoginTitle: "Вход в бизнес-портал",
+    modalLoginSub: "Доступ к панели управления магазина",
+    emailLabel: "Электронная почта",
+    passLabel: "Пароль",
+    btnSigningIn: "Вход...",
+    btnSignIn: "Войти",
+    modalQrTitle: "Скачать приложение",
+    modalQrSub: "Отсканируйте QR-код камерой телефона, чтобы установить приложение AdaBazar.",
+    btnClose: "Закрыть",
+    modalApplyTitle: "Заявка для магазинов",
+    modalApplySub: "Зарегистрируйте свой бизнес на AdaBazar",
+    modalApplySuccessTitle: "Заявка принята!",
+    modalApplySuccessSub: "Наша команда свяжется с вами в ближайшее время для предоставления доступа.",
+    formStoreName: "Название компании / магазина *",
+    formCity: "Город *",
+    formSector: "Сфера деятельности *",
+    formPhone: "Контактный телефон *",
+    formNotes: "Дополнительные примечания",
+    btnSubmitting: "Отправка...",
+    btnSubmitApply: "Отправить заявку",
+    sectorRealEstate: "Недвижимость",
+    sectorAuto: "Автомобили",
+    sectorElectronics: "Электроника и техника",
+    sectorFashion: "Одежда и мода",
+    sectorOther: "Другие услуги"
+  }
+};
+
 export default function LandingPage() {
   const { user, profile, loginWithEmail, logout } = useAuth();
+
+  // Language state (tr | en | ru)
+  const [lang, setLang] = useState<'tr' | 'en' | 'ru'>('tr');
+  const t = TRANSLATIONS[lang];
 
   const [products, setProducts] = useState<any[]>([]);
   const [stores, setStores] = useState<any[]>([]);
@@ -45,9 +272,6 @@ export default function LandingPage() {
   const [showQrModal, setShowQrModal] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-
-  // Phone Mockup Active Slide State (0..4)
-  const [phoneSlide, setPhoneSlide] = useState(0);
 
   // Portal Login Form State
   const [loginEmail, setLoginEmail] = useState('');
@@ -69,14 +293,6 @@ export default function LandingPage() {
     profile?.storeStatus === 'approved' || 
     profile?.role === 'store' ||
     profile?.isVerifiedStore === true;
-
-  // Phone Carousel Auto-play (every 3.5 seconds)
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setPhoneSlide((prev) => (prev + 1) % 5);
-    }, 3500);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -156,22 +372,14 @@ export default function LandingPage() {
     return matchesCat && matchesSearch;
   });
 
-  const slideScreens = [
-    { id: 'home', image: '/app-screens/home.png', title: 'Ana Sayfa Vitrini', desc: 'Canlı İlan Akışı' },
-    { id: 'profile', image: '/app-screens/profile.png', title: 'İlan & Satıcı Profili', desc: 'Aracısız İletişim' },
-    { id: 'verify', image: '/app-screens/verify.png', title: 'Onaylı Mağazalar', desc: 'Doğrulanmış İşletmeler' },
-    { id: 'addlist', image: '/app-screens/addlist.png', title: 'Hızlı İlan Verme', desc: '30 Saniyede Foto Paylaş' },
-    { id: 'message', image: '/app-screens/message.png', title: 'Canlı Mesajlaşma', desc: 'Anlık Chat' },
-  ];
-
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-600 selection:text-white">
       {/* 🌟 TOP ANNOUNCEMENT BAR */}
       <div className="bg-gradient-to-r from-emerald-700 via-teal-700 to-emerald-800 text-white py-2 px-4 text-center text-xs font-bold flex items-center justify-center gap-2 shadow-sm">
         <Sparkles className="w-4 h-4 animate-pulse text-emerald-200" />
-        <span>AdaBazar Mobil Uygulaması Canlıda! KKTC'nin 1 Numaralı İlan & Kurumsal Mağaza Platformu</span>
+        <span>{t.announcement}</span>
         <a href="#download" className="underline hover:text-emerald-200 transition-colors ml-2 font-black">
-          Hemen İndir →
+          {t.downloadNow}
         </a>
       </div>
 
@@ -182,23 +390,45 @@ export default function LandingPage() {
             <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-10 h-10 rounded-2xl object-contain shadow-md" />
             <div>
               <span className="text-lg font-black tracking-tight text-slate-900 block">AdaBazar</span>
-              <span className="text-[10px] font-bold text-emerald-600 block -mt-1 tracking-wider uppercase">KIBRIS MARKETPLACE</span>
+              <span className="text-[10px] font-bold text-emerald-600 block -mt-1 tracking-wider uppercase">{t.subTitle}</span>
             </div>
           </div>
 
           <nav className="hidden md:flex items-center gap-8 text-xs font-bold text-slate-600">
-            <a href="#hero" className="hover:text-emerald-600 transition-colors">Ana Sayfa</a>
-            <a href="#products" className="hover:text-emerald-600 transition-colors">Canlı İlanlar</a>
-            <a href="#stores" className="hover:text-emerald-600 transition-colors">Kurumsal Mağazalar</a>
-            <a href="#features" className="hover:text-emerald-600 transition-colors">Neden AdaBazar?</a>
+            <a href="#hero" className="hover:text-emerald-600 transition-colors">{t.navHome}</a>
+            <a href="#products" className="hover:text-emerald-600 transition-colors">{t.navProducts}</a>
+            <a href="#stores" className="hover:text-emerald-600 transition-colors">{t.navStores}</a>
+            <a href="#features" className="hover:text-emerald-600 transition-colors">{t.navWhyUs}</a>
           </nav>
 
           <div className="flex items-center gap-3">
+            {/* 🌐 LANGUAGE SELECTOR (TR | EN | RU) */}
+            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+              <button
+                onClick={() => setLang('tr')}
+                className={`px-2 py-1 rounded-lg transition-all ${lang === 'tr' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
+              >
+                TR
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2 py-1 rounded-lg transition-all ${lang === 'en' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => setLang('ru')}
+                className={`px-2 py-1 rounded-lg transition-all ${lang === 'ru' ? 'bg-white text-emerald-700 shadow-sm font-black' : 'text-slate-500 hover:text-slate-900'}`}
+              >
+                RU
+              </button>
+            </div>
+
             <button
               onClick={() => setShowApplyModal(true)}
               className="hidden sm:flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-emerald-700 border border-emerald-600/20 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm"
             >
-              <span>Mağaza Başvurusu</span>
+              <span>{t.storeApply}</span>
             </button>
 
             {user ? (
@@ -208,13 +438,13 @@ export default function LandingPage() {
                   className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-emerald-600/20 flex items-center gap-1.5"
                 >
                   <User className="w-4 h-4" />
-                  <span>Portala Git ({profile?.displayName || 'Giriş Yapıldı'}) →</span>
+                  <span>{t.goToPortal} ({profile?.displayName || 'Active'}) →</span>
                 </a>
                 <button
                   onClick={logout}
                   className="bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 text-xs font-bold px-3 py-2.5 rounded-xl border border-slate-200 transition-colors"
                 >
-                  Çıkış
+                  {t.logout}
                 </button>
               </div>
             ) : (
@@ -223,7 +453,7 @@ export default function LandingPage() {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-md shadow-emerald-600/20 flex items-center gap-1.5"
               >
                 <Lock className="w-4 h-4" />
-                <span>Kurumsal Giriş</span>
+                <span>{t.corporateLogin}</span>
               </button>
             )}
           </div>
@@ -240,19 +470,18 @@ export default function LandingPage() {
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-4 py-2 rounded-full shadow-sm">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
-              <span>KKTC'nin Doğrulanmış Yerel Pazaryeri Platformu</span>
+              <span>{t.badgeVerified}</span>
             </div>
 
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-tight tracking-tight">
-              Kıbrıs'ta Al, Sat, Keşfet <br />
+              {t.heroTitleLine1} <br />
               <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 bg-clip-text text-transparent">
-                Tüm Ada Cebinde!
+                {t.heroTitleLine2}
               </span>
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed mx-auto lg:mx-0 font-medium">
-              Emlak, vasıta, ikinci el eşyalar ve KKTC'nin seçkin kurumsal mağazaları AdaBazar'da buluşuyor.
-              Aracısız, hızlı ve %100 doğrudan iletişim ile ilan verin veya hayalinizdeki ürünü bulun.
+              {t.heroDesc}
             </p>
 
             {/* Action Buttons */}
@@ -262,14 +491,14 @@ export default function LandingPage() {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm px-6 py-3.5 rounded-2xl transition-all shadow-xl shadow-emerald-600/25 flex items-center gap-2.5 hover:scale-105"
               >
                 <Download className="w-5 h-5" />
-                <span>Uygulamayı Hemen İndir</span>
+                <span>{t.btnDownloadApp}</span>
               </button>
 
               <button
                 onClick={() => setShowApplyModal(true)}
                 className="bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-sm px-6 py-3.5 rounded-2xl transition-all shadow-sm flex items-center gap-2 hover:scale-105"
               >
-                <span>Kurumsal Mağaza Ol</span>
+                <span>{t.btnBecomeStore}</span>
               </button>
             </div>
 
@@ -277,15 +506,15 @@ export default function LandingPage() {
             <div className="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0">
               <div>
                 <p className="text-2xl sm:text-3xl font-black text-slate-900">10.000+</p>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">Mobil İndirme</p>
+                <p className="text-xs font-bold text-slate-500 mt-0.5">{t.statDownloads}</p>
               </div>
               <div>
                 <p className="text-2xl sm:text-3xl font-black text-emerald-600">500+</p>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">Aktif İlan</p>
+                <p className="text-xs font-bold text-slate-500 mt-0.5">{t.statListings}</p>
               </div>
               <div>
                 <p className="text-2xl sm:text-3xl font-black text-slate-900">50+</p>
-                <p className="text-xs font-bold text-slate-500 mt-0.5">Onaylı Mağaza</p>
+                <p className="text-xs font-bold text-slate-500 mt-0.5">{t.statStores}</p>
               </div>
             </div>
           </div>
@@ -306,18 +535,18 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
-              <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">CANLI İLAN AKIŞI</span>
-              <h2 className="text-3xl font-black text-slate-900">Platformdaki Güncel İlanlar</h2>
+              <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">{t.liveFeedTag}</span>
+              <h2 className="text-3xl font-black text-slate-900">{t.liveFeedTitle}</h2>
             </div>
 
             {/* Category Selector */}
             <div className="flex flex-wrap gap-2">
               {[
-                { id: 'all', label: 'Tüm İlanlar' },
-                { id: 'real_estate', label: 'Emlak' },
-                { id: 'auto', label: 'Vasıta' },
-                { id: 'electronics', label: 'Elektronik' },
-                { id: 'fashion', label: 'Moda' },
+                { id: 'all', label: t.catAll },
+                { id: 'real_estate', label: t.catRealEstate },
+                { id: 'auto', label: t.catAuto },
+                { id: 'electronics', label: t.catElectronics },
+                { id: 'fashion', label: t.catFashion },
               ].map(cat => (
                 <button
                   key={cat.id}
@@ -338,7 +567,7 @@ export default function LandingPage() {
           {filteredProducts.length === 0 ? (
             <div className="text-center py-12 bg-slate-50 border border-slate-200 rounded-3xl p-8 space-y-3">
               <ShoppingBag className="w-12 h-12 text-slate-400 mx-auto" />
-              <p className="text-sm font-bold text-slate-600">Bu kategoride gösterilecek canlı ilan bulunuyor.</p>
+              <p className="text-sm font-bold text-slate-600">{t.noProducts}</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -369,7 +598,7 @@ export default function LandingPage() {
                       className="w-full bg-slate-50 hover:bg-emerald-600 hover:text-white text-emerald-700 border border-emerald-600/30 text-[11px] font-bold py-2 rounded-lg transition-all flex items-center justify-center gap-1 mt-1"
                     >
                       <Smartphone className="w-3.5 h-3.5" />
-                      <span>İncele</span>
+                      <span>{t.inspectInApp}</span>
                     </button>
                   </div>
                 </div>
@@ -383,9 +612,9 @@ export default function LandingPage() {
       <section id="stores" className="py-16 px-6 bg-slate-50/60 border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">GÜVENİLİR İŞLETMELER</span>
-            <h2 className="text-3xl font-black text-slate-900">KKTC Onaylı Kurumsal Mağazalar</h2>
-            <p className="text-xs text-slate-500">AdaBazar doğrulama sisteminden geçmiş resmi işletmeler</p>
+            <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">{t.trustedBusinessesTag}</span>
+            <h2 className="text-3xl font-black text-slate-900">{t.storesTitle}</h2>
+            <p className="text-xs text-slate-500">{t.storesSub}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -405,7 +634,7 @@ export default function LandingPage() {
                         <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                       </h3>
                       <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full inline-block mt-1 border border-emerald-200">
-                        ONAYLI MAĞAZA
+                        {t.verifiedBadge}
                       </span>
                     </div>
                   </div>
@@ -433,8 +662,8 @@ export default function LandingPage() {
       <section id="features" className="py-16 px-6 bg-white border-b border-slate-200/80">
         <div className="max-w-7xl mx-auto space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-2">
-            <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">NEDEN BİZ?</span>
-            <h2 className="text-3xl font-black text-slate-900">AdaBazar Avantajları</h2>
+            <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">{t.whyUsTag}</span>
+            <h2 className="text-3xl font-black text-slate-900">{t.whyUsTitle}</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -442,9 +671,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center text-emerald-700">
                 <Zap className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">30 Saniyede Ücretsiz İlan</h3>
+              <h3 className="text-lg font-bold text-slate-900">{t.feat1Title}</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Fotoğrafını çek, fiyatını belirle ve ilanını saniyeler içinde binlerce alıcıya ulaştır.
+                {t.feat1Desc}
               </p>
             </div>
 
@@ -452,9 +681,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-teal-100 border border-teal-200 flex items-center justify-center text-teal-700">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Doğrulanmış Mağazalar</h3>
+              <h3 className="text-lg font-bold text-slate-900">{t.feat2Title}</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                KKTC genelindeki güvenilir kurumsal işletmelerden güvenle alışveriş yapın.
+                {t.feat2Desc}
               </p>
             </div>
 
@@ -462,9 +691,9 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-blue-100 border border-blue-200 flex items-center justify-center text-blue-700">
                 <MessageCircle className="w-6 h-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Doğrudan İletişim</h3>
+              <h3 className="text-lg font-bold text-slate-900">{t.feat3Title}</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                WhatsApp veya telefon ile aracısız, komisyonsuz doğrudan alıcı ve satıcıyla görüşün.
+                {t.feat3Desc}
               </p>
             </div>
           </div>
@@ -475,9 +704,9 @@ export default function LandingPage() {
       <section id="download" className="py-20 px-6 relative overflow-hidden bg-slate-50">
         <div className="max-w-5xl mx-auto bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white rounded-[40px] p-8 sm:p-12 text-center space-y-6 shadow-2xl relative">
           <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-16 h-16 rounded-3xl object-contain mx-auto shadow-lg bg-white p-1" />
-          <h2 className="text-3xl sm:text-4xl font-black text-white">Tüm Ada Cebinde! Hemen İndir</h2>
+          <h2 className="text-3xl sm:text-4xl font-black text-white">{t.bannerTitle}</h2>
           <p className="text-xs sm:text-sm text-slate-200 max-w-xl mx-auto leading-relaxed">
-            AdaBazar mobil uygulamasını iOS veya Android cihazınıza indirerek ilanları inceleyin veya hemen ilan yayınlayın.
+            {t.bannerDesc}
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -486,7 +715,7 @@ export default function LandingPage() {
               className="bg-white text-slate-950 font-black text-sm px-6 py-3.5 rounded-2xl shadow-lg flex items-center gap-2 hover:bg-slate-100 transition-colors"
             >
               <Smartphone className="w-5 h-5 text-emerald-700" />
-              <span>iOS App Store'dan İndir</span>
+              <span>{t.downloadAppStore}</span>
             </button>
 
             <button
@@ -494,7 +723,7 @@ export default function LandingPage() {
               className="bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm px-6 py-3.5 rounded-2xl shadow-lg flex items-center gap-2 transition-colors border border-emerald-400/30"
             >
               <Download className="w-5 h-5" />
-              <span>Google Play'den İndir</span>
+              <span>{t.downloadPlayStore}</span>
             </button>
           </div>
         </div>
@@ -508,11 +737,11 @@ export default function LandingPage() {
             <span className="font-bold text-slate-900 text-sm">AdaBazar KKTC</span>
           </div>
 
-          <p>© 2026 AdaBazar C2C & B2B İlan Platformu. Tüm hakları saklıdır.</p>
+          <p>{t.footerRights}</p>
 
           <div className="flex items-center gap-6">
-            <button onClick={() => setShowLoginModal(true)} className="hover:text-emerald-600 font-bold transition-colors">Kurumsal Giriş</button>
-            <button onClick={() => setShowApplyModal(true)} className="hover:text-emerald-600 font-bold transition-colors">Mağaza Başvurusu</button>
+            <button onClick={() => setShowLoginModal(true)} className="hover:text-emerald-600 font-bold transition-colors">{t.corporateLogin}</button>
+            <button onClick={() => setShowApplyModal(true)} className="hover:text-emerald-600 font-bold transition-colors">{t.storeApply}</button>
           </div>
         </div>
       </footer>
@@ -532,15 +761,15 @@ export default function LandingPage() {
               <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
                 <Lock className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-black text-slate-900">Kurumsal Portal Girişi</h3>
-              <p className="text-xs text-slate-500">Mağaza veya Yönetim panelinize erişin</p>
+              <h3 className="text-xl font-black text-slate-900">{t.modalLoginTitle}</h3>
+              <p className="text-xs text-slate-500">{t.modalLoginSub}</p>
             </div>
 
             <form onSubmit={handlePortalLogin} className="space-y-4 text-left">
               {loginError && <p className="text-xs text-rose-600 font-bold text-center bg-rose-50 p-2.5 rounded-xl border border-rose-200">{loginError}</p>}
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700">E-posta Adresi</label>
+                <label className="text-xs font-bold text-slate-700">{t.emailLabel}</label>
                 <input
                   type="email"
                   value={loginEmail}
@@ -552,7 +781,7 @@ export default function LandingPage() {
               </div>
 
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-700">Şifre</label>
+                <label className="text-xs font-bold text-slate-700">{t.passLabel}</label>
                 <input
                   type="password"
                   value={loginPassword}
@@ -568,7 +797,7 @@ export default function LandingPage() {
                 disabled={loginSubmitting}
                 className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5"
               >
-                <span>{loginSubmitting ? 'Giriş Yapılıyor...' : 'Giriş Yap'}</span>
+                <span>{loginSubmitting ? t.btnSigningIn : t.btnSignIn}</span>
               </button>
             </form>
           </div>
@@ -588,9 +817,9 @@ export default function LandingPage() {
             <div className="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-2xl flex items-center justify-center mx-auto border border-emerald-200">
               <QrCode className="w-6 h-6" />
             </div>
-            <h3 className="text-xl font-black text-slate-900">Uygulamayı İndirin</h3>
+            <h3 className="text-xl font-black text-slate-900">{t.modalQrTitle}</h3>
             <p className="text-xs text-slate-500">
-              Telefonunuzun kamerasını QR koda tutarak AdaBazar uygulamasını hemen yükleyebilirsiniz.
+              {t.modalQrSub}
             </p>
             <div className="w-48 h-48 bg-slate-50 border border-slate-200 rounded-2xl mx-auto p-3 flex items-center justify-center shadow-inner">
               <img
@@ -603,7 +832,7 @@ export default function LandingPage() {
               onClick={() => setShowQrModal(false)}
               className="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs py-3 rounded-xl transition-colors"
             >
-              Kapat
+              {t.btnClose}
             </button>
           </div>
         </div>
@@ -625,21 +854,21 @@ export default function LandingPage() {
                 <Building2 className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-black text-slate-900">Kurumsal Mağaza Başvurusu</h3>
-                <p className="text-xs text-slate-500">İşletmenizi AdaBazar'a dahil edin</p>
+                <h3 className="text-lg font-black text-slate-900">{t.modalApplyTitle}</h3>
+                <p className="text-xs text-slate-500">{t.modalApplySub}</p>
               </div>
             </div>
 
             {appSubmitted ? (
               <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center space-y-2 text-emerald-800">
                 <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto animate-bounce" />
-                <p className="font-bold text-sm">Başvurunuz Alındı!</p>
-                <p className="text-xs text-slate-600">Ekibimiz en kısa sürede sizinle iletişime geçip web giriş bilgilerinizi tanımlayacaktır.</p>
+                <p className="font-bold text-sm">{t.modalApplySuccessTitle}</p>
+                <p className="text-xs text-slate-600">{t.modalApplySuccessSub}</p>
               </div>
             ) : (
               <form onSubmit={handleApplySubmit} className="space-y-4 text-left">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700">İşletme / Mağaza Adı *</label>
+                  <label className="text-xs font-bold text-slate-700">{t.formStoreName}</label>
                   <input
                     type="text"
                     value={appName}
@@ -652,7 +881,7 @@ export default function LandingPage() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-700">Şehir *</label>
+                    <label className="text-xs font-bold text-slate-700">{t.formCity}</label>
                     <select
                       value={appCity}
                       onChange={(e) => setAppCity(e.target.value)}
@@ -665,23 +894,23 @@ export default function LandingPage() {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-bold text-slate-700">Sektör *</label>
+                    <label className="text-xs font-bold text-slate-700">{t.formSector}</label>
                     <select
                       value={appSector}
                       onChange={(e) => setAppSector(e.target.value)}
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-xs text-slate-900 focus:outline-none focus:border-emerald-600"
                     >
-                      <option value="real_estate">Emlak & Gayrimenkul</option>
-                      <option value="auto">Oto Galeri & Vasıta</option>
-                      <option value="electronics">Teknoloji & Elektronik</option>
-                      <option value="fashion">Giyim & Moda</option>
-                      <option value="other">Diğer Hizmet</option>
+                      <option value="real_estate">{t.sectorRealEstate}</option>
+                      <option value="auto">{t.sectorAuto}</option>
+                      <option value="electronics">{t.sectorElectronics}</option>
+                      <option value="fashion">{t.sectorFashion}</option>
+                      <option value="other">{t.sectorOther}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700">İletişim Telefonu *</label>
+                  <label className="text-xs font-bold text-slate-700">{t.formPhone}</label>
                   <input
                     type="text"
                     value={appPhone}
@@ -693,12 +922,12 @@ export default function LandingPage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-700">Ek Notlar (İsteğe Bağlı)</label>
+                  <label className="text-xs font-bold text-slate-700">{t.formNotes}</label>
                   <textarea
                     rows={2}
                     value={appNotes}
                     onChange={(e) => setAppNotes(e.target.value)}
-                    placeholder="İlan sayınız veya talebiniz..."
+                    placeholder="..."
                     className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2 text-xs text-slate-900 focus:outline-none focus:border-emerald-600 resize-none"
                   />
                 </div>
@@ -709,7 +938,7 @@ export default function LandingPage() {
                   className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs py-3 rounded-xl transition-all shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5"
                 >
                   <Send className="w-4 h-4" />
-                  <span>{appLoading ? 'Gönderiliyor...' : 'Başvuruyu Gönder'}</span>
+                  <span>{appLoading ? t.btnSubmitting : t.btnSubmitApply}</span>
                 </button>
               </form>
             )}
