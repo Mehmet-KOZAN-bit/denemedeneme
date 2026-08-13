@@ -644,47 +644,33 @@ export default function LandingPage() {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
               const city = s.storeInfo?.city || s.city || 'Lefkoşa / KKTC';
-              const phone = s.storeInfo?.phone || s.phone || '';
               const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
                 <div
                   key={s.id}
-                  className="w-48 h-48 sm:w-52 sm:h-52 bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-2xl p-4 flex flex-col items-center justify-between text-center shadow-sm hover:shadow-md transition-all group shrink-0"
+                  className="w-48 h-48 sm:w-52 sm:h-52 bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-2xl p-5 flex flex-col items-center justify-center text-center shadow-sm hover:shadow-md transition-all group shrink-0"
                 >
                   {/* Top: Store Logo */}
-                  <div className="relative">
-                    <img src={logo} alt={name} className="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl object-cover border border-slate-100 shadow-sm group-hover:scale-105 transition-transform" />
+                  <div className="relative mb-3">
+                    <img src={logo} alt={name} className="w-16 h-16 rounded-2xl object-cover border border-slate-100 shadow-sm group-hover:scale-105 transition-transform" />
                     <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
-                      <Check className="w-2 h-2 stroke-[3]" />
+                      <Check className="w-2.5 h-2.5 stroke-[3]" />
                     </div>
                   </div>
 
                   {/* Middle: Store Name & Details */}
-                  <div className="space-y-0.5">
-                    <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center justify-center gap-1">
+                  <div className="space-y-1">
+                    <h3 className="font-extrabold text-sm text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center justify-center gap-1">
                       <span>{name}</span>
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                     </h3>
-                    <p className="text-[10px] text-slate-500 font-medium line-clamp-1">{sector}</p>
-                    <div className="flex items-center justify-center gap-1 text-[10px] text-slate-400 font-medium">
-                      <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
+                    <p className="text-xs text-slate-500 font-medium line-clamp-1">{sector}</p>
+                    <div className="flex items-center justify-center gap-1 text-xs text-slate-400 font-medium">
+                      <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                       <span>{city}</span>
                     </div>
                   </div>
-
-                  {/* Bottom: WhatsApp Action Button */}
-                  {phone && (
-                    <a
-                      href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-xs font-bold py-1.5 rounded-xl transition-colors flex items-center justify-center gap-1"
-                    >
-                      <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>WhatsApp</span>
-                    </a>
-                  )}
                 </div>
               );
             })}
@@ -699,29 +685,6 @@ export default function LandingPage() {
             <div>
               <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block mb-1">{t.liveFeedTag}</span>
               <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">{t.liveFeedTitle}</h2>
-            </div>
-
-            {/* Category Selector */}
-            <div className="flex flex-wrap gap-2">
-              {[
-                { id: 'all', label: t.catAll },
-                { id: 'real_estate', label: t.catRealEstate },
-                { id: 'auto', label: t.catAuto },
-                { id: 'electronics', label: t.catElectronics },
-                { id: 'fashion', label: t.catFashion },
-              ].map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`text-xs font-bold px-3.5 py-1.5 rounded-xl transition-all ${
-                    selectedCategory === cat.id
-                      ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/20'
-                      : 'bg-slate-100 text-slate-600 hover:text-slate-900 border border-slate-200'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
             </div>
           </div>
 
