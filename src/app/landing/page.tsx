@@ -587,19 +587,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (PLACED ABOVE PRODUCTS FEED - COMPACT & NEAT) */}
-      <section id="stores" className="py-10 px-6 bg-slate-50/70 border-b border-slate-200/80">
-        <div className="max-w-5xl mx-auto space-y-6">
-          <div className="text-center max-w-xl mx-auto space-y-1.5">
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-0.5 rounded-full uppercase tracking-wider">
-              <Building2 className="w-3.5 h-3.5 text-emerald-600" />
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (SUPER SLIM & COMPACT BAR) */}
+      <section id="stores" className="py-4 px-4 bg-slate-50/70 border-b border-slate-200/80">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <div className="text-center max-w-sm mx-auto space-y-0.5">
+            <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+              <Building2 className="w-3 h-3 text-emerald-600" />
               {t.trustedBusinessesTag}
             </span>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
-            <p className="text-xs text-slate-500 font-medium">{t.storesSub}</p>
+            <h2 className="text-base font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
           </div>
 
-          <div className="flex flex-wrap items-stretch justify-center gap-5 max-w-4xl mx-auto">
+          <div className="flex flex-wrap items-stretch justify-center gap-3.5 max-w-3xl mx-auto">
             {/* Real Registered Stores */}
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
@@ -609,31 +608,31 @@ export default function LandingPage() {
               const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
-                <div key={s.id} className="w-full sm:w-[300px] bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-2xl p-4.5 space-y-3 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <img src={logo} alt={name} className="w-11 h-11 rounded-xl object-cover border border-slate-100 shadow-sm shrink-0" />
-                        <div>
-                          <h3 className="font-extrabold text-xs sm:text-sm text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center gap-1.5">
-                            <span>{name}</span>
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <div key={s.id} className="w-full sm:w-[260px] bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-xl p-3 space-y-2 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 truncate">
+                        <img src={logo} alt={name} className="w-9 h-9 rounded-lg object-cover border border-slate-100 shadow-sm shrink-0" />
+                        <div className="truncate">
+                          <h3 className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center gap-1 truncate">
+                            <span className="truncate">{name}</span>
+                            <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
                           </h3>
-                          <p className="text-[11px] text-slate-500 font-medium">{sector}</p>
+                          <p className="text-[10px] text-slate-500 font-medium truncate">{sector}</p>
                         </div>
                       </div>
                     </div>
 
-                    <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    <span className="inline-flex items-center gap-1 text-[8px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                       {t.verifiedBadge}
                     </span>
                   </div>
 
-                  <div className="space-y-1.5 text-xs text-slate-600 pt-2.5 border-t border-slate-100">
+                  <div className="space-y-1 text-[11px] text-slate-600 pt-1.5 border-t border-slate-100">
                     <div className="flex items-center justify-between font-medium">
-                      <div className="flex items-center gap-1.5 truncate">
-                        <MapPin className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                      <div className="flex items-center gap-1 truncate">
+                        <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
                         <span className="truncate">{city}</span>
                       </div>
                       {phone && (
@@ -641,9 +640,9 @@ export default function LandingPage() {
                           href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-lg transition-colors flex items-center gap-1 shrink-0"
+                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-lg transition-colors flex items-center gap-1 shrink-0"
                         >
-                          <MessageCircle className="w-3 h-3 text-emerald-600" />
+                          <MessageCircle className="w-2.5 h-2.5 text-emerald-600" />
                           <span>WhatsApp</span>
                         </a>
                       )}
@@ -654,20 +653,22 @@ export default function LandingPage() {
             })}
 
             {/* Always Present "Mağaza Ol" CTA Card */}
-            <div className="w-full sm:w-[300px] bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-2xl p-4.5 flex flex-col justify-between space-y-3 shadow-md border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
-              <div className="space-y-1.5 relative z-10">
-                <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
-                  <Store className="w-4 h-4" />
+            <div className="w-full sm:w-[260px] bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-xl p-3 flex flex-col justify-between space-y-2 shadow-md border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
+              <div className="space-y-1 relative z-10">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-6 h-6 rounded-md bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
+                    <Store className="w-3 h-3" />
+                  </div>
+                  <h3 className="text-xs font-black text-white leading-snug">Kurumsal Mağazanızı Açın</h3>
                 </div>
-                <h3 className="text-sm font-black text-white leading-snug">Kurumsal Mağazanızı Açın</h3>
-                <p className="text-[11px] text-slate-300 leading-relaxed font-medium">
-                  KKTC genelindeki binlerce alıcıya %100 doğrudan ulaşın, komisyonsuz satış yapın.
+                <p className="text-[10px] text-slate-300 leading-relaxed font-medium">
+                  KKTC genelindeki alıcılara %100 doğrudan ulaşın.
                 </p>
               </div>
 
               <button
                 onClick={() => setShowApplyModal(true)}
-                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[11px] px-3.5 py-2 rounded-xl transition-all shadow-md flex items-center justify-center gap-1 relative z-10"
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] px-3 py-1 rounded-lg transition-all shadow-md flex items-center justify-center gap-1 relative z-10"
               >
                 <span>{t.storeApply} →</span>
               </button>
