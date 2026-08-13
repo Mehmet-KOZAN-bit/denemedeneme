@@ -687,31 +687,56 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 📲 APP DOWNLOAD BANNER */}
+      {/* 📲 APP DOWNLOAD BANNER (ULTRA-MODERN GLASSMORPHISM) */}
       <section id="download" className="py-20 px-6 relative overflow-hidden bg-slate-50">
-        <div className="max-w-5xl mx-auto bg-gradient-to-r from-emerald-800 via-teal-800 to-emerald-900 text-white rounded-[40px] p-8 sm:p-12 text-center space-y-6 shadow-2xl relative">
-          <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-16 h-16 rounded-3xl object-contain mx-auto shadow-lg bg-white p-1" />
-          <h2 className="text-3xl sm:text-4xl font-black text-white">{t.bannerTitle}</h2>
-          <p className="text-xs sm:text-sm text-slate-200 max-w-xl mx-auto leading-relaxed">
-            {t.bannerDesc}
-          </p>
+        <div className="max-w-5xl mx-auto bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 border border-emerald-500/30 text-white rounded-[44px] p-10 sm:p-14 text-center space-y-8 shadow-2xl relative overflow-hidden">
+          {/* Ambient Glow Circles */}
+          <div className="absolute -top-20 -left-20 w-64 h-64 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-teal-500/20 rounded-full blur-3xl pointer-events-none" />
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
-            <button
-              onClick={() => setShowQrModal(true)}
-              className="bg-white text-slate-950 font-black text-sm px-6 py-3.5 rounded-2xl shadow-lg flex items-center gap-2 hover:bg-slate-100 transition-colors"
-            >
-              <Smartphone className="w-5 h-5 text-emerald-700" />
-              <span>{t.downloadAppStore}</span>
-            </button>
+          <div className="relative z-10 space-y-6">
+            <div className="w-20 h-20 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 p-2 mx-auto shadow-2xl flex items-center justify-center">
+              <img src="/yeniikon.png" alt="AdaBazar Logo" className="w-full h-full object-contain" />
+            </div>
 
-            <button
-              onClick={() => setShowQrModal(true)}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm px-6 py-3.5 rounded-2xl shadow-lg flex items-center gap-2 transition-colors border border-emerald-400/30"
-            >
-              <Download className="w-5 h-5" />
-              <span>{t.downloadPlayStore}</span>
-            </button>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">{t.bannerTitle}</h2>
+            <p className="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto leading-relaxed font-medium">
+              {t.bannerDesc}
+            </p>
+
+            {/* Official Store Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-5 pt-4">
+              {/* Apple App Store Button */}
+              <button
+                onClick={() => setShowQrModal(true)}
+                className="bg-slate-950/90 hover:bg-slate-900 border border-slate-700/90 hover:border-emerald-500/50 text-white px-6 py-3.5 rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-3.5 group text-left"
+              >
+                <svg className="w-8 h-8 fill-current text-white shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.86c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.61.71-1.14 1.86-1 2.97 1.08.08 2.15-.56 2.81-1.37z" />
+                </svg>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">App Store</span>
+                  <span className="text-sm font-black text-white block leading-tight">{t.downloadAppStore}</span>
+                </div>
+              </button>
+
+              {/* Google Play Store Button */}
+              <button
+                onClick={() => setShowQrModal(true)}
+                className="bg-slate-950/90 hover:bg-slate-900 border border-slate-700/90 hover:border-emerald-500/50 text-white px-6 py-3.5 rounded-2xl transition-all shadow-xl hover:scale-105 flex items-center gap-3.5 group text-left"
+              >
+                <svg className="w-8 h-8 shrink-0 group-hover:scale-110 transition-transform" viewBox="0 0 24 24">
+                  <path fill="#410593" d="M3.609 1.814L13.792 12 3.61 22.186A2.37 2.37 0 0 1 3 20.57V3.43c0-.623.23-1.22.609-1.616z"/>
+                  <path fill="#00e5ff" d="M17.07 8.72l-3.278 3.28 3.278 3.28 3.708-2.126a1.44 1.44 0 0 0 0-2.308z"/>
+                  <path fill="#ff3a44" d="M3.609 1.814l10.183 10.186 3.278-3.28-11.89-6.816a1.44 1.44 0 0 0-1.571.91z"/>
+                  <path fill="#00e676" d="M3.609 22.186l11.89-6.816-3.278-3.28L2.038 22.276a1.44 1.44 0 0 0 1.571-.09z"/>
+                </svg>
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider text-slate-400 block font-bold">Google Play</span>
+                  <span className="text-sm font-black text-white block leading-tight">{t.downloadPlayStore}</span>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </section>
