@@ -766,58 +766,77 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 📦 İÇERİDE NE VAR? (WHAT'S INSIDE SHOWCASE) */}
-      <section id="inside" className="py-16 px-6 bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      {/* 📦 İÇERİDE NE VAR? (ULTRA-MODERN LIGHT SHOWCASE) */}
+      <section id="inside" className="py-16 px-6 bg-gradient-to-b from-slate-50 via-emerald-50/40 to-slate-50 border-b border-slate-200/80 relative overflow-hidden">
+        {/* Glow ambient background accents */}
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
+
         <div className="max-w-6xl mx-auto space-y-10 relative z-10">
           <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-full uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
+            <span className="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-800 bg-emerald-100/80 border border-emerald-200/90 px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
+              <Sparkles className="w-3.5 h-3.5 text-emerald-600" />
               AdaBazaar Dünyası
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">İçeride Ne Var?</h2>
-            <p className="text-xs sm:text-sm text-slate-400">KKTC genelinde ihtiyacınız olan tüm kategoriler ve dijital hizmetler AdaBazaar'da!</p>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">İçeride Ne Var?</h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">KKTC genelinde ihtiyacınız olan tüm kategoriler ve dijital hizmetler AdaBazaar'da!</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition-transform">
+            {/* Card 1: Emlak */}
+            <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
                 🏡
               </div>
-              <h3 className="text-base font-black text-white">Emlak & Gayrimenkul</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                KKTC genelinde satılık/kiralık daireler, villalar, arsalar ve iş yerleri.
-              </p>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Emlak & Gayrimenkul</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  KKTC genelinde satılık/kiralık daireler, villalar, arsalar ve iş yerleri.
+                </p>
+              </div>
             </div>
 
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 text-2xl group-hover:scale-110 transition-transform">
+            {/* Card 2: Vasıta */}
+            <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center text-2xl shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform duration-300">
                 🚗
               </div>
-              <h3 className="text-base font-black text-white">Vasıta & Oto Galeri</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                Sahibinden ve KKTC onaylı galerilerden temiz ikinci el araçlar.
-              </p>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Vasıta & Oto Galeri</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  Sahibinden ve KKTC onaylı galerilerden temiz ikinci el araçlar.
+                </p>
+              </div>
             </div>
 
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl group-hover:scale-110 transition-transform">
+            {/* Card 3: Elektronik */}
+            <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
                 📱
               </div>
-              <h3 className="text-base font-black text-white">Elektronik & İkinci El</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                Telefon, bilgisayar, ev eşyaları ve giyim ilanları kapınızda.
-              </p>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Elektronik & İkinci El</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  Telefon, bilgisayar, ev eşyaları ve giyim ilanları kapınızda.
+                </p>
+              </div>
             </div>
 
-            <div className="bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 space-y-3 hover:border-emerald-500/50 transition-all group">
-              <div className="w-12 h-12 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 text-2xl group-hover:scale-110 transition-transform">
+            {/* Card 4: İletişim */}
+            <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center text-2xl shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform duration-300">
                 🤝
               </div>
-              <h3 className="text-base font-black text-white">%100 Doğrudan İletişim</h3>
-              <p className="text-xs text-slate-400 leading-relaxed font-medium">
-                Sıfır komisyon, sıfır aracı. Satıcı ile doğrudan WhatsApp veya arama ile görüşün.
-              </p>
+              <div className="space-y-1.5">
+                <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">%100 Doğrudan İletişim</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-medium">
+                  Sıfır komisyon, sıfır aracı. Satıcı ile doğrudan WhatsApp veya arama ile görüşün.
+                </p>
+              </div>
             </div>
           </div>
         </div>
