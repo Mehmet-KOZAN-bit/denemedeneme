@@ -198,7 +198,6 @@ export default function LandingPage() {
               onClick={() => setShowApplyModal(true)}
               className="hidden sm:flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-emerald-700 border border-emerald-600/20 text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm"
             >
-              <Building2 className="w-4 h-4 text-emerald-600" />
               <span>Mağaza Başvurusu</span>
             </button>
 
@@ -270,7 +269,6 @@ export default function LandingPage() {
                 onClick={() => setShowApplyModal(true)}
                 className="bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-sm px-6 py-3.5 rounded-2xl transition-all shadow-sm flex items-center gap-2 hover:scale-105"
               >
-                <Building2 className="w-5 h-5 text-emerald-600" />
                 <span>Kurumsal Mağaza Ol</span>
               </button>
             </div>
@@ -294,7 +292,7 @@ export default function LandingPage() {
 
           {/* 📱 REAL APP SCREENSHOTS CAROUSEL */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center relative">
-            <div className="relative w-72 sm:w-80 h-[540px]">
+            <div className="relative w-80 sm:w-96 md:w-[410px] h-[600px] sm:h-[650px]">
               {slideScreens.map((slide, idx) => (
                 <div
                   key={slide.id}
