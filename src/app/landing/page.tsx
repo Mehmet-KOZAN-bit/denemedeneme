@@ -515,14 +515,14 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 🚀 HERO SECTION (PASTEL MESH GRADIENT & FLOATING LIVE CARD) */}
-      <section id="hero" className="relative pt-12 pb-24 px-6 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-slate-50/60 border-b border-slate-200/60">
+      {/* 🚀 HERO SECTION (OPTIMIZED PADDING & BALANCED PHONE SCALE) */}
+      <section id="hero" className="relative pt-6 sm:pt-8 pb-14 px-6 overflow-hidden bg-gradient-to-b from-emerald-500/5 via-teal-500/5 to-slate-50/60 border-b border-slate-200/60">
         {/* Glow Ambient Circles & Mesh Dots */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute top-1/3 right-10 w-[450px] h-[450px] bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
-          <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-center relative z-10">
+          <div className="lg:col-span-7 space-y-4 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold px-4 py-2 rounded-full shadow-sm">
               <ShieldCheck className="w-4 h-4 text-emerald-600" />
               <span>{t.badgeVerified}</span>
@@ -540,7 +540,7 @@ export default function LandingPage() {
             </p>
 
             {/* Official Store Buttons & Store Apply */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
               {/* Apple App Store Button */}
               <button
                 onClick={() => handleSmartDownload('ios')}
@@ -584,7 +584,7 @@ export default function LandingPage() {
 
           {/* 🖼️ HERO PHONE IMAGE - PERFECTLY SIZED FULL SCREENSHOT WITH ROUNDED CORNERS */}
           <div className="lg:col-span-5 flex justify-center items-center relative">
-            <div className="rounded-[32px] overflow-hidden shadow-2xl border-[3px] border-slate-200/90 hover:scale-105 transition-transform duration-500 max-w-[240px] sm:max-w-[270px] lg:max-w-[290px] w-full bg-white">
+            <div className="rounded-[32px] overflow-hidden shadow-2xl border-[3px] border-slate-200/90 hover:scale-105 transition-transform duration-500 max-w-[250px] sm:max-w-[285px] lg:max-w-[310px] w-full bg-white">
               <img
                 src="/hero-banner.png"
                 alt="AdaBazaar Mobil Uygulaması"
