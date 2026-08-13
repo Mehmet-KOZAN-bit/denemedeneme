@@ -587,19 +587,19 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (SUPER SLIM & COMPACT BAR) */}
-      <section id="stores" className="py-4 px-4 bg-slate-50/70 border-b border-slate-200/80">
-        <div className="max-w-4xl mx-auto space-y-3">
-          <div className="text-center max-w-sm mx-auto space-y-0.5">
-            <span className="inline-flex items-center gap-1 text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-              <Building2 className="w-3 h-3 text-emerald-600" />
+      {/* 🏢 ONAYLI KURUMSAL MAĞAZALAR (ROUNDED PILL CAPSULE SHOWCASE) */}
+      <section id="stores" className="py-4 px-4 bg-slate-50/60 border-b border-slate-200/80">
+        <div className="max-w-5xl mx-auto space-y-2.5">
+          <div className="text-center max-w-sm mx-auto flex items-center justify-center gap-2">
+            <span className="inline-flex items-center gap-1 text-[9px] font-black text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
+              <Building2 className="w-2.5 h-2.5 text-emerald-600" />
               {t.trustedBusinessesTag}
             </span>
-            <h2 className="text-base font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
+            <h2 className="text-xs sm:text-sm font-black text-slate-900 tracking-tight">{t.storesTitle}</h2>
           </div>
 
-          <div className="flex flex-wrap items-stretch justify-center gap-3.5 max-w-3xl mx-auto">
-            {/* Real Registered Stores */}
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            {/* Real Registered Stores - Rounded Capsule Cards */}
             {stores.map(s => {
               const name = s.storeInfo?.storeName || s.displayName || 'Kurumsal Mağaza';
               const logo = s.photoURL || s.storeInfo?.storeLogo || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0F766E&color=fff&size=200`;
@@ -608,71 +608,59 @@ export default function LandingPage() {
               const sector = s.storeInfo?.sector || 'Kurumsal İşletme';
 
               return (
-                <div key={s.id} className="w-full sm:w-[260px] bg-white border border-slate-200/90 hover:border-emerald-500/50 rounded-xl p-3 space-y-2 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden group flex flex-col justify-between">
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 truncate">
-                        <img src={logo} alt={name} className="w-9 h-9 rounded-lg object-cover border border-slate-100 shadow-sm shrink-0" />
-                        <div className="truncate">
-                          <h3 className="font-extrabold text-xs text-slate-900 group-hover:text-emerald-700 transition-colors flex items-center gap-1 truncate">
-                            <span className="truncate">{name}</span>
-                            <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
-                          </h3>
-                          <p className="text-[10px] text-slate-500 font-medium truncate">{sector}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <span className="inline-flex items-center gap-1 text-[8px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      {t.verifiedBadge}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1 text-[11px] text-slate-600 pt-1.5 border-t border-slate-100">
-                    <div className="flex items-center justify-between font-medium">
-                      <div className="flex items-center gap-1 truncate">
-                        <MapPin className="w-3 h-3 text-emerald-600 shrink-0" />
-                        <span className="truncate">{city}</span>
-                      </div>
-                      {phone && (
-                        <a
-                          href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[10px] font-bold px-2 py-0.5 rounded-lg transition-colors flex items-center gap-1 shrink-0"
-                        >
-                          <MessageCircle className="w-2.5 h-2.5 text-emerald-600" />
-                          <span>WhatsApp</span>
-                        </a>
-                      )}
+                <div
+                  key={s.id}
+                  className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-full px-3 py-1.5 flex items-center gap-2.5 shadow-sm hover:shadow-md transition-all duration-300 group"
+                >
+                  {/* Round Store Logo */}
+                  <div className="relative shrink-0">
+                    <img src={logo} alt={name} className="w-9 h-9 rounded-full object-cover border border-slate-100 ring-2 ring-emerald-500/20 group-hover:scale-105 transition-transform" />
+                    <div className="absolute -bottom-0.5 -right-0.5 bg-emerald-500 text-white rounded-full p-0.5 border border-white">
+                      <Check className="w-1.5 h-1.5 stroke-[3]" />
                     </div>
                   </div>
+
+                  {/* Store Name & City */}
+                  <div className="pr-1">
+                    <div className="flex items-center gap-1">
+                      <h3 className="font-black text-xs text-slate-900 group-hover:text-emerald-700 transition-colors line-clamp-1">
+                        {name}
+                      </h3>
+                      <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium">
+                      <span>{sector}</span>
+                      <span>•</span>
+                      <span className="text-slate-400">{city}</span>
+                    </div>
+                  </div>
+
+                  {/* WhatsApp Action Button */}
+                  {phone && (
+                    <a
+                      href={`https://wa.me/${phone.replace(/[^0-9]/g, '')}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold px-2.5 py-1 rounded-full transition-colors flex items-center gap-1 shrink-0"
+                    >
+                      <MessageCircle className="w-3 h-3 text-emerald-600" />
+                      <span>WhatsApp</span>
+                    </a>
+                  )}
                 </div>
               );
             })}
 
-            {/* Always Present "Mağaza Ol" CTA Card */}
-            <div className="w-full sm:w-[260px] bg-gradient-to-br from-emerald-950 via-slate-900 to-teal-950 text-white rounded-xl p-3 flex flex-col justify-between space-y-2 shadow-md border border-emerald-500/30 relative overflow-hidden group hover:scale-[1.01] transition-transform">
-              <div className="space-y-1 relative z-10">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-6 h-6 rounded-md bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
-                    <Store className="w-3 h-3" />
-                  </div>
-                  <h3 className="text-xs font-black text-white leading-snug">Kurumsal Mağazanızı Açın</h3>
-                </div>
-                <p className="text-[10px] text-slate-300 leading-relaxed font-medium">
-                  KKTC genelindeki alıcılara %100 doğrudan ulaşın.
-                </p>
+            {/* Always Present "Mağaza Ol" CTA Pill Button */}
+            <button
+              onClick={() => setShowApplyModal(true)}
+              className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 text-white border border-emerald-500/40 rounded-full px-4 py-2 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 transition-all group"
+            >
+              <div className="w-6 h-6 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center text-emerald-400 shrink-0">
+                <Store className="w-3 h-3" />
               </div>
-
-              <button
-                onClick={() => setShowApplyModal(true)}
-                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] px-3 py-1 rounded-lg transition-all shadow-md flex items-center justify-center gap-1 relative z-10"
-              >
-                <span>{t.storeApply} →</span>
-              </button>
-            </div>
+              <span className="text-xs font-black text-white whitespace-nowrap">Kurumsal Mağaza Açın →</span>
+            </button>
           </div>
         </div>
       </section>
