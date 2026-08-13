@@ -31,7 +31,11 @@ import {
   Camera,
   PlusCircle,
   MessageSquare,
-  HelpCircle
+  HelpCircle,
+  Home,
+  Car,
+  Laptop,
+  Handshake
 } from 'lucide-react';
 import { useAuth, db } from '../../context/AuthContext';
 import { collection, query, where, getDocs, limit, addDoc } from 'firebase/firestore';
@@ -786,8 +790,8 @@ export default function LandingPage() {
             {/* Card 1: Emlak */}
             <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
-                🏡
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
+                <Home className="w-7 h-7 stroke-[2.2]" />
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Emlak & Gayrimenkul</h3>
@@ -800,8 +804,8 @@ export default function LandingPage() {
             {/* Card 2: Vasıta */}
             <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center text-2xl shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform duration-300">
-                🚗
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform duration-300">
+                <Car className="w-7 h-7 stroke-[2.2]" />
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Vasıta & Oto Galeri</h3>
@@ -814,8 +818,8 @@ export default function LandingPage() {
             {/* Card 3: Elektronik */}
             <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center text-2xl shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
-                📱
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:scale-110 transition-transform duration-300">
+                <Smartphone className="w-7 h-7 stroke-[2.2]" />
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">Elektronik & İkinci El</h3>
@@ -828,8 +832,8 @@ export default function LandingPage() {
             {/* Card 4: İletişim */}
             <div className="bg-white border border-slate-200/90 hover:border-emerald-500/60 rounded-3xl p-6 space-y-4 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal-500 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center text-2xl shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform duration-300">
-                🤝
+              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-teal-500 to-emerald-600 text-white flex items-center justify-center shadow-md shadow-teal-500/20 group-hover:scale-110 transition-transform duration-300">
+                <Handshake className="w-7 h-7 stroke-[2.2]" />
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-base font-extrabold text-slate-900 group-hover:text-emerald-700 transition-colors">%100 Doğrudan İletişim</h3>
